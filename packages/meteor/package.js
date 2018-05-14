@@ -34,13 +34,14 @@ Package.onUse(function (api) {
   api.addFiles('timers.js', ['client', 'server']);
   api.addFiles('errors.js', ['client', 'server']);
   api.addFiles('fiber_helpers.js', 'server');
+  api.addFiles('fiber_pool.js', 'server');
   api.addFiles('fiber_stubs_client.js', 'client');
   api.addFiles('startup_client.js', ['client']);
   api.addFiles('startup_server.js', ['server']);
   api.addFiles('debug.js', ['client', 'server']);
   api.addFiles('string_utils.js', ['client', 'server']);
   api.addFiles('test_environment.js', ['client', 'server']);
-  
+
   // dynamic variables, bindEnvironment
   // XXX move into a separate package?
   api.addFiles('dynamics_browser.js', 'client');

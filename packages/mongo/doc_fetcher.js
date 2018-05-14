@@ -6,6 +6,7 @@ DocFetcher = function (mongoConnection) {
   self._mongoConnection = mongoConnection;
   // Map from cache key -> [callback]
   self._callbacksForCacheKey = {};
+  self._fiberPool = Meteor._makeFiberPool();
 };
 
 _.extend(DocFetcher.prototype, {
@@ -34,7 +35,7 @@ _.extend(DocFetcher.prototype, {
 
     var callbacks = self._callbacksForCacheKey[cacheKey] = [callback];
 
-    Fiber(function () {
+    this._fiberPool.run(function () {
       try {
         var doc = self._mongoConnection.findOne(
           collectionName, {_id: id}) || null;
@@ -57,7 +58,7 @@ _.extend(DocFetcher.prototype, {
         // removing from the cache
         delete self._callbacksForCacheKey[cacheKey];
       }
-    }).run();
+    });
   }
 });
 
