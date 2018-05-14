@@ -61,18 +61,20 @@ function withoutInvocation(f) {
   }
 }
 
-function FiberPool(targetFiberCount) {
-  assert.ok(this instanceof FiberPool);
+function FixedFiberPool(targetFiberCount) {
+  assert.ok(this instanceof FixedFiberPool);
   assert.strictEqual(typeof targetFiberCount, "number");
 
-  var fiberStack = [];
+  var queuedTasks = [];
+  var idleFibers = [];
+  var fiberCount = 0;
 
   function makeNewFiber() {
     var fiber = new Fiber(function () {
-      while (true) {
-        // Call Fiber.yield() to await further instructions.
-        var entry = originalYield.call(Fiber);
+      // Call Fiber.yield() to await further instructions.
+      var entry = originalYield.call(Fiber);
 
+      while (true) {
         if (!(entry &&
           typeof entry.callback === "function" &&
           typeof entry.resolve === "function" &&
@@ -86,7 +88,7 @@ function FiberPool(targetFiberCount) {
 
         // Ensure this Fiber is no longer in the pool once it begins to
         // execute an entry.
-        assert.strictEqual(fiberStack.indexOf(fiber), -1);
+        assert.strictEqual(idleFibers.indexOf(fiber), -1);
 
         if (entry.dynamics) {
           // Restore the dynamic environment of this fiber as if
@@ -114,13 +116,15 @@ function FiberPool(targetFiberCount) {
           delete fiber[key];
         });
 
-        if (fiberStack.length < targetFiberCount) {
-          fiberStack.push(fiber);
+        if (queuedTasks.length){
+          entry = queuedTasks.pop();
         } else {
-          console.log('destroying fiber');
-          // If the pool has already reached the target maximum number of
-          // Fibers, don't bother recycling this Fiber.
-          break;
+          if (fiberCount > targetFiberCount){
+            fiberCount -= 1;
+            return;
+          }
+          idleFibers.push(fiber);
+          entry = originalYield.call(Fiber);
         }
       }
     });
@@ -140,8 +144,25 @@ function FiberPool(targetFiberCount) {
     assert.strictEqual(typeof entry.resolve, "function");
     assert.strictEqual(typeof entry.reject, "function");
 
-    var fiber = fiberStack.pop() || makeNewFiber();
-    fiber.run(entry);
+    var fiber = idleFibers.pop();
+    if (fiber){
+      // TODO consider Meteor._setImmediate(function(){ fiber.run(entry) });
+      fiber.run(entry);
+      return;
+    }
+
+    if (fiberCount < targetFiberCount) {
+      fiberCount += 1;
+      fiber = makeNewFiber();
+      fiber.run(entry);
+    }
+
+    queuedTasks.push(entry);
+    // -- for debug only --
+    var n = queuedTasks.length;
+    if (n > 0 && (n % 1000) === 0) {
+      console.log("fibers exhausted, queue-size=", n);
+    }
   }
 
   function noop(){}
@@ -208,10 +229,10 @@ function FiberPool(targetFiberCount) {
 
     targetFiberCount = Math.max(limit, 0);
 
-    if (targetFiberCount < fiberStack.length) {
+    if (targetFiberCount < idleFibers.length) {
       // If the requested target count is less than the current length of
       // the stack, truncate the stack and terminate any surplus Fibers.
-      fiberStack.splice(targetFiberCount).forEach(function (fiber) {
+      idleFibers.splice(targetFiberCount).forEach(function (fiber) {
         fiber.reset();
       });
     }
@@ -223,11 +244,11 @@ function FiberPool(targetFiberCount) {
 // Call pool.drain() to terminate all Fibers waiting in the pool and
 // signal to any outstanding Fibers that they should exit upon completion,
 // instead of reinserting themselves into the pool.
-FiberPool.prototype.drain = function () {
+FixedFiberPool.prototype.drain = function () {
   return this.setTargetFiberCount(0);
 };
 
 Meteor._makeFiberPool = function (targetFiberCount) {
-  return new FiberPool(targetFiberCount || 20);
+  return new FixedFiberPool(targetFiberCount || 20);
 };
 
