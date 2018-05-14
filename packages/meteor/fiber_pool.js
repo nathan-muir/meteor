@@ -102,9 +102,12 @@ function FiberPool(targetFiberCount) {
             entry.args || []
           ));
         } catch (error) {
-          entry.reject(error);
+          try {
+            entry.reject(error);
+          } catch (innerError) {
+            Meteor._debug('unhandled fiber error', innerError);
+          }
         }
-
         // Remove all own properties of the fiber before returning it to
         // the pool.
         Object.keys(fiber).forEach(function (key) {
@@ -165,6 +168,9 @@ function FiberPool(targetFiberCount) {
     } else if (typeof(onException) !== 'function') {
       throw new Error('onException argument must be a function, string or undefined for Meteor.bindEnvironment().');
     }
+
+    var dynamics = cloneFiberOwnProperties(Fiber.current);
+
     return function (/* arguments */) {
       var args = Array.prototype.slice.call(arguments);
       runEntry({
@@ -172,7 +178,7 @@ function FiberPool(targetFiberCount) {
         context: _this,
         args: args,
         reject: onException,
-        dynamics: cloneFiberOwnProperties(Fiber.current)
+        dynamics: dynamics
       })
     }
   };
