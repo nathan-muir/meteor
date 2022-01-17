@@ -109,6 +109,18 @@ Autoupdate._retrySubscription = () => {
           return;
         }
 
+        // disable partial/css reloads in production
+        if (Meteor.isProduction) {
+          if (doc.version !== autoupdateVersions.version) {
+            if (stop) stop();
+            if (Package.reload) {
+              Package.reload.Reload._reload();
+            }
+            return;
+          }
+          return;
+        }
+
         if (doc.versionNonRefreshable !==
             autoupdateVersions.versionNonRefreshable) {
           // Non-refreshable assets have changed, so we have to reload the

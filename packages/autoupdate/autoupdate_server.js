@@ -136,7 +136,8 @@ Meteor.startup(function () {
   // Force any connected clients that are still looking for these older
   // document IDs to reload.
   ["version",
-   "version-refreshable",
+    //  We don't send version-refreshable to old clients, as that would force an incorrect css reload
+    //   "version-refreshable",
    "version-cordova",
   ].forEach(_id => {
     clientVersions.set(_id, {
