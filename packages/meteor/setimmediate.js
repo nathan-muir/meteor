@@ -1,3 +1,4 @@
+import { Meteor } from './client_environment.js';
 // Chooses one of three setImmediate implementations:
 //
 // * Native setImmediate (IE 10, Node 0.9+)
@@ -30,7 +31,7 @@
 
 "use strict";
 
-var global = this;
+var global = window;
 
 
 // IE 10, Node >= 9.1

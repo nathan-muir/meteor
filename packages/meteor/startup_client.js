@@ -1,3 +1,5 @@
+import { Meteor } from './client_environment.js';
+
 var callbackQueue = [];
 var isLoadingCompleted = false;
 var isReady = false;

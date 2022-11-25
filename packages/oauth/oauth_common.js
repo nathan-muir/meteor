@@ -1,3 +1,5 @@
+import { constructUrl } from 'meteor/url/bc/url_client.js';
+
 OAuth._storageTokenPrefix = "Meteor.oauth.credentialSecret-";
 
 OAuth._redirectUri = (serviceName, config, params, absoluteUrlOptions) => {
@@ -44,7 +46,7 @@ OAuth._redirectUri = (serviceName, config, params, absoluteUrlOptions) => {
     };
   }
 
-  return URL._constructUrl(
+  return constructUrl(
     Meteor.absoluteUrl(`_oauth/${serviceName}`, absoluteUrlOptions),
     null,
     params);

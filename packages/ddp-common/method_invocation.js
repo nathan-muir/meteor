@@ -7,7 +7,7 @@
  * @instanceName this
  * @showInstanceName true
  */
-DDPCommon.MethodInvocation = class MethodInvocation {
+export default class MethodInvocation {
   constructor(options) {
     // true if we're running not the actual method, but a stub (that is,
     // if we're on a client (which may be a browser, or in the future a

@@ -1,3 +1,5 @@
+import { Meteor } from './client_environment.js';
+
 var suppress = 0;
 
 // replacement for console.log. This is a temporary API. We should

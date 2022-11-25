@@ -10,7 +10,7 @@ Npm.depends({
 });
 
 Package.onUse(function(api) {
-  api.use("modules");
+  api.use("ecmascript");
   api.use("modern-browsers");
 
   api.mainModule("modern.js", "web.browser");

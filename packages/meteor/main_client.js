@@ -1,0 +1,12 @@
+export const global = window;
+export { Meteor, meteorEnv } from './client_environment.js';
+import './helpers.js';
+import './setimmediate.js';
+import './timers.js';
+import './errors.js';
+import './fiber_stubs_client.js';
+import './startup_client.js';
+import './debug.js';
+import './string_utils.js';
+import './dynamics_browser.js';
+import './url_common.js';

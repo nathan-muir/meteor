@@ -1,23 +1,15 @@
+import { CurrentMethodInvocation } from 'meteor/ddp-client/common/environment.js';
+import { Meteor } from './client_environment.js';
+
 function withoutInvocation(f) {
-  if (Package.ddp) {
-    var DDP = Package.ddp.DDP;
-    var CurrentInvocation =
-      DDP._CurrentMethodInvocation ||
-      // For backwards compatibility, as explained in this issue:
-      // https://github.com/meteor/meteor/issues/8947
-      DDP._CurrentInvocation;
-
-    var invocation = CurrentInvocation.get();
-    if (invocation && invocation.isSimulation) {
-      throw new Error("Can't set timers inside simulations");
-    }
-
-    return function () {
-      CurrentInvocation.withValue(null, f);
-    };
-  } else {
-    return f;
+  var invocation = CurrentMethodInvocation.get();
+  if (invocation && invocation.isSimulation) {
+    throw new Error("Can't set timers inside simulations");
   }
+
+  return function () {
+    CurrentMethodInvocation.withValue(null, f);
+  };
 }
 
 function bindAndCatch(context, f) {

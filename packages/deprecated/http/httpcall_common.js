@@ -1,7 +1,7 @@
 var MAX_LENGTH = 500; // if you change this, also change the appropriate test
 var slice = Array.prototype.slice;
 
-exports.makeErrorByStatus = function(statusCode, content) {
+export function makeErrorByStatus(statusCode, content) {
   var message = "failed [" + statusCode + "]";
 
   if (content) {
@@ -12,14 +12,14 @@ exports.makeErrorByStatus = function(statusCode, content) {
   }
 
   return new Error(message);
-};
+}
 
 function truncate(str, length) {
   return str.length > length ? str.slice(0, length) + '...' : str;
 }
 
 // Fill in `response.data` if the content-type is JSON.
-exports.populateData = function(response) {
+export function populateData(response) {
   // Read Content-Type header, up to a ';' if there is one.
   // A typical header might be "application/json; charset=utf-8"
   // or just "application/json".
@@ -39,9 +39,9 @@ exports.populateData = function(response) {
   } else {
     response.data = null;
   }
-};
+}
 
-var HTTP = exports.HTTP = {};
+export const HTTP = {};
 
 /**
  * @summary Send an HTTP `GET` request. Equivalent to calling [`HTTP.call`](#http_call) with "GET" as the first argument.

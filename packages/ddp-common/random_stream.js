@@ -21,7 +21,7 @@
 //                          If an array, will be used as-is
 //                          If a value, will be converted to a single-value array
 //                          If omitted, a random array will be used as the seed.
-DDPCommon.RandomStream = class RandomStream {
+export default class RandomStream {
   constructor(options) {
     this.seed = [].concat(options.seed || randomToken());
     this.sequences = Object.create(null);
@@ -53,7 +53,7 @@ DDPCommon.RandomStream = class RandomStream {
 // and call Random's randomToken instead.
 function randomToken() {
   return Random.hexString(20);
-};
+}
 
 // Returns the random stream with the specified name, in the specified
 // scope. If a scope is passed, then we use that to seed a (not
@@ -63,7 +63,7 @@ function randomToken() {
 // However, scope will normally be the current DDP method invocation,
 // so we'll use the stream with the specified name, and we should get
 // consistent values on the client and server sides of a method call.
-DDPCommon.RandomStream.get = function (scope, name) {
+RandomStream.get = function (scope, name) {
   if (!name) {
     name = "default";
   }
@@ -76,7 +76,7 @@ DDPCommon.RandomStream.get = function (scope, name) {
   }
   var randomStream = scope.randomStream;
   if (!randomStream) {
-    scope.randomStream = randomStream = new DDPCommon.RandomStream({
+    scope.randomStream = randomStream = new RandomStream({
       seed: scope.randomSeed
     });
   }
@@ -89,7 +89,7 @@ DDPCommon.RandomStream.get = function (scope, name) {
 // However, we often evaluate makeRpcSeed lazily, and thus the relevant
 // invocation may not be the one currently in scope.
 // If enclosing is null, we'll use Random and values won't be repeatable.
-DDPCommon.makeRpcSeed = function (enclosing, methodName) {
-  var stream = DDPCommon.RandomStream.get(enclosing, '/rpc/' + methodName);
+export function makeRpcSeed (enclosing, methodName) {
+  var stream = RandomStream.get(enclosing, '/rpc/' + methodName);
   return stream.hexString(20);
-};
+}

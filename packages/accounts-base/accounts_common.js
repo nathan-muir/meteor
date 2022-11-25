@@ -78,39 +78,36 @@ export class AccountsCommon {
     // symbolic error code rather than a number).
     this.LoginCancelledError.numericError = 0x8acdc2f;
 
-    // loginServiceConfiguration and ConfigError are maintained for backwards compatibility
-    Meteor.startup(() => {
-      const { ServiceConfiguration } = Package['service-configuration'];
-      this.loginServiceConfiguration = ServiceConfiguration.configurations;
-      this.ConfigError = ServiceConfiguration.ConfigError;
-
-      const settings = Meteor.settings?.packages?.['accounts-base'];
-      if (settings) {
-        if (settings.oauthSecretKey) {
-          if (!Package['oauth-encryption']) {
-            throw new Error(
-              'The oauth-encryption package must be loaded to set oauthSecretKey'
+    if (Meteor.isServer) {
+      Meteor.startup(() => {
+        const settings = Meteor.settings?.packages?.['accounts-base'];
+        if (settings) {
+          if (settings.oauthSecretKey) {
+            if (!Package['oauth-encryption']) {
+              throw new Error(
+                'The oauth-encryption package must be loaded to set oauthSecretKey'
+              );
+            }
+            Package['oauth-encryption'].OAuthEncryption.loadKey(
+              settings.oauthSecretKey
             );
+            delete settings.oauthSecretKey;
           }
-          Package['oauth-encryption'].OAuthEncryption.loadKey(
-            settings.oauthSecretKey
-          );
-          delete settings.oauthSecretKey;
+          // Validate config options keys
+          Object.keys(settings).forEach(key => {
+            if (!VALID_CONFIG_KEYS.includes(key)) {
+              // TODO Consider just logging a debug message instead to allow for additional keys in the settings here?
+              throw new Meteor.Error(
+                `Accounts configuration: Invalid key: ${key}`
+              );
+            } else {
+              // set values in Accounts._options
+              this._options[key] = settings[key];
+            }
+          });
         }
-        // Validate config options keys
-        Object.keys(settings).forEach(key => {
-          if (!VALID_CONFIG_KEYS.includes(key)) {
-            // TODO Consider just logging a debug message instead to allow for additional keys in the settings here?
-            throw new Meteor.Error(
-              `Accounts configuration: Invalid key: ${key}`
-            );
-          } else {
-            // set values in Accounts._options
-            this._options[key] = settings[key];
-          }
-        });
-      }
-    });
+      });
+    }
   }
 
   /**
@@ -394,25 +391,6 @@ export class AccountsCommon {
   // No-op on the server, overridden on the client.
   _startupCallback(callback) {}
 }
-
-// Note that Accounts is defined separately in accounts_client.js and
-// accounts_server.js.
-
-/**
- * @summary Get the current user id, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- */
-Meteor.userId = () => Accounts.userId();
-
-/**
- * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- * @param {Object} [options]
- * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
- */
-Meteor.user = options => Accounts.user(options);
 
 // how long (in days) until a login token expires
 const DEFAULT_LOGIN_EXPIRATION_DAYS = 90;

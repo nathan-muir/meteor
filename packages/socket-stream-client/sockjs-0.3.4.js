@@ -30,7 +30,6 @@ THE SOFTWARE.
 
 //     [*] Including lib/index.js
 // Public object
-SockJS = (function(){
               var _document = document;
               var _window = window;
               var utils = {};
@@ -2453,14 +2452,11 @@ SockJS.getIframeTransport = function(){
 };
 //         [*] End of lib/test-hooks.js
 
-                  return SockJS;
-          })();
+
 if ('_sockjs_onload' in window) setTimeout(_sockjs_onload, 1);
 
 // AMD compliance
-if (typeof define === 'function' && define.amd) {
-    define('sockjs', [], function(){return SockJS;});
-}
 //     [*] End of lib/index.js
 
 // [*] End of lib/all.js
+export { SockJS };

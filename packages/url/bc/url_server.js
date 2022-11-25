@@ -1,14 +1,13 @@
-var url_util = require('url');
-var common = require("./url_common.js");
+import URL from 'url';
+import { buildUrl } from './url_common.js';
+export { encodeParams } from './url_common.js';
 
-exports._constructUrl = function (url, query, params) {
-  var url_parts = url_util.parse(url);
-  return common.buildUrl(
+export function constructUrl(url, query, params) {
+  var url_parts = URL.parse(url);
+  return buildUrl(
     url_parts.protocol + "//" + url_parts.host + url_parts.pathname,
     url_parts.search,
     query,
     params
   );
-};
-
-exports._encodeParams = common._encodeParams;
+}

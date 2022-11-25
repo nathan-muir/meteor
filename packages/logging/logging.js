@@ -11,6 +11,13 @@ let intercept = 0;
 let interceptedLines = [];
 let suppress = 0;
 
+let prettify = function(line, color){
+    return line;
+}
+export function injectPrettify(fn) {
+  prettify = fn;
+}
+
 // Intercept the next 'count' calls to a Log function. The actual
 // lines printed to the console can be cleared and read by calling
 // Log._intercepted().
@@ -308,8 +315,8 @@ Log.format = (obj, options = {}) => {
     stderrIndicator].join('');
 
 
-  return Formatter.prettify(metaPrefix, options.color && platformColor(options.metaColor || META_COLOR)) +
-      Formatter.prettify(message, options.color && platformColor(LEVEL_COLORS[level]));
+  return prettify(metaPrefix, options.color && platformColor(options.metaColor || META_COLOR)) +
+      prettify(message, options.color && platformColor(LEVEL_COLORS[level]));
 };
 
 // Turn a line of text into a loggable object.

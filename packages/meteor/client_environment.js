@@ -1,11 +1,11 @@
 var config = __meteor_runtime_config__;
-meteorEnv = config.meteorEnv;
+export const meteorEnv = config.meteorEnv;
 
 /**
  * @summary The Meteor namespace
  * @namespace Meteor
  */
-Meteor = {
+export const Meteor = {
   /**
    * @summary Boolean variable.  True if running in production environment.
    * @locus Anywhere

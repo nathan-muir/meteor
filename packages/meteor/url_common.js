@@ -1,3 +1,4 @@
+import { Meteor } from './client_environment.js';
 /**
  * @summary Generate an absolute URL pointing to the application. The server reads from the `ROOT_URL` environment variable to determine where it is running. This is taken care of automatically for apps deployed to Galaxy, but must be provided when using `meteor build`.
  * @locus Anywhere

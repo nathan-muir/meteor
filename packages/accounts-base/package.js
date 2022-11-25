@@ -5,7 +5,7 @@ Package.describe({
 
 Package.onUse(api => {
   api.use('ecmascript', ['client', 'server']);
-  api.use('ddp-rate-limiter');
+  api.use('ddp-rate-limiter', 'server');
   api.use('localstorage', 'client');
   api.use('tracker', 'client');
   api.use('check', 'server');

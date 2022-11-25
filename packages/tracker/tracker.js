@@ -6,13 +6,13 @@
  * @namespace Tracker
  * @summary The namespace for Tracker-related methods.
  */
-Tracker = {};
+export const Tracker = {};
 
 /**
  * @namespace Deps
  * @deprecated
  */
-Deps = Tracker;
+export const Deps = Tracker;
 
 // http://docs.meteor.com/#tracker_active
 

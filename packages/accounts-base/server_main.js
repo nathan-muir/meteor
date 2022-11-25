@@ -17,6 +17,21 @@ Accounts = new AccountsServer(Meteor.server);
  * @importFromPackage meteor
 */
 Meteor.users = Accounts.users;
+/**
+ * @summary Get the current user id, or `null` if no user is logged in. A reactive data source.
+ * @locus Anywhere but publish functions
+ * @importFromPackage meteor
+ */
+Meteor.userId = () => Accounts.userId();
+
+/**
+ * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
+ * @locus Anywhere but publish functions
+ * @importFromPackage meteor
+ * @param {Object} [options]
+ * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
+ */
+Meteor.user = options => Accounts.user(options);
 
 export {
   // Since this file is the main module for the server version of the

@@ -1,1 +1,1 @@
-import './minimongo_common.js';
+export * from './minimongo_common.js';

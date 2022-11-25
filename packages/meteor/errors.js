@@ -1,3 +1,5 @@
+import { Meteor } from './client_environment.js';
+
 // Makes an error subclass which properly contains a stack trace in most
 // environments. constructor can set fields on `this` (and should probably set
 // `message`, which is what gets displayed at the top of a stack trace).

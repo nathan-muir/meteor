@@ -1,6 +1,4 @@
-if (typeof ServiceConfiguration === 'undefined') {
-  ServiceConfiguration = {};
-}
+export const ServiceConfiguration = {};
 
 // Table containing documents with configuration options for each
 // login service
@@ -30,3 +28,7 @@ ServiceConfiguration.ConfigError = function(serviceName) {
 ServiceConfiguration.ConfigError.prototype = new Error();
 ServiceConfiguration.ConfigError.prototype.name =
   'ServiceConfiguration.ConfigError';
+
+// loginServiceConfiguration and ConfigError are maintained for backwards compatibility
+// Accounts.loginServiceConfiguration = ServiceConfiguration.configurations;
+// Accounts.ConfigError = ServiceConfiguration.ConfigError;

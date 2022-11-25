@@ -11,4 +11,4 @@ try {
 }
 
 // backwards compatibility
-require('./modern.js');
+export * from './modern.js';

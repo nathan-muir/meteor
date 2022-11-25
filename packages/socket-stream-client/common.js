@@ -50,9 +50,7 @@ export class StreamClientCommon {
       retryCount: 0
     };
 
-    if (Package.tracker) {
-      this.statusListeners = new Package.tracker.Tracker.Dependency();
-    }
+    this.statusListeners = new Tracker.Dependency();
 
     this.statusChanged = () => {
       if (this.statusListeners) {

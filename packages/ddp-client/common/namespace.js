@@ -2,6 +2,7 @@ import { DDPCommon } from 'meteor/ddp-common';
 import { Meteor } from 'meteor/meteor';
 
 import { Connection } from './livedata_connection.js';
+import { CurrentMethodInvocation, CurrentPublicationInvocation } from './environment.js';
 
 // This array allows the `_allSubscriptionsReady` method below, which
 // is used by the `spiderable` package, to keep track of whether all
@@ -17,8 +18,8 @@ export const DDP = {};
 // This is private but it's used in a few places. accounts-base uses
 // it to get the current user. Meteor.setTimeout and friends clear
 // it. We can probably find a better way to factor this.
-DDP._CurrentMethodInvocation = new Meteor.EnvironmentVariable();
-DDP._CurrentPublicationInvocation = new Meteor.EnvironmentVariable();
+DDP._CurrentMethodInvocation = CurrentMethodInvocation
+DDP._CurrentPublicationInvocation = CurrentPublicationInvocation;
 
 // XXX: Keep DDP._CurrentInvocation for backwards-compatibility.
 DDP._CurrentInvocation = DDP._CurrentMethodInvocation;

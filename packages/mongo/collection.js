@@ -2,12 +2,13 @@
 // XXX presently there is no way to destroy/clean up a Collection
 
 import { normalizeProjection } from "./mongo_utils";
+import { LocalCollectionDriver } from './local_collection_driver.js';
 
 /**
  * @summary Namespace for MongoDB-related items
  * @namespace
  */
-Mongo = {};
+export const Mongo = {};
 
 /**
  * @summary Constructor for a Collection
@@ -98,6 +99,7 @@ Mongo.Collection = function Collection(name, options) {
     // collection from Node code without webapp", but we don't yet.
     // #MeteorServerNull
     if (
+      Meteor.isServer &&
       name &&
       this._connection === Meteor.server &&
       typeof MongoInternals !== 'undefined' &&
@@ -105,7 +107,6 @@ Mongo.Collection = function Collection(name, options) {
     ) {
       options._driver = MongoInternals.defaultRemoteCollectionDriver();
     } else {
-      const { LocalCollectionDriver } = require('./local_collection_driver.js');
       options._driver = LocalCollectionDriver;
     }
   }
@@ -202,9 +203,9 @@ Object.assign(Mongo.Collection.prototype, {
             return;
           } else if (msg.msg === 'changed' && !doc) {
             msg.msg = 'added';
-            _ref = msg.fields;
-            for (field in _ref) {
-              value = _ref[field];
+            var _ref = msg.fields;
+            for (var field in _ref) {
+              var value = _ref[field];
               if (value === void 0) {
                 delete msg.fields[field];
               }
@@ -735,8 +736,6 @@ Object.assign(Mongo.Collection.prototype, {
     if (self._collection.createIndex) {
       self._collection.createIndex(index, options);
     } else {
-      import { Log } from 'meteor/logging';
-      Log.debug(`_ensureIndex has been deprecated, please use the new 'createIndex' instead${options?.name ? `, index name: ${options.name}` : `, index: ${JSON.stringify(index)}`}`)
       self._collection._ensureIndex(index, options);
     }
   },

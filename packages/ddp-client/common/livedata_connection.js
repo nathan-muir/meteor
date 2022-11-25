@@ -3,8 +3,9 @@ import { DDPCommon } from 'meteor/ddp-common';
 import { Tracker } from 'meteor/tracker';
 import { EJSON } from 'meteor/ejson';
 import { Random } from 'meteor/random';
-import { Hook } from 'meteor/callback-hook';
 import { MongoID } from 'meteor/mongo-id';
+import { Reload } from 'meteor/reload';
+import { ClientStream } from "meteor/socket-stream-client";
 import { DDP } from './namespace.js';
 import MethodInvoker from './MethodInvoker.js';
 import {
@@ -84,7 +85,6 @@ export class Connection {
     if (typeof url === 'object') {
       self._stream = url;
     } else {
-      const { ClientStream } = require("meteor/socket-stream-client");
       self._stream = new ClientStream(url, {
         retry: options.retry,
         ConnectionError: DDP.ConnectionError,
@@ -244,9 +244,8 @@ export class Connection {
 
     // Block auto-reload while we're waiting for method responses.
     if (Meteor.isClient &&
-        Package.reload &&
         ! options.reloadWithOutstanding) {
-      Package.reload.Reload._onMigrate(retry => {
+      Reload._onMigrate(retry => {
         if (! self._readyToMigrate()) {
           self._retryMigrate = retry;
           return [false];
