@@ -1,4 +1,39 @@
-import { AccountsTest } from "./accounts_client.js";
+import { Accounts } from "meteor/accounts-base";
+
+const attemptToMatchHash = (accounts, hash, success) => {
+  // All of the special hash URLs we support for accounts interactions
+  ["reset-password", "verify-email", "enroll-account"].forEach(urlPart => {
+    let token;
+
+    const tokenRegex = new RegExp(`^\\#\\/${urlPart}\\/(.*)$`);
+    const match = hash.match(tokenRegex);
+
+    if (match) {
+      token = match[1];
+
+      // XXX COMPAT WITH 0.9.3
+      if (urlPart === "reset-password") {
+        accounts._resetPasswordToken = token;
+      } else if (urlPart === "verify-email") {
+        accounts._verifyEmailToken = token;
+      } else if (urlPart === "enroll-account") {
+        accounts._enrollAccountToken = token;
+      }
+    } else {
+      return;
+    }
+
+    // If no handlers match the hash, then maybe it's meant to be consumed
+    // by some entirely different code, so we only clear it the first time
+    // a handler successfully matches. Note that later handlers reuse the
+    // savedHash, so clearing window.location.hash here will not interfere
+    // with their needs.
+    window.location.hash = "";
+
+    // Do some stuff with the token we matched
+    success.call(accounts, token, urlPart);
+  });
+}
 
 Tinytest.add("accounts - parse urls for accounts-password", test => {
     const actions = ["reset-password", "verify-email", "enroll-account"];
@@ -8,9 +43,9 @@ Tinytest.add("accounts - parse urls for accounts-password", test => {
 
     actions.forEach(hashPart => {
       const fakeToken = "asdf";
-      
+
       const hashTokenOnly = `#/${hashPart}/${fakeToken}`;
-      AccountsTest.attemptToMatchHash(hashTokenOnly, (token, action) => {
+      attemptToMatchHash(hashTokenOnly, (token, action) => {
         test.equal(token, fakeToken);
         test.equal(action, hashPart);
 

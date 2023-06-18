@@ -410,34 +410,6 @@ export class AccountsCommon {
   _startupCallback(callback) {}
 }
 
-// Note that Accounts is defined separately in accounts_client.js and
-// accounts_server.js.
-
-/**
- * @summary Get the current user id, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- */
-Meteor.userId = () => Accounts.userId();
-
-/**
- * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- * @param {Object} [options]
- * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
- */
-Meteor.user = options => Accounts.user(options);
-
-/**
- * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- * @param {Object} [options]
- * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
- */
-Meteor.userAsync = options => Accounts.userAsync(options);
-
 // how long (in days) until a login token expires
 const DEFAULT_LOGIN_EXPIRATION_DAYS = 90;
 // how long (in days) until reset password token expires
