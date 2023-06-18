@@ -9,6 +9,7 @@ var hasOwn = Object.prototype.hasOwnProperty;
 var key = '_localstorage_test_' + Random.id();
 var retrieved;
 var storage;
+let _localStorage;
 
 try {
   storage = globalThis.localStorage;
@@ -22,7 +23,7 @@ try {
 
 if (key === retrieved) {
   if (Meteor.isServer) {
-    Meteor._localStorage = storage;
+    _localStorage = storage;
   } else {
     // Some browsers (e.g. IE11) don't properly handle attempts to change
     // window.localStorage methods. By using proxy methods to expose
@@ -36,11 +37,11 @@ if (key === retrieved) {
       this[name] = function () {
         return storage[name].apply(storage, arguments);
       };
-    }, Meteor._localStorage = {});
+    }, _localStorage = {});
   }
 }
 
-if (! Meteor._localStorage) {
+if (! _localStorage) {
   if (Meteor.isClient) {
     Meteor._debug(
       "You are running a browser with no localStorage or userData "
@@ -48,7 +49,7 @@ if (! Meteor._localStorage) {
         + "tab to be logged in.");
   }
 
-  Meteor._localStorage = Object.create({
+  _localStorage = Object.create({
     setItem: function (key, val) {
       this[key] = val;
     },
@@ -62,3 +63,5 @@ if (! Meteor._localStorage) {
     }
   });
 }
+
+export const Meteor$_localStorage = _localStorage;

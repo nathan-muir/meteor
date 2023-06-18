@@ -16,14 +16,14 @@ const Accounts = new AccountsServer(Meteor.server);
  * @type {Mongo.Collection}
  * @importFromPackage meteor
 */
-Meteor.users = Accounts.users;
+export const Meteor$users = Accounts.users;
 
 /**
  * @summary Get the current user id, or `null` if no user is logged in. A reactive data source.
  * @locus Anywhere but publish functions
  * @importFromPackage meteor
  */
-Meteor.userId = () => Accounts.userId();
+export const Meteor$userId = () => Accounts.userId();
 
 /**
  * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
@@ -32,7 +32,7 @@ Meteor.userId = () => Accounts.userId();
  * @param {Object} [options]
  * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
  */
-Meteor.user = options => Accounts.user(options);
+export const Meteor$user = options => Accounts.user(options);
 
 /**
  * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
@@ -41,7 +41,7 @@ Meteor.user = options => Accounts.user(options);
  * @param {Object} [options]
  * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
  */
-Meteor.userAsync = options => Accounts.userAsync(options);
+export const Meteor$userAsync = options => Accounts.userAsync(options);
 
 export {
   Accounts,
