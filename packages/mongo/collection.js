@@ -28,7 +28,7 @@ export function warnUsingOldApi (
  * @summary Namespace for MongoDB-related items
  * @namespace
  */
-Mongo = {};
+export const Mongo = {};
 
 /**
  * @summary Constructor for a Collection
@@ -119,6 +119,7 @@ Mongo.Collection = function Collection(name, options) {
     // collection from Node code without webapp", but we don't yet.
     // #MeteorServerNull
     if (
+      Meteor.isServer &&
       name &&
       this._connection === Meteor.server &&
       typeof MongoInternals !== 'undefined' &&
@@ -223,9 +224,9 @@ Object.assign(Mongo.Collection.prototype, {
             return;
           } else if (msg.msg === 'changed' && !doc) {
             msg.msg = 'added';
-            _ref = msg.fields;
-            for (field in _ref) {
-              value = _ref[field];
+            var _ref = msg.fields;
+            for (var field in _ref) {
+              var value = _ref[field];
               if (value === void 0) {
                 delete msg.fields[field];
               }
@@ -891,7 +892,7 @@ Object.assign(Mongo.Collection.prototype, {
       throw new Error(
         'Can only call _createCappedCollection on server collections'
       );
-    
+
     // [FIBERS]
     // TODO: Remove this when 3.0 is released.
     warnUsingOldApi(
