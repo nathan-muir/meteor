@@ -11,7 +11,7 @@ var retrieved;
 var storage;
 
 try {
-  storage = global.localStorage;
+  storage = globalThis.localStorage;
 
   if (storage) {
     storage.setItem(key, key);
