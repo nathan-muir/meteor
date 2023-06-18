@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { DDPCommon } from 'meteor/ddp-common';
 import { Tracker } from 'meteor/tracker';
 import { EJSON } from 'meteor/ejson';

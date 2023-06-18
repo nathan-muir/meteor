@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-
 // TODO get from account-base
 // config option keys
 const VALID_CONFIG_KEYS = [

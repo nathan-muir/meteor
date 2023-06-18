@@ -1,4 +1,3 @@
-import { Meteor } from "meteor/meteor";
 import { toWebsocketUrl } from "./urls.js";
 import { StreamClientCommon } from "./common.js";
 

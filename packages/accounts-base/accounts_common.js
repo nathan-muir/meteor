@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-
 // config option keys
 const VALID_CONFIG_KEYS = [
   'sendVerificationEmail',

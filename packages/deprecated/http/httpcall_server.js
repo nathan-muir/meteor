@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { fetch, Request } from 'meteor/fetch';
 import { URL, URLSearchParams, constructUrl } from 'meteor/url';
 import { HTTP, makeErrorByStatus, populateData } from './httpcall_common.js';

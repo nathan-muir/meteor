@@ -1,6 +1,5 @@
 import { Mongo } from 'meteor/mongo';
 import { URL } from 'meteor/url';
-import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { Random } from 'meteor/random';
 

@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { Log } from 'meteor/logging';
 import { Hook } from 'meteor/callback-hook';
 

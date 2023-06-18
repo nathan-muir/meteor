@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { Meteor } from 'meteor/meteor'
 import {
   AccountsCommon,
   EXPIRE_TOKENS_INTERVAL_MS,

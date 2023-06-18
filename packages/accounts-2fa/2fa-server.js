@@ -1,7 +1,6 @@
 import { Accounts } from 'meteor/accounts-base';
 import twofactor from 'node-2fa';
 import QRCode from 'qrcode-svg';
-import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
 
 Accounts._check2faEnabled = user => {

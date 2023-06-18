@@ -1,4 +1,3 @@
-import { Meteor } from "meteor/meteor";
 import {
   AccountsClient,
 } from "./accounts_client.js";

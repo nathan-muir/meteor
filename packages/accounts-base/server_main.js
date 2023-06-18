@@ -1,5 +1,4 @@
 import { AccountsServer } from "./accounts_server.js";
-import { Meteor } from "meteor/meteor";
 
 /**
  * @namespace Accounts

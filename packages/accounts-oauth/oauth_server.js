@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-
 // Listen to calls to `login` with an oauth option set. This is where
 // users actually get logged in to meteor via oauth.
 Accounts.registerLoginHandler(options => {
