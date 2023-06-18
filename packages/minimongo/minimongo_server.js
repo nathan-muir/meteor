@@ -1,4 +1,4 @@
-import './minimongo_common.js';
+import { Minimongo, LocalCollection } from "./minimongo_common.js";
 import {
   hasOwn,
   isNumericKey,
@@ -344,3 +344,5 @@ function treeToPaths(tree, prefix = '') {
 
   return result;
 }
+
+export { Minimongo, LocalCollection }

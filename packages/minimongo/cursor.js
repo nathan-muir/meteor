@@ -1,5 +1,8 @@
-import LocalCollection from './local_collection.js';
+import * as LCS from './local_collection_static.js';
+import Matcher from './matcher.js';
+import Sorter from './sorter.js';
 import { hasOwn } from './common.js';
+import ObserveHandle from "./observe_handle.js";
 import { ASYNC_CURSOR_METHODS, getAsyncMethodName } from "./constants";
 
 // Cursor: a specification for a particular subset of documents, w/ a defined
@@ -9,9 +12,9 @@ export default class Cursor {
   constructor(collection, selector, options = {}) {
     this.collection = collection;
     this.sorter = null;
-    this.matcher = new Minimongo.Matcher(selector);
+    this.matcher = new Matcher(selector);
 
-    if (LocalCollection._selectorIsIdPerhapsAsObject(selector)) {
+    if (LCS._selectorIsIdPerhapsAsObject(selector)) {
       // stash for fast _id and { _id }
       this._selectorId = hasOwn.call(selector, '_id')
         ? selector._id
@@ -20,7 +23,7 @@ export default class Cursor {
       this._selectorId = undefined;
 
       if (this.matcher.hasGeoQuery() || options.sort) {
-        this.sorter = new Minimongo.Sorter(options.sort || []);
+        this.sorter = new Sorter(options.sort || []);
       }
     }
 
@@ -28,9 +31,9 @@ export default class Cursor {
     this.limit = options.limit;
     this.fields = options.projection || options.fields;
 
-    this._projectionFn = LocalCollection._compileProjection(this.fields || {});
+    this._projectionFn = LCS._compileProjection(this.fields || {});
 
-    this._transform = LocalCollection.wrapTransform(options.transform);
+    this._transform = LCS.wrapTransform(options.transform);
 
     // by default, queries register w/ Tracker when it is available.
     if (typeof Tracker !== 'undefined') {
@@ -199,7 +202,7 @@ export default class Cursor {
   //  * collection: the collection this query is querying
   //
   // iff x is a returned query handle, (x instanceof
-  // LocalCollection.ObserveHandle) is true
+  // ObserveHandle) is true
   //
   // initial results delivered through added callback
   // XXX maybe callbacks should take a list of objects, to expose transactions?
@@ -214,7 +217,7 @@ export default class Cursor {
    *                           changes
    */
   observe(options) {
-    return LocalCollection._observeFromObserveChanges(this, options);
+    return LCS._observeFromObserveChanges(this, options);
   }
 
   /**
@@ -228,7 +231,7 @@ export default class Cursor {
    *                           changes
    */
   observeChanges(options) {
-    const ordered = LocalCollection._observeChangesCallbacksAreOrdered(options);
+    const ordered = LCS._observeChangesCallbacksAreOrdered(options);
 
     // there are several places that assume you aren't combining skip/limit with
     // unordered observe.  eg, update's EJSON.clone, and the "there are several"
@@ -248,7 +251,7 @@ export default class Cursor {
     const distances = (
       this.matcher.hasGeoQuery() &&
       ordered &&
-      new LocalCollection._IdMap
+      new LCS._IdMap
     );
 
     const query = {
@@ -274,7 +277,7 @@ export default class Cursor {
     query.results = this._getRawObjects({ordered, distances: query.distances});
 
     if (this.collection.paused) {
-      query.resultsSnapshot = ordered ? [] : new LocalCollection._IdMap;
+      query.resultsSnapshot = ordered ? [] : new LCS._IdMap;
     }
 
     // wrap callbacks we were passed. callbacks only fire when not paused and
@@ -326,7 +329,7 @@ export default class Cursor {
       });
     }
 
-    const handle = Object.assign(new LocalCollection.ObserveHandle, {
+    const handle = Object.assign(new ObserveHandle, {
       collection: this.collection,
       stop: () => {
         if (this.reactive) {
@@ -406,7 +409,7 @@ export default class Cursor {
 
     // XXX use OrderedDict instead of array, and make IdMap and OrderedDict
     // compatible
-    const results = options.ordered ? [] : new LocalCollection._IdMap;
+    const results = options.ordered ? [] : new LCS._IdMap;
 
     // fast path for single ID value
     if (this._selectorId !== undefined) {
@@ -440,7 +443,7 @@ export default class Cursor {
         distances = options.distances;
         distances.clear();
       } else {
-        distances = new LocalCollection._IdMap();
+        distances = new LCS._IdMap();
       }
     }
 

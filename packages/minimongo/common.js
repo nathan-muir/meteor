@@ -1,4 +1,6 @@
-import LocalCollection from './local_collection.js';
+import * as fieldHelpers from "./field-helpers.js";
+import { _isPlainObject, _selectorIsId } from "./local_collection_util.js";
+import { MinimongoError } from "./error.js";
 
 export const hasOwn = Object.prototype.hasOwnProperty;
 
@@ -125,7 +127,7 @@ export const ELEMENT_OPERATORS = {
       }
 
       return value => (
-        value !== undefined && LocalCollection._f._type(value) === operand
+        value !== undefined && fieldHelpers._type(value) === operand
       );
     },
   },
@@ -197,7 +199,7 @@ export const ELEMENT_OPERATORS = {
   $elemMatch: {
     dontExpandLeafArrays: true,
     compileElementSelector(operand, valueSelector, matcher) {
-      if (!LocalCollection._isPlainObject(operand)) {
+      if (!_isPlainObject(operand)) {
         throw Error('$elemMatch need an object');
       }
 
@@ -402,7 +404,7 @@ const VALUE_OPERATORS = {
     // marked with a $geometry property, though legacy coordinates can be
     // matched using $geometry.
     let maxDistance, point, distance;
-    if (LocalCollection._isPlainObject(operand) && hasOwn.call(operand, '$geometry')) {
+    if (_isPlainObject(operand) && hasOwn.call(operand, '$geometry')) {
       // GeoJSON "2dsphere" mode.
       maxDistance = operand.$maxDistance;
       point = operand.$geometry;
@@ -553,7 +555,7 @@ function compileArrayOfDocumentSelectors(selectors, matcher, inElemMatch) {
   }
 
   return selectors.map(subSelector => {
-    if (!LocalCollection._isPlainObject(subSelector)) {
+    if (!_isPlainObject(subSelector)) {
       throw Error('$or/$and/$nor entries need to be full objects');
     }
 
@@ -693,7 +695,7 @@ export function equalityElementMatcher(elementSelector) {
     return value => value == null;
   }
 
-  return value => LocalCollection._f._equal(elementSelector, value);
+  return value => fieldHelpers._equal(elementSelector, value);
 }
 
 function everythingMatcher(docOrBranchedValues) {
@@ -840,7 +842,7 @@ function invertBranchedMatcher(branchedMatcher) {
 }
 
 export function isIndexable(obj) {
-  return Array.isArray(obj) || LocalCollection._isPlainObject(obj);
+  return Array.isArray(obj) || _isPlainObject(obj);
 }
 
 export function isNumericKey(s) {
@@ -851,7 +853,7 @@ export function isNumericKey(s) {
 // with $.  Unless inconsistentOK is set, throws if some keys begin with $ and
 // others don't.
 export function isOperatorObject(valueSelector, inconsistentOK) {
-  if (!LocalCollection._isPlainObject(valueSelector)) {
+  if (!_isPlainObject(valueSelector)) {
     return false;
   }
 
@@ -893,7 +895,7 @@ function makeInequality(cmpValueComparator) {
         operand = null;
       }
 
-      const operandType = LocalCollection._f._type(operand);
+      const operandType = fieldHelpers._type(operand);
 
       return value => {
         if (value === undefined) {
@@ -902,11 +904,11 @@ function makeInequality(cmpValueComparator) {
 
         // Comparisons are never true among things of different type (except
         // null vs undefined).
-        if (LocalCollection._f._type(value) !== operandType) {
+        if (fieldHelpers._type(value) !== operandType) {
           return false;
         }
 
-        return cmpValueComparator(LocalCollection._f._cmp(value, operand));
+        return cmpValueComparator(fieldHelpers._cmp(value, operand));
       };
     },
   };
@@ -1064,7 +1066,7 @@ export function makeLookupFunction(key, options = {}) {
     if (Array.isArray(firstLevel) &&
         !(isNumericKey(parts[1]) && options.forSort)) {
       firstLevel.forEach((branch, arrayIndex) => {
-        if (LocalCollection._isPlainObject(branch)) {
+        if (_isPlainObject(branch)) {
           appendToResult(lookupRest(branch, arrayIndices ? arrayIndices.concat(arrayIndex) : [arrayIndex]));
         }
       });
@@ -1076,16 +1078,7 @@ export function makeLookupFunction(key, options = {}) {
 
 // Object exported only for unit testing.
 // Use it to export private functions to test in Tinytest.
-MinimongoTest = {makeLookupFunction};
-MinimongoError = (message, options = {}) => {
-  if (typeof message === 'string' && options.field) {
-    message += ` for field '${options.field}'`;
-  }
-
-  const error = new Error(message);
-  error.name = 'MinimongoError';
-  return error;
-};
+export const MinimongoTest = {makeLookupFunction};
 
 export function nothingMatcher(docOrBranchedValues) {
   return {result: false};
@@ -1277,7 +1270,7 @@ export function populateDocumentWithQueryFields(query, document = {}) {
     });
   } else {
     // Handle meteor-specific shortcut for selecting _id
-    if (LocalCollection._selectorIsId(query)) {
+    if (_selectorIsId(query)) {
       insertIntoDocument(document, '_id', query);
     }
   }

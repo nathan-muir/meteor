@@ -1,12 +1,6 @@
-import {
-  ELEMENT_OPERATORS,
-  equalityElementMatcher,
-  expandArraysInBranches,
-  hasOwn,
-  isOperatorObject,
-  makeLookupFunction,
-  regexpElementMatcher,
-} from './common.js';
+import Matcher from './matcher.js';
+import * as fieldHelpers from "./field-helpers.js";
+import { expandArraysInBranches, hasOwn, makeLookupFunction, } from './common.js';
 
 // Give a sort spec, which can be in any of these forms:
 //   {"key1": 1, "key2": -1}
@@ -76,7 +70,7 @@ export default class Sorter {
         selector[spec.path] = 1;
       });
 
-      this._selectorForAffectedByModifier = new Minimongo.Matcher(selector);
+      this._selectorForAffectedByModifier = new Matcher(selector);
     }
 
     this._keyComparator = composeComparators(
@@ -293,7 +287,7 @@ export default class Sorter {
     const invert = !this._sortSpecParts[i].ascending;
 
     return (key1, key2) => {
-      const compare = LocalCollection._f._cmp(key1[i], key2[i]);
+      const compare = fieldHelpers._cmp(key1[i], key2[i]);
       return invert ? -compare : compare;
     };
   }
