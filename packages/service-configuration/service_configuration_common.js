@@ -1,6 +1,4 @@
-if (typeof ServiceConfiguration === 'undefined') {
-  ServiceConfiguration = {};
-}
+export const ServiceConfiguration = {};
 
 // Table containing documents with configuration options for each
 // login service

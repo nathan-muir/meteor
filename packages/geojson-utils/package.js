@@ -6,7 +6,7 @@ Package.describe({
 Package.onUse(function (api) {
   api.use('modules');
   api.export('GeoJSON');
-  api.mainModule('main.js');
+  api.mainModule('geojson-utils.js');
 });
 
 Package.onTest(function (api) {

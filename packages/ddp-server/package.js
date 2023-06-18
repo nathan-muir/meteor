@@ -36,13 +36,7 @@ Package.onUse(function (api) {
   api.use('callback-hook', 'server');
   api.export('DDPServer', 'server');
 
-  api.addFiles('stream_server.js', 'server');
-
-  api.addFiles('livedata_server.js', 'server');
-  api.addFiles('writefence.js', 'server');
-  api.addFiles('crossbar.js', 'server');
-
-  api.addFiles('server_convenience.js', 'server');
+  api.mainModule('server_convenience.js', 'server');
 });
 
 

@@ -23,9 +23,8 @@ Package.onUse(api => {
   api.use('check', 'server');
   api.use('ecmascript');
 
-  api.addFiles('email_templates.js', 'server');
-  api.addFiles('password_server.js', 'server');
-  api.addFiles('password_client.js', 'client');
+  api.mainModule('password_server.js', 'server');
+  api.mainModule('password_client.js', 'client');
 });
 
 Package.onTest(api => {

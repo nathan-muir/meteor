@@ -2,7 +2,7 @@
 // See _match for the definition of how a notification matches a trigger.
 // All notifications and triggers must have a string key named 'collection'.
 
-DDPServer._Crossbar = function (options) {
+export const Crossbar = function (options) {
   var self = this;
   options = options || {};
 
@@ -16,7 +16,7 @@ DDPServer._Crossbar = function (options) {
   self.factName = options.factName || null;
 };
 
-_.extend(DDPServer._Crossbar.prototype, {
+_.extend(Crossbar.prototype, {
   // msg is a trigger or a notification
   _collectionForMessage: function (msg) {
     var self = this;
@@ -162,6 +162,6 @@ _.extend(DDPServer._Crossbar.prototype, {
 // should call beginWrite on the current write fence before they return, if they
 // want to delay the write fence from firing (ie, the DDP method-data-updated
 // message from being sent).
-DDPServer._InvalidationCrossbar = new DDPServer._Crossbar({
+export const InvalidationCrossbar = new Crossbar({
   factName: "invalidation-crossbar-listeners"
 });

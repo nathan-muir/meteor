@@ -1,5 +1,4 @@
-import { Meteor } from 'meteor/meteor';
-
+import { ServiceConfiguration } from "./service_configuration_common.js";
 // Only one configuration should ever exist for each service.
 // A unique index helps avoid various race conditions which could
 // otherwise lead to an inconsistent database state (when there are multiple
@@ -43,3 +42,5 @@ Meteor.startup(() => {
     );
   });
 });
+
+export { ServiceConfiguration }

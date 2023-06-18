@@ -1,8 +1,3 @@
-URL = global.URL;
-URLSearchParams = global.URLSearchParams;
-
-exports.URL = URL;
-exports.URLSearchParams = URLSearchParams;
-
-// backwards compatibility
-Object.assign(URL, require('./bc/url_client'));
+export const URL = globalThis.URL;
+export const URLSearchParams = globalThis.URLSearchParams;
+export * from './bc/url_client.js';

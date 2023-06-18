@@ -1,1 +1,1 @@
-exports.GeoJSON = require("./geojson-utils.js");
+export { default as GeoJSON } from './geojson-utils.js';

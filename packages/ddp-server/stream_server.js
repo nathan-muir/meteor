@@ -25,7 +25,7 @@ var websocketExtensions = _.once(function () {
 
 var pathPrefix = __meteor_runtime_config__.ROOT_URL_PATH_PREFIX ||  "";
 
-StreamServer = function () {
+export const StreamServer = function () {
   var self = this;
   self.registration_callbacks = [];
   self.open_sockets = [];

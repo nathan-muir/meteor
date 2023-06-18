@@ -1,8 +1,3 @@
-/// METEOR WRAPPER
-//
-SHA256 = (function () {
-
-
 /**
 *
 *  Secure Hash Algorithm (SHA256)
@@ -13,7 +8,7 @@ SHA256 = (function () {
 *
 **/
 
-function SHA256(s){
+export function SHA256(s){
 
 	var chrsz   = 8;
 	var hexcase = 0;
@@ -137,7 +132,3 @@ function SHA256(s){
 	return binb2hex(core_sha256(str2binb(s), s.length * chrsz));
 
 }
-
-/// METEOR WRAPPER
-return SHA256;
-})();

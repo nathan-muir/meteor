@@ -34,7 +34,7 @@ const hasOwn = Object.prototype.hasOwnProperty;
 // call all of them if it is able to make a decision without calling them all
 // (so don't include side effects).
 
-AllowDeny = {
+export const AllowDeny = {
   CollectionPrototype: {}
 };
 

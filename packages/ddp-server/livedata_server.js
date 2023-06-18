@@ -1,4 +1,12 @@
-DDPServer = {};
+import { StreamServer } from './stream_server.js';
+import { WriteFence, CurrentWriteFence } from './writefence.js';
+import { Crossbar, InvalidationCrossbar } from './crossbar.js';
+export const DDPServer = {
+  _WriteFence: WriteFence,
+  _CurrentWriteFence: CurrentWriteFence,
+  _Crossbar: Crossbar,
+  _InvalidationCrossbar: InvalidationCrossbar,
+};
 
 var Fiber = Npm.require('fibers');
 
@@ -1417,7 +1425,7 @@ Object.assign(Subscription.prototype, {
 /* Server                                                                     */
 /******************************************************************************/
 
-Server = function (options = {}) {
+export const Server = function (options = {}) {
   var self = this;
 
   // The default heartbeat interval is 30 seconds on the server and 35

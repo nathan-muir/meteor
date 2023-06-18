@@ -1,13 +1,12 @@
-var common = require("./url_common.js");
+import { buildUrl } from './url_common.js';
+export { encodeParams } from './url_common.js';
 
-exports._constructUrl = function (url, query, params) {
+export function constructUrl(url, query, params) {
   var query_match = /^(.*?)(\?.*)?$/.exec(url);
-  return common.buildUrl(
+  return buildUrl(
     query_match[1],
     query_match[2],
     query,
     params
   );
-};
-
-exports._encodeParams = common._encodeParams;
+}

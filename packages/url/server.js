@@ -1,7 +1,5 @@
-const { URL, URLSearchParams } = require('url');
-
-exports.URL = URL;
-exports.URLSearchParams = URLSearchParams;
+export { URL, URLSearchParams } from 'url';
+export * from './bc/url_server.js'
 
 const { setMinimumBrowserVersions } = require("meteor/modern-browsers");
 
@@ -20,6 +18,3 @@ setMinimumBrowserVersions({
   // https://github.com/Kilian/electron-to-chromium/blob/master/full-versions.js
   electron: [0, 20],
 }, module.id);
-
-// backwards compatibility
-Object.assign(exports.URL, require('./bc/url_server'));

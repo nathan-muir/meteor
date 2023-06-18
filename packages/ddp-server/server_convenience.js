@@ -1,3 +1,5 @@
+import { DDPServer, Server } from './livedata_server.js';
+
 if (process.env.DDP_DEFAULT_CONNECTION_URL) {
   __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL =
     process.env.DDP_DEFAULT_CONNECTION_URL;
@@ -26,3 +28,5 @@ _.each(
     Meteor[name] = _.bind(Meteor.server[name], Meteor.server);
   }
 );
+
+export { DDPServer };

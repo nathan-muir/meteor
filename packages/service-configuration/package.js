@@ -8,7 +8,7 @@ Package.onUse(function(api) {
   api.use('mongo', ['client', 'server']);
   api.use('ecmascript', ['client', 'server']);
   api.export('ServiceConfiguration');
-  api.addFiles('service_configuration_common.js', ['client', 'server']);
-  api.addFiles('service_configuration_server.js', 'server');
+  api.mainModule('service_configuration_common.js', 'client');
+  api.mainModule('service_configuration_server.js', 'server');
   api.addAssets('service-configuration.d.ts', 'server');
 });

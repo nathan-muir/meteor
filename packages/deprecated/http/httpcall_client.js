@@ -1,7 +1,5 @@
-var URL = require("meteor/url").URL;
-var common = require("./httpcall_common.js");
-var HTTP = exports.HTTP = common.HTTP;
-var hasOwn = Object.prototype.hasOwnProperty;
+import {URL, constructUrl, encodeParams } from 'meteor/url';
+import { HTTP } from './httpcall_common.js';
 
 /**
  * @summary Perform an outbound HTTP request.
@@ -201,3 +199,5 @@ HTTP.call = function(method, url, options, callback) {
     callback(err);
   }
 };
+
+export { HTTP };

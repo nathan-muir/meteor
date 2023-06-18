@@ -4,7 +4,7 @@ var Future = Npm.require('fibers/future');
 // when all of the writes are fully committed and propagated (all
 // observers have been notified of the write and acknowledged it.)
 //
-DDPServer._WriteFence = function () {
+export const WriteFence = function () {
   var self = this;
 
   self.armed = false;
@@ -19,9 +19,9 @@ DDPServer._WriteFence = function () {
 // that writes to databases should register their writes with it using
 // beginWrite().
 //
-DDPServer._CurrentWriteFence = new Meteor.EnvironmentVariable;
+export const CurrentWriteFence = new Meteor.EnvironmentVariable;
 
-_.extend(DDPServer._WriteFence.prototype, {
+_.extend(WriteFence.prototype, {
   // Start tracking a write, and return an object to represent it. The
   // object has a single method, committed(). This method should be
   // called when the write is fully committed and propagated. You can
@@ -53,7 +53,7 @@ _.extend(DDPServer._WriteFence.prototype, {
   // uncommitted writes, it will activate.
   arm: function () {
     var self = this;
-    if (self === DDPServer._CurrentWriteFence.get())
+    if (self === CurrentWriteFence.get())
       throw Error("Can't arm the current fence");
     self.armed = true;
     self._maybeFire();
