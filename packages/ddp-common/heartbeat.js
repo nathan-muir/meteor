@@ -5,7 +5,7 @@
 //   sendPing: function to call to send a ping on the connection.
 //   onTimeout: function to call to close the connection.
 
-DDPCommon.Heartbeat = class Heartbeat {
+export default class Heartbeat {
   constructor(options) {
     this.heartbeatInterval = options.heartbeatInterval;
     this.heartbeatTimeout = options.heartbeatTimeout;

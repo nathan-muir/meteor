@@ -14,13 +14,7 @@ Package.onUse(function (api) {
     'retry',
   ], ['client', 'server']);
 
-  api.addFiles('namespace.js');
-
-  api.addFiles('heartbeat.js', ['client', 'server']);
-  api.addFiles('utils.js', ['client', 'server']);
-  api.addFiles('method_invocation.js', ['client', 'server']);
-  api.addFiles('random_stream.js', ['client', 'server']);
-
+  api.mainModule('namespace.js');
   api.export('DDPCommon');
 });
 
