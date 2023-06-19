@@ -1,11 +1,11 @@
-const fetch = require("node-fetch");
+import fetch from 'node-fetch';
+import { setMinimumBrowserVersions } from "meteor/modern-browsers";
 
-exports.fetch = fetch;
-exports.Headers = fetch.Headers;
-exports.Request = fetch.Request;
-exports.Response = fetch.Response;
+export const Headers = fetch.Headers;
+export const Request = fetch.Request;
+export const Response = fetch.Response;
 
-const { setMinimumBrowserVersions } = require("meteor/modern-browsers");
+export { fetch };
 
 // https://caniuse.com/#feat=fetch
 setMinimumBrowserVersions({

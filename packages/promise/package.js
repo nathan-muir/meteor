@@ -12,7 +12,7 @@ Npm.depends({
 });
 
 Package.onUse(function(api) {
-  api.use("modules");
+  api.use("ecmascript");
   api.use("modern-browsers");
   api.use("context", "server", { weak: true });
   api.addFiles("modern.js");

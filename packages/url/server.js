@@ -1,7 +1,6 @@
 export { URL, URLSearchParams } from 'url';
 export * from './bc/url_server.js'
-
-const { setMinimumBrowserVersions } = require("meteor/modern-browsers");
+import { setMinimumBrowserVersions } from 'meteor/modern-browsers';
 
 // https://caniuse.com/#feat=url
 setMinimumBrowserVersions({

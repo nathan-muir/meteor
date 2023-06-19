@@ -1,4 +1,4 @@
-import Google from './namespace.js';
+export const Google = {};
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
@@ -78,7 +78,7 @@ Google.requestCredential = (options, credentialRequestCompleteCallback) => {
     "state": OAuth._stateParam(loginStyle, credentialToken, options.redirectUrl)
   });
   const loginUrl = 'https://accounts.google.com/o/oauth2/auth?' +
-    Object.keys(loginUrlParameters).map(param => 
+    Object.keys(loginUrlParameters).map(param =>
       `${encodeURIComponent(param)}=${encodeURIComponent(loginUrlParameters[param])}`
     ).join("&");
 

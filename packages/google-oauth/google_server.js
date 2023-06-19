@@ -1,6 +1,7 @@
-import Google from './namespace.js';
 import { Accounts } from 'meteor/accounts-base';
 import { fetch } from 'meteor/fetch';
+
+export const Google = {};
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
