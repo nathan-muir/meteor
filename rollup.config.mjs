@@ -344,6 +344,11 @@ const packages = [
     globals: ['DDPCommon'],
   },
   {
+    name: 'ddp-rate-limiter',
+    server: 'ddp-rate-limiter.js',
+    globals: ['DDPRateLimiter'],
+  },
+  {
     virtual: true,
     name: 'ddp-common-utils',
     srcDir: 'packages/ddp-common',
@@ -607,21 +612,40 @@ function makeConfig(input, output, isClient) {
     external: isClient ? [
       'decimal.js',
     ] : [
-      'url', // node:url
-      'crypto', //node:crypto
-      'decimal.js',
+      '@vlasky/whomst',
+      'assert', // node:assert
+      'basic-auth-connnect',
       'bcrypt',
       'chalk',
-      'sockjs',
+      'cluster',
+      'compression',
+      'connect',
+      'cookie-parser',
+      'crypto', //node:crypto
+      'decimal.js',
+      'denque',
       'faye-websocket',
-      'permessage-deflate',
       'fibers',
       'fibers/future',
-      'denque',
-      'node-fetch',
-      'underscore',
-      'meteor/reload', // elided
+      'fs', // node:fs
+      'http', // node:http
+      'meteor-promise',
+      'meteor/inter-process-messaging',
       'meteor/modern-browsers', // will be automatically stripped
+      'meteor/reload', // elided
+      'mongodb',
+      'node-fetch',
+      'nodemailer',
+      'os', // node:os
+      'parseurl',
+      'path', // node:path
+      'permessage-deflate',
+      'qs',
+      'send',
+      'sockjs',
+      'underscore',
+      'url', // node:url
+      'useragent',
     ],
     plugins: [
       replace({
@@ -645,8 +669,9 @@ function makeConfig(input, output, isClient) {
           'Meteor.isServer': 'false',
           'Meteor.isClient': 'true',
           'Meteor.isCordova': 'false',
-          'Package.blaze': 'undefined',
           'Package.autopublish': 'undefined',
+          'Package.autoupdate': 'undefined',
+          'Package.blaze': 'undefined',
           'Package.insecure': 'undefined',
 
         } : {
@@ -654,11 +679,12 @@ function makeConfig(input, output, isClient) {
           'Meteor.isClient': 'false',
           'Meteor.isCordova': 'false',
           'Npm.require': 'require',
-          'Package.blaze': 'undefined',
-          'Package.autopublish': 'undefined',
-          'Package.insecure': 'undefined',
-          'Meteor._printSentDDP': 'false',
           'Meteor._printReceivedDDP': 'false',
+          'Meteor._printSentDDP': 'false',
+          'Package.autopublish': 'undefined',
+          'Package.autoupdate': 'undefined',
+          'Package.blaze': 'undefined',
+          'Package.insecure': 'undefined',
         }
       }),
       strip({

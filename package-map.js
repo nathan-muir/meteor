@@ -17,7 +17,8 @@
 
 const noop = undefined;
 export { noop as "autopublish" };
+export { noop as "autoupdate" };
 export { noop as "blaze" };
+export { noop as "facts-base"};
 export { noop as "insecure" };
 export { noop as "oauth-encryption" };
-export { noop as "facts-base"};
