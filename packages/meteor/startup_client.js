@@ -67,7 +67,7 @@ if (document.readyState === 'complete' || document.readyState === 'loaded') {
  * @locus Anywhere
  * @param {Function} func A function to run on startup.
  */
-Meteor.startup = function (callback) {
+export const Meteor$startup = function (callback) {
   // Fix for < IE9, see http://javascript.nwbox.com/IEContentLoaded/
   var doScroll = !document.addEventListener &&
     document.documentElement.doScroll;
@@ -80,7 +80,7 @@ Meteor.startup = function (callback) {
   } else {
     try { doScroll('left'); }
     catch (error) {
-      setTimeout(function () { Meteor.startup(callback); }, 50);
+      setTimeout(function () { Meteor$startup(callback); }, 50);
       return;
     };
     callback();

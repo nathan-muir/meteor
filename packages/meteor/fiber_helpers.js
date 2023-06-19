@@ -1,7 +1,9 @@
+import Meteor$_DoubleEndedQueue from 'denque';
+
 var Fiber = Npm.require('fibers');
 var Future = Npm.require('fibers/future');
 
-Meteor._noYieldsAllowed = function (f) {
+export const Meteor$_noYieldsAllowed = function (f) {
   var savedYield = Fiber.yield;
   Fiber.yield = function () {
     throw new Error("Can't call yield in a noYieldsAllowed block!");
@@ -13,7 +15,7 @@ Meteor._noYieldsAllowed = function (f) {
   }
 };
 
-Meteor._DoubleEndedQueue = Npm.require('denque');
+export { Meteor$_DoubleEndedQueue };
 
 // Meteor._SynchronousQueue is a queue which runs task functions serially.
 // Tasks are assumed to be synchronous: ie, it's assumed that they are
@@ -32,13 +34,13 @@ Meteor._DoubleEndedQueue = Npm.require('denque');
 // XXX could maybe use the npm 'schlock' module instead, which would
 //     also support multiple concurrent "read" tasks
 //
-Meteor._SynchronousQueue = function () {
+export const Meteor$_SynchronousQueue = function () {
   var self = this;
   // List of tasks to run (not including a currently-running task if any). Each
   // is an object with field 'task' (the task function to run) and 'future' (the
   // Future associated with the blocking runTask call that queued it, or null if
   // called from queueTask).
-  self._taskHandles = new Meteor._DoubleEndedQueue();
+  self._taskHandles = new Meteor$_DoubleEndedQueue();
   // This is true if self._run() is either currently executing or scheduled to
   // do so soon.
   self._runningOrRunScheduled = false;
@@ -53,7 +55,7 @@ Meteor._SynchronousQueue = function () {
   self._draining = false;
 };
 
-var SQp = Meteor._SynchronousQueue.prototype;
+var SQp = Meteor$_SynchronousQueue.prototype;
 
 SQp.runTask = function (task) {
   var self = this;
@@ -174,7 +176,7 @@ SQp._run = function () {
 // Sleep. Mostly used for debugging (eg, inserting latency into server
 // methods).
 //
-Meteor._sleepForMs = function (ms) {
+export const Meteor$_sleepForMs = function (ms) {
   var fiber = Fiber.current;
   setTimeout(function() {
     fiber.run();

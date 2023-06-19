@@ -133,7 +133,7 @@ function useTimeout() {
 }
 
 
-Meteor._setImmediate =
+export const Meteor$_setImmediate =
   useSetImmediate() ||
   usePostMessage() ||
   useTimeout();

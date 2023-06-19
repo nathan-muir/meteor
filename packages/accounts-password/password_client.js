@@ -53,7 +53,7 @@ const internalLoginWithPassword = ({ selector, password, code, callback }) => {
  *   on failure.
  * @importFromPackage meteor
  */
-Meteor.loginWithPassword = (selector, password, callback) => {
+export const Meteor$loginWithPassword = (selector, password, callback) => {
   return internalLoginWithPassword({ selector, password, callback });
 };
 
@@ -78,7 +78,7 @@ Accounts._hashPassword = password => ({
  * @importFromPackage meteor
  */
 
-Meteor.loginWithPasswordAnd2faCode = (selector, password, code, callback) => {
+export const Meteor$loginWithPasswordAnd2faCode = (selector, password, code, callback) => {
   if (code == null || typeof code !== 'string' || !code) {
     throw new Meteor.Error(
       400,

@@ -1,4 +1,4 @@
-meteorEnv = {
+export const meteorEnv = {
   NODE_ENV: process.env.NODE_ENV || "production",
   TEST_METADATA: process.env.TEST_METADATA || "{}"
 };
@@ -10,22 +10,20 @@ if (config) {
   config.meteorEnv = meteorEnv;
 }
 
-Meteor = {
-  isProduction: meteorEnv.NODE_ENV === "production",
-  isDevelopment: meteorEnv.NODE_ENV !== "production",
-  isClient: false,
-  isServer: true,
-  isCordova: false,
-  // Server code runs in Node 8+, which is decidedly "modern" by any
-  // reasonable definition.
-  isModern: true
-};
+export const Meteor$isProduction = meteorEnv.NODE_ENV === "production";
+export const Meteor$isDevelopment = meteorEnv.NODE_ENV !== "production";
+export const Meteor$isClient = false;
+export const Meteor$isServer = true;
+export const Meteor$isCordova = false;
+// Server code runs in Node 8+, which is decidedly "modern" by any
+// reasonable definition.
+export const Meteor$isModern = true
 
-Meteor.settings = {};
+let Meteor$settings_ = {};
 
 if (process.env.METEOR_SETTINGS) {
   try {
-    Meteor.settings = JSON.parse(process.env.METEOR_SETTINGS);
+    Meteor$settings_ = JSON.parse(process.env.METEOR_SETTINGS);
   } catch (e) {
     throw new Error("METEOR_SETTINGS are not valid JSON.");
   }
@@ -33,8 +31,8 @@ if (process.env.METEOR_SETTINGS) {
 
 // Make sure that there is always a public attribute
 // to enable Meteor.settings.public on client
-if (! Meteor.settings.public) {
-    Meteor.settings.public = {};
+if (! Meteor$settings_.public) {
+    Meteor$settings_.public = {};
 }
 
 // Push a subset of settings to the client.  Note that the way this
@@ -43,9 +41,8 @@ if (! Meteor.settings.public) {
 // `__meteor_runtime_config__.PUBLIC_SETTINGS`, and the modified
 // settings will be sent to the client.
 if (config) {
-  config.PUBLIC_SETTINGS = Meteor.settings.public;
+  config.PUBLIC_SETTINGS = Meteor$settings_.public;
 }
+export const Meteor$settings = Meteor$settings_;
 
-if (config && config.gitCommitHash) {
-  Meteor.gitCommitHash = config.gitCommitHash;
-}
+export const Meteor$gitCommitHash = config && config.gitCommitHash ? config.gitCommitHash : null;
