@@ -433,6 +433,10 @@ const packages = [
     globals: ['Minimongo', 'LocalCollection'],
   },
   {
+    name: 'modern-browsers',
+    server: 'modern_fake.js',
+  },
+  {
     name: 'mongo',
     client: 'client_main.js',
     server: 'server_main.js',
@@ -608,7 +612,15 @@ function makeConfig(input, output, isClient) {
       preserveModules: true,
       preserveModulesRoot: 'packages',
     },
-    treeshake: 'smallest',
+    treeshake: {
+      preset: 'smallest',
+      moduleSideEffects: [
+        path.resolve(projectRootDir, 'packages/non-core/mongo-decimal/decimal.js'),
+        path.resolve(projectRootDir, 'packages/promise/extensions.js'),
+        path.resolve(projectRootDir, 'packages/accounts-password/email_templates.js'),
+        path.resolve(projectRootDir, 'packages/meteor/url_server.js'),
+      ],
+    },
     external: isClient ? [
       'decimal.js',
     ] : [
@@ -631,7 +643,6 @@ function makeConfig(input, output, isClient) {
       'http', // node:http
       'meteor-promise',
       'meteor/inter-process-messaging',
-      'meteor/modern-browsers', // will be automatically stripped
       'meteor/reload', // elided
       'mongodb',
       'node-fetch',
