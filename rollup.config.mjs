@@ -284,10 +284,58 @@ const packages = [
     globals: ['Accounts'],
   },
   {
-    name: 'ejson',
-    client: 'ejson.js',
-    server: 'ejson.js',
-    globals: ['EJSON'],
+    name: 'accounts-github',
+  },
+  {
+    name: 'accounts-oauth',
+  },
+  {
+    name: 'accounts-password',
+    client: 'password_client.js',
+    server: 'password_server.js',
+    globals: [],
+  },
+  {
+    name: 'allow-deny',
+    client: 'allow-deny.js',
+    server: 'allow-deny.js',
+    globals: ['AllowDeny'],
+  },
+  {
+    name: 'base64',
+    client: 'base64.js',
+    server: 'base64.js',
+    globals: ['Base64'],
+  },
+  {
+    name: 'binary-heap',
+  },
+  {
+    name: 'callback-hook',
+    client: 'hook.js',
+    server: 'hook.js',
+    globals: ['Hook'],
+  },
+
+  {
+    name: 'check',
+    client: 'match.js',
+    server: 'match.js',
+    globals: ['check', 'Match'],
+  },
+
+  {
+    name: 'ddp-client',
+    client: 'client/client.js',
+    server: 'server/server.js',
+    globals: ['DDP'],
+  },
+  {
+    virtual: true,
+    name: 'ddp-client-environment',
+    srcDir: 'packages/ddp-client',
+    client: 'common/environment.js',
+    server: 'common/environment.js',
   },
   {
     name: 'ddp-common',
@@ -303,63 +351,9 @@ const packages = [
     server: 'utils.js',
   },
   {
-    name: 'ddp-client',
-    client: 'client/client.js',
-    server: 'server/server.js',
-    globals: ['DDP'],
-  },
-  {
-    virtual: true,
-    name: 'ddp-client-environment',
-    srcDir: 'packages/ddp-client',
-    client: 'common/environment.js',
-    server: 'common/environment.js',
-  },
-  {
     name: 'ddp-server',
     server: 'server_convenience.js',
     globals: ['DDPServer'],
-  },
-  {
-    name: 'mongo-id',
-    client: 'id.js',
-    server: 'id.js',
-    globals: ['MongoID'],
-  },
-  {
-    virtual: true,
-    name: 'meteor',
-    srcDir: '.',
-    client: 'meteor-star-client.js',
-  },
-  {
-    name: 'random',
-    client: 'main_client.js',
-    server: 'main_server.js',
-    globals: ['Random'],
-  },
-  {
-    name: 'tracker',
-    client: 'tracker.js',
-    server: 'tracker.js',
-    globals: ['Tracker'],
-  },
-  {
-    name: 'reload',
-    client: 'reload.js',
-    globals: ['Reload']
-  },
-  {
-    name: 'mongo',
-    client: 'client_main.js',
-    server: 'server_main.js',
-    globals: ['Mongo'],
-  },
-  {
-    name: 'minimongo',
-    client: 'minimongo_client.js',
-    server: 'minimongo_server.js',
-    globals: ['Minimongo', 'LocalCollection'],
   },
   {
     name: 'diff-sequence',
@@ -368,10 +362,39 @@ const packages = [
     globals: ['DiffSequence'],
   },
   {
+    name: 'ejson',
+    client: 'ejson.js',
+    server: 'ejson.js',
+    globals: ['EJSON'],
+  },
+  {
+    name: 'email',
+    server: 'email.js',
+    globals: ['Email'],
+  },
+  {
+    name: 'fetch',
+    server: 'server.js',
+    globals: [],
+  },
+  {
     name: 'geojson-utils',
     client: 'geojson-utils.js',
     server: 'geojson-utils.js',
     globals: ['GeoJSON'],
+  },
+  {
+    name: 'google-oauth',
+    client: 'google_client.js',
+    server: 'google_server.js',
+    globals: ['Google'],
+  },
+  {
+    name: 'http',
+    client: 'httpcall_client.js',
+    server: 'httpcall_server.js',
+    srcDir: 'packages/deprecated/http',
+    globals: ['HTTP'],
   },
   {
     name: 'id-map',
@@ -380,12 +403,42 @@ const packages = [
     globals: ['IdMap'],
   },
   {
-    name: 'ordered-dict',
-    client: 'ordered_dict.js',
-    server: 'ordered_dict.js',
-    globals: ['OrderedDict'],
+    name: 'localstorage',
+    client: 'localstorage.js',
+    // server: 'localstorage.js',
+    globals: [],
   },
-
+  {
+    name: 'logging',
+    client: 'logging.js',
+    server: 'logging.js',
+    globals: ['Log'],
+  },
+  {
+    virtual: true,
+    name: 'meteor',
+    srcDir: '.',
+    client: 'meteor-star-client.js',
+    server: 'meteor-star-server.js',
+  },
+  {
+    name: 'minimongo',
+    client: 'minimongo_client.js',
+    server: 'minimongo_server.js',
+    globals: ['Minimongo', 'LocalCollection'],
+  },
+  {
+    name: 'mongo',
+    client: 'client_main.js',
+    server: 'server_main.js',
+    globals: ['Mongo'],
+  },
+  {
+    name: 'mongo-id',
+    client: 'id.js',
+    server: 'id.js',
+    globals: ['MongoID'],
+  },
   {
     name: 'mongo-decimal',
     client: 'decimal.js',
@@ -393,7 +446,44 @@ const packages = [
     srcDir: 'packages/non-core/mongo-decimal',
     globals: ['Decimal'],
   },
-
+  {
+    name: 'npm-mongo',
+    server: 'wrapper.js',
+    globals: [
+      "NpmModuleMongodb",
+      "NpmModuleMongodbVersion",
+    ]
+  },
+  {
+    name: 'oauth',
+    globals: ['OAuth'],
+  },
+  {
+    name: 'oauth2',
+  },
+  {
+    name: 'ordered-dict',
+    client: 'ordered_dict.js',
+    server: 'ordered_dict.js',
+    globals: ['OrderedDict'],
+  },
+  {
+    name: 'promise',
+    client: 'client.js',
+    server: 'server.js',
+    globals: ['Promise'],
+  },
+  {
+    name: 'random',
+    client: 'main_client.js',
+    server: 'main_server.js',
+    globals: ['Random'],
+  },
+  {
+    name: 'rate-limit',
+    server: 'rate-limit.js',
+    globals: ['RateLimiter'],
+  },
   {
     name: 'reactive-dict',
     client: 'migration.js',
@@ -407,99 +497,28 @@ const packages = [
     // server: 'reactive-var.js',
     globals: ['ReactiveVar'],
   },
-
   {
-    name: 'localstorage',
-    client: 'localstorage.js',
-    // server: 'localstorage.js',
-    globals: [],
+    name: 'reload',
+    client: 'reload.js',
+    globals: ['Reload']
   },
-
-  {
-    name: 'check',
-    client: 'match.js',
-    server: 'match.js',
-    globals: ['check', 'Match'],
-  },
-
-  {
-    name: 'callback-hook',
-    client: 'hook.js',
-    server: 'hook.js',
-    globals: ['Hook'],
-  },
-
-  {
-    name: 'url',
-    client: 'modern.js',
-    server: 'server.js',
-    globals: [],
-  },
-
-  {
-    name: 'service-configuration',
-    client: 'service_configuration_common.js',
-    server: 'service_configuration_server.js',
-    globals: ['ServiceConfiguration'],
-  },
-
-  {
-    name: 'accounts-password',
-    client: 'password_client.js',
-    server: 'password_server.js',
-    globals: [],
-  },
-
-  {
-    name: 'allow-deny',
-    client: 'allow-deny.js',
-    server: 'allow-deny.js',
-    globals: ['AllowDeny'],
-  },
-
-  {
-    name: 'logging',
-    client: 'logging.js',
-    server: 'logging.js',
-    globals: ['Log'],
-  },
-
-  {
-    name: 'socket-stream-client',
-    client: 'browser.js',
-    server: 'node.js',
-    globals: [],
-  },
-
   {
     name: 'retry',
     client: 'retry.js',
     server: 'retry.js',
     globals: ['Retry'],
   },
-
   {
-    name: 'base64',
-    client: 'base64.js',
-    server: 'base64.js',
-    globals: ['Base64'],
+    name: 'routepolicy',
+    server: 'main.js',
+    globals: ['RoutePolicy']
   },
-
   {
-    name: 'sha',
-    client: 'sha256.js',
-    server: 'sha256.js',
-    globals: ['SHA256'],
+    name: 'service-configuration',
+    client: 'service_configuration_common.js',
+    server: 'service_configuration_server.js',
+    globals: ['ServiceConfiguration'],
   },
-
-  {
-    name: 'http',
-    client: 'httpcall_client.js',
-    server: 'httpcall_server.js',
-    srcDir: 'packages/deprecated/http',
-    globals: ['HTTP'],
-  },
-
   {
     name: 'session',
     client: 'session.js',
@@ -507,9 +526,36 @@ const packages = [
     globals: ['Session'],
   },
   {
-    name: 'fetch',
+    name: 'sha',
+    client: 'sha256.js',
+    server: 'sha256.js',
+    globals: ['SHA256'],
+  },
+  {
+    name: 'socket-stream-client',
+    client: 'browser.js',
+    server: 'node.js',
+    globals: [],
+  },
+  {
+    name: 'tracker',
+    client: 'tracker.js',
+    server: 'tracker.js',
+    globals: ['Tracker'],
+  },
+
+
+  {
+    name: 'url',
+    client: 'modern.js',
     server: 'server.js',
     globals: [],
+  },
+  {
+    name: 'webapp',
+    client: 'webapp_client.js',
+    server: 'webapp_server',
+    globals: ['WebApp', 'WebAppInternals'],
   }
 ];
 
@@ -520,7 +566,7 @@ const getImportPath = (p, isClient) =>
 
 const makeInjects = (isClient) =>
   packages.map(p => {
-    const hasGlobals = p.globals?.length > 0;
+    const hasGlobals = Array.isArray(p.globals) && p.globals.length > 0;
     const add = hasGlobals && ((p.client && isClient) || (p.server && !isClient));
     if (add) {
       return inject({
@@ -566,12 +612,14 @@ function makeConfig(input, output, isClient) {
       'decimal.js',
       'bcrypt',
       'chalk',
+      'sockjs',
       'faye-websocket',
       'permessage-deflate',
       'fibers',
       'fibers/future',
       'denque',
       'node-fetch',
+      'underscore',
       'meteor/reload', // elided
       'meteor/modern-browsers', // will be automatically stripped
     ],
@@ -586,6 +634,9 @@ function makeConfig(input, output, isClient) {
           // 'Package[\'oauth-encryption\']': 'Package.oauthEncryption',
           'Package[\'service-configuration\']': 'Package.serviceConfiguration',
           'Package[\'mongo-decimal\']': 'Package.mongoDecimal',
+          'Package[\'ddp-rate-limiter\']': 'Package.ddpRateLimiter',
+          'Package[\'audit-argument-checks\']': 'true',
+          'Package[\'disable-oplog\']': 'true',
         }
       }),
       replace({
@@ -606,6 +657,8 @@ function makeConfig(input, output, isClient) {
           'Package.blaze': 'undefined',
           'Package.autopublish': 'undefined',
           'Package.insecure': 'undefined',
+          'Meteor._printSentDDP': 'false',
+          'Meteor._printReceivedDDP': 'false',
         }
       }),
       strip({
@@ -625,6 +678,7 @@ function makeConfig(input, output, isClient) {
         'Package.ddp': ['meteor/ddp', '*'],
         'Package.serviceConfiguration': ['meteor/service-configuration', '*'],
         'Package.mongoDecimal': ['meteor/mongo-decimal', '*'],
+        'Package.ddpRateLimiter': ['meteor/ddp-rate-limiter', '*'],
         Package: [path.resolve(projectRootDir, 'package-map.js'), '*'],
         ...Object.fromEntries((isClient ? MeteorClientNamespace : MeteorServerNamespace).flatMap(nsp => {
           const importFrom = nsp.package ?? path.resolve(projectRootDir, nsp.path);
