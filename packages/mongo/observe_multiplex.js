@@ -1,6 +1,6 @@
 var Future = Npm.require('fibers/future');
 
-ObserveMultiplexer = function (options) {
+export const ObserveMultiplexer = function (options) {
   var self = this;
 
   if (!options || !_.has(options, 'ordered'))
@@ -210,7 +210,7 @@ _.extend(ObserveMultiplexer.prototype, {
 var nextObserveHandleId = 1;
 
 // When the callbacks do not mutate the arguments, we can skip a lot of data clones
-ObserveHandle = function (multiplexer, callbacks, nonMutatingCallbacks = false) {
+export const ObserveHandle = function (multiplexer, callbacks, nonMutatingCallbacks = false) {
   var self = this;
   // The end user is only supposed to call stop().  The other fields are
   // accessible to the multiplexer, though.

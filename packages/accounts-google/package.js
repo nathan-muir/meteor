@@ -16,5 +16,6 @@ Package.onUse(api => {
   api.use(['accounts-ui', 'google-config-ui'], ['client', 'server'], { weak: true });
   api.addFiles("notice.js");
 
-  api.addFiles("google.js");
+  api.addFiles('google.js', 'client');
+  api.addFiles('google_server.js', 'server');
 });

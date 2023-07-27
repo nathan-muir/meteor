@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 
-OAuth = {};
-OAuthTest = {};
+export const OAuth = {};
+export const OAuthTest = {};
 
 RoutePolicy.declare('/_oauth/', 'network');
 

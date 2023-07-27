@@ -1,4 +1,3 @@
-import { Minimongo, LocalCollection } from "./minimongo_common.js";
 import {
   hasOwn,
   isNumericKey,
@@ -6,6 +5,28 @@ import {
   pathsToTree,
   projectionDetails,
 } from './common.js';
+import Matcher from './matcher.js';
+import Sorter from './sorter.js';
+import LocalCollection_ from "./local_collection.js";
+import Cursor from './cursor.js';
+import ObserveHandle from "./observe_handle.js";
+import * as LCS from './local_collection_static.js';
+import * as _f from "./field-helpers.js";
+
+Object.assign(LocalCollection_, {
+    Cursor,
+    ObserveHandle,
+    ...LCS,
+    _f: {..._f},
+});
+
+export const LocalCollection = LocalCollection_;
+export const Minimongo = {
+    LocalCollection,
+    Matcher,
+    Sorter
+};
+
 
 Minimongo._pathsElidingNumericKeys = paths => paths.map(path =>
   path.split('.').filter(part => !isNumericKey(part)).join('.')
@@ -344,5 +365,3 @@ function treeToPaths(tree, prefix = '') {
 
   return result;
 }
-
-export { Minimongo, LocalCollection }

@@ -1,4 +1,34 @@
-import { ServiceConfiguration } from "./service_configuration_common.js";
+export const ServiceConfiguration = {};
+
+// Table containing documents with configuration options for each
+// login service
+ServiceConfiguration.configurations = new Mongo.Collection(
+  'meteor_accounts_loginServiceConfiguration',
+  {
+    _preventAutopublish: true,
+    connection: Meteor.isClient ? Accounts.connection : null,
+  }
+);
+// Leave this collection open in insecure mode. In theory, someone could
+// hijack your oauth connect requests to a different endpoint or appId,
+// but you did ask for 'insecure'. The advantage is that it is much
+// easier to write a configuration wizard that works only in insecure
+// mode.
+
+// Thrown when trying to use a login service which is not configured
+ServiceConfiguration.ConfigError = function(serviceName) {
+  if (Meteor.isClient && !Accounts.loginServicesConfigured()) {
+    this.message = 'Login service configuration not yet loaded';
+  } else if (serviceName) {
+    this.message = 'Service ' + serviceName + ' not configured';
+  } else {
+    this.message = 'Service not configured';
+  }
+};
+ServiceConfiguration.ConfigError.prototype = new Error();
+ServiceConfiguration.ConfigError.prototype.name =
+  'ServiceConfiguration.ConfigError';
+
 // Only one configuration should ever exist for each service.
 // A unique index helps avoid various race conditions which could
 // otherwise lead to an inconsistent database state (when there are multiple
@@ -42,5 +72,3 @@ Meteor.startup(() => {
     );
   });
 });
-
-export { ServiceConfiguration }

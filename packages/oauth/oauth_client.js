@@ -3,7 +3,7 @@
 // the _pendingCredentials collection.
 const credentialSecrets = {};
 
-OAuth = {};
+export const OAuth = {};
 
 OAuth.showPopup = (url, callback, dimensions) => {
   throw new Error("OAuth.showPopup must be implemented on this arch.");

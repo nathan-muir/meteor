@@ -1,3 +1,4 @@
+import { publishCursor } from 'meteor/mongo/collection_util.js';
 import * as LCS from './local_collection_static.js';
 import Matcher from './matcher.js';
 import Sorter from './sorter.js';
@@ -499,19 +500,12 @@ export default class Cursor {
 
   _publishCursor(subscription) {
     // XXX minimongo should not depend on mongo-livedata!
-    if (!Package.mongo) {
-      throw new Error(
-        'Can\'t publish from Minimongo without the `mongo` package.'
-      );
-    }
-
     if (!this.collection.name) {
       throw new Error(
         'Can\'t publish a cursor from a collection without a name.'
       );
     }
-
-    return Package.mongo.Mongo.Collection._publishCursor(
+    return publishCursor(
       this,
       subscription,
       this.collection.name

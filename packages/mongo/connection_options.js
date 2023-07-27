@@ -4,7 +4,12 @@
  * @locus Server
  * @param {Object} options User specified Mongo connection options
  */
-Mongo.setConnectionOptions = function setConnectionOptions (options) {
+let _connectionOptions = null;
+export function setConnectionOptions (options) {
   check(options, Object);
-  Mongo._connectionOptions = options;
-};
+  _connectionOptions = options;
+}
+
+export function getConnectionOptions() {
+  return _connectionOptions || {};
+}

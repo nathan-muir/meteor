@@ -1,4 +1,6 @@
-import { DDPServer, Server } from './livedata_server.js';
+import { Server } from './livedata_server.js';
+import { InvalidationCrossbar } from './crossbar.js';
+export { DDPServer } from './livedata_server.js';
 
 if (process.env.DDP_DEFAULT_CONNECTION_URL) {
   __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL =
@@ -8,7 +10,7 @@ if (process.env.DDP_DEFAULT_CONNECTION_URL) {
 export const Meteor$server = new Server;
 
 export const Meteor$refresh = function (notification) {
-  DDPServer._InvalidationCrossbar.fire(notification);
+  InvalidationCrossbar.fire(notification);
 };
 
 // Proxy the public methods of Meteor.server so they can
@@ -22,4 +24,3 @@ export const Meteor$applyAsync = Meteor$server.applyAsync.bind(Meteor$server);
 export const Meteor$onConnection = Meteor$server.onConnection.bind(Meteor$server);
 export const Meteor$onMessage = Meteor$server.onMessage.bind(Meteor$server);
 
-export { DDPServer };

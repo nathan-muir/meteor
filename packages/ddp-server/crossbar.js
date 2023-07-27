@@ -54,14 +54,14 @@ _.extend(Crossbar.prototype, {
     self.listenersByCollection[collection][id] = record;
     self.listenersByCollectionCount[collection]++;
 
-    if (self.factName && Package['facts-base']) {
+    if (Package['facts-base'] && self.factName) {
       Package['facts-base'].Facts.incrementServerFact(
         self.factPackage, self.factName, 1);
     }
 
     return {
       stop: function () {
-        if (self.factName && Package['facts-base']) {
+        if (Package['facts-base'] && self.factName) {
           Package['facts-base'].Facts.incrementServerFact(
             self.factPackage, self.factName, -1);
         }
