@@ -1,7 +1,7 @@
 export {
   Meteor$_debug as _debug,
   Meteor$_suppress_log as _suppress_log,
-  Meteor$_suppressed_log_expected as _suppressed_log_expected
+  Meteor$_suppressed_log_expected as _suppressed_log_expected,
 } from './packages/meteor/debug.js';
 export {
   Meteor$EnvironmentVariable as EnvironmentVariable,
@@ -15,10 +15,10 @@ export {
   Meteor$_delete as _delete,
   Meteor$promisify as promisify,
   Meteor$wrapAsync as wrapAsync,
-  Meteor$wrapFn as wrapFn,
   Meteor$_inherits as _inherits,
   Meteor$_wrapAsync as _wrapAsync,
 } from './packages/meteor/helpers.js';
+export { Meteor$wrapFn as wrapFn } from './packages/meteor/helpers_wrapfn.js';
 export {
   Meteor$Error as Error,
   Meteor$makeErrorType as makeErrorType,
@@ -30,26 +30,20 @@ export {
   Meteor$clearTimeout as clearTimeout,
   Meteor$defer as defer,
 } from './packages/meteor/timers.js';
-export {
-  Meteor$_setImmediate as _setImmediate
-} from './packages/meteor/setimmediate.js';
+export { Meteor$_setImmediate as _setImmediate } from './packages/meteor/setimmediate.js';
 export const _localStorage = undefined;
-export {
-  Meteor$startup as startup
-} from './packages/meteor/startup_server.js';
+export { Meteor$startup as startup } from './packages/meteor/startup_server.js';
 export {
   Meteor$_noYieldsAllowed as _noYieldsAllowed,
   Meteor$_SynchronousQueue as _SynchronousQueue,
   Meteor$_sleepForMs as _sleepForMs,
-} from './packages/meteor/fiber_helpers.js'
+} from './packages/meteor/fiber_helpers.js';
 export { default as _DoubleEndedQueue } from 'denque';
 export {
   Meteor$absoluteUrl as absoluteUrl,
   Meteor$_relativeToSiteRootUrl as _relativeToSiteRootUrl,
-} from './packages/meteor/url_server.js'
-export {
-  Meteor$_escapeRegExp as _escapeRegExp,
-} from './packages/meteor/string_utils.js';
+} from './packages/meteor/url_server.js';
+export { Meteor$_escapeRegExp as _escapeRegExp } from './packages/meteor/string_utils.js';
 
 export {
   Meteor$server as server,
@@ -62,7 +56,7 @@ export {
   Meteor$applyAsync as applyAsync,
   Meteor$onConnection as onConnection,
   Meteor$onMessage as onMessage,
-} from 'meteor/ddp-server'
+} from 'meteor/ddp-server';
 
 export const connection = undefined;
 export const subscribe = undefined;

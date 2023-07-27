@@ -12,19 +12,11 @@ const projectRootDir = url.fileURLToPath(new URL('.', import.meta.url));
 const MeteorClientNamespace = [
   {
     path: 'packages/meteor/debug.js',
-    names: [
-      '_debug',
-      '_suppress_log',
-      '_suppressed_log_expected',
-    ]
+    names: ['_debug', '_suppress_log', '_suppressed_log_expected'],
   },
   {
     path: 'packages/meteor/dynamics_browser.js',
-    names: [
-      'EnvironmentVariable',
-      'bindEnvironment',
-      '_nodeCodeMustBeInFiber',
-    ]
+    names: ['EnvironmentVariable', 'bindEnvironment', '_nodeCodeMustBeInFiber'],
   },
   {
     path: 'packages/meteor/helpers.js',
@@ -35,17 +27,17 @@ const MeteorClientNamespace = [
       '_delete',
       'promisify',
       'wrapAsync',
-      'wrapFn',
       '_inherits',
       '_wrapAsync',
-    ]
+    ],
+  },
+  {
+    path: 'packages/meteor/helpers_wrapfn.js',
+    names: ['wrapFn'],
   },
   {
     path: 'packages/meteor/errors.js',
-    names: [
-      'Error',
-      'makeErrorType',
-    ]
+    names: ['Error', 'makeErrorType'],
   },
   {
     path: 'packages/meteor/timers.js',
@@ -55,39 +47,27 @@ const MeteorClientNamespace = [
       'clearInterval',
       'clearTimeout',
       'defer',
-    ]
+    ],
   },
   {
     path: 'packages/meteor/setimmediate.js',
-    names: [
-      '_setImmediate'
-    ]
+    names: ['_setImmediate'],
   },
   {
     package: 'meteor/localstorage',
-    names: [
-      '_localStorage'
-    ]
+    names: ['_localStorage'],
   },
   {
     path: 'packages/meteor/startup_client.js',
-    names: [
-      'startup'
-    ]
+    names: ['startup'],
   },
   {
     path: 'packages/meteor/fiber_stubs_client.js',
-    names: [
-      '_noYieldsAllowed',
-      '_SynchronousQueue',
-    ]
+    names: ['_noYieldsAllowed', '_SynchronousQueue'],
   },
   {
     path: 'packages/meteor/url_common.js',
-    names: [
-      'absoluteUrl',
-      '_relativeToSiteRootUrl',
-    ]
+    names: ['absoluteUrl', '_relativeToSiteRootUrl'],
   },
   {
     path: 'packages/meteor/string_utils.js',
@@ -107,7 +87,7 @@ const MeteorClientNamespace = [
       'status',
       'reconnect',
       'disconnect',
-    ]
+    ],
   },
   {
     package: 'meteor/accounts-base',
@@ -121,14 +101,11 @@ const MeteorClientNamespace = [
       'logout',
       'logoutOtherClients',
       'loginWithToken',
-    ]
+    ],
   },
   {
     package: 'meteor/accounts-password',
-    names: [
-      'loginWithPassword',
-      'loginWithPasswordAnd2faCode',
-    ],
+    names: ['loginWithPassword', 'loginWithPasswordAnd2faCode'],
   },
   {
     path: 'packages/meteor/client_environment.js',
@@ -138,26 +115,18 @@ const MeteorClientNamespace = [
       'isModern',
       'gitCommitHash',
       'settings',
-    ]
-  }
+    ],
+  },
 ];
 
 const MeteorServerNamespace = [
   {
     path: 'packages/meteor/debug.js',
-    names: [
-      '_debug',
-      '_suppress_log',
-      '_suppressed_log_expected',
-    ]
+    names: ['_debug', '_suppress_log', '_suppressed_log_expected'],
   },
   {
     path: 'packages/meteor/dynamics_nodejs.js',
-    names: [
-      'EnvironmentVariable',
-      'bindEnvironment',
-      '_nodeCodeMustBeInFiber',
-    ]
+    names: ['EnvironmentVariable', 'bindEnvironment', '_nodeCodeMustBeInFiber'],
   },
   {
     path: 'packages/meteor/helpers.js',
@@ -168,17 +137,17 @@ const MeteorServerNamespace = [
       '_delete',
       'promisify',
       'wrapAsync',
-      'wrapFn',
       '_inherits',
       '_wrapAsync',
-    ]
+    ],
+  },
+  {
+    path: 'packages/meteor/helpers_wrapfn.js',
+    names: ['wrapFn'],
   },
   {
     path: 'packages/meteor/errors.js',
-    names: [
-      'Error',
-      'makeErrorType',
-    ]
+    names: ['Error', 'makeErrorType'],
   },
   {
     path: 'packages/meteor/timers.js',
@@ -188,45 +157,31 @@ const MeteorServerNamespace = [
       'clearInterval',
       'clearTimeout',
       'defer',
-    ]
+    ],
   },
   {
     path: 'packages/meteor/setimmediate.js',
-    names: [
-      '_setImmediate'
-    ]
+    names: ['_setImmediate'],
   },
   {
     package: 'meteor/localstorage',
-    names: [
-      '_localStorage'
-    ]
+    names: ['_localStorage'],
   },
   {
     path: 'packages/meteor/startup_server.js',
-    names: [
-      'startup'
-    ]
+    names: ['startup'],
   },
   {
     path: 'packages/meteor/fiber_helpers.js',
-    names: [
-      '_noYieldsAllowed',
-      '_SynchronousQueue',
-    ]
+    names: ['_noYieldsAllowed', '_SynchronousQueue'],
   },
   {
-    package: 'denque',
-    names: [
-      '_DoubleEndedQueue',
-    ]
+    path: 'packages/meteor/denque.js',
+    names: ['_DoubleEndedQueue'],
   },
   {
     path: 'packages/meteor/url_server.js',
-    names: [
-      'absoluteUrl',
-      '_relativeToSiteRootUrl',
-    ]
+    names: ['absoluteUrl', '_relativeToSiteRootUrl'],
   },
   {
     path: 'packages/meteor/string_utils.js',
@@ -245,23 +200,15 @@ const MeteorServerNamespace = [
       'applyAsync',
       'onConnection',
       'onMessage',
-    ]
+    ],
   },
   {
     package: 'meteor/accounts-base',
-    names: [
-      'users',
-      'userId',
-      'user',
-      'userAsync',
-    ]
+    names: ['users', 'userId', 'user', 'userAsync'],
   },
   {
     package: 'meteor/accounts-password',
-    names: [
-      'loginWithPassword',
-      'loginWithPasswordAnd2faCode',
-    ],
+    names: ['loginWithPassword', 'loginWithPasswordAnd2faCode'],
   },
   {
     path: 'packages/meteor/client_environment.js',
@@ -271,10 +218,75 @@ const MeteorServerNamespace = [
       'isModern',
       'gitCommitHash',
       'settings',
-    ]
-  }
+    ],
+  },
 ];
 
+const StaticsShared = [
+  {
+    global: 'DDP',
+    members: {
+      _CurrentMethodInvocation: 'CurrentMethodInvocation',
+      _CurrentPublicationInvocation: 'CurrentPublicationInvocation',
+      _CurrentInvocation: 'CurrentMethodInvocation',
+    },
+
+    path: 'packages/ddp-client/common/environment.js',
+  },
+  {
+    global: 'DDP',
+    members: ['ConnectionError', 'ForcedReconnectError'],
+    path: 'packages/ddp-client/common/errors.js',
+  },
+  {
+    global: 'DDP',
+    members: ['randomStream'],
+    path: 'packages/ddp-client/common/random_stream.js',
+  },
+  {
+    global: 'DDPServer',
+    members: {
+      _WriteFence: 'WriteFence',
+      _CurrentWriteFence: 'CurrentWriteFence',
+    },
+    path: 'packages/ddp-server/writefence.js',
+  },
+  {
+    global: 'DDPServer',
+    members: {
+      _Crossbar: 'Crossbar',
+      _InvalidationCrossbar: 'InvalidationCrossbar',
+    },
+    path: 'packages/ddp-server/crossbar.js',
+  },
+  {
+    global: 'LocalCollection',
+    members: [
+      '_IdMap',
+      '_modify',
+      '_observeFromObserveChanges',
+      '_observeChangesCallbacksAreOrdered',
+      '_isPlainObject',
+      '_selectorIsId',
+      '_selectorIsIdPerhapsAsObject',
+    ],
+    path: 'packages/minimongo/local_collection_static.js',
+  },
+];
+
+function* statics(isClient) {
+  for (const entry of StaticsShared) {
+    if (Array.isArray(entry.members)) {
+      for (const member of entry.members) {
+        yield [entry.global, member, member, entry.path];
+      }
+    } else {
+      for (const [member, importName] of Object.entries(entry.members)) {
+        yield [entry.global, member, importName, entry.path];
+      }
+    }
+  }
+}
 
 const packages = [
   {
@@ -284,7 +296,9 @@ const packages = [
     globals: ['Accounts'],
   },
   {
-    name: 'accounts-github',
+    name: 'accounts-google',
+    client: 'google.js',
+    server: 'google_server.js',
   },
   {
     name: 'accounts-oauth',
@@ -309,6 +323,9 @@ const packages = [
   },
   {
     name: 'binary-heap',
+    client: 'binary-heap.js',
+    server: 'binary-heap.js',
+    globals: ['MaxHeap', 'MinHeap', 'MinMaxHeap'],
   },
   {
     name: 'callback-hook',
@@ -458,17 +475,17 @@ const packages = [
   {
     name: 'npm-mongo',
     server: 'wrapper.js',
-    globals: [
-      "NpmModuleMongodb",
-      "NpmModuleMongodbVersion",
-    ]
+    globals: ['NpmModuleMongodb', 'NpmModuleMongodbVersion'],
   },
   {
     name: 'oauth',
+    client: 'oauth_client.js',
+    server: 'oauth_server.js',
     globals: ['OAuth'],
   },
   {
     name: 'oauth2',
+    server: 'oauth2_server.js',
   },
   {
     name: 'ordered-dict',
@@ -509,7 +526,7 @@ const packages = [
   {
     name: 'reload',
     client: 'reload.js',
-    globals: ['Reload']
+    globals: ['Reload'],
   },
   {
     name: 'retry',
@@ -520,7 +537,7 @@ const packages = [
   {
     name: 'routepolicy',
     server: 'main.js',
-    globals: ['RoutePolicy']
+    globals: ['RoutePolicy'],
   },
   {
     name: 'service-configuration',
@@ -549,11 +566,9 @@ const packages = [
   {
     name: 'tracker',
     client: 'tracker.js',
-    server: 'tracker.js',
+    // server: 'tracker.js',
     globals: ['Tracker'],
   },
-
-
   {
     name: 'url',
     client: 'modern.js',
@@ -563,44 +578,50 @@ const packages = [
   {
     name: 'webapp',
     client: 'webapp_client.js',
-    server: 'webapp_server',
+    server: 'webapp_server.js',
     globals: ['WebApp', 'WebAppInternals'],
-  }
+  },
 ];
 
-const getPath = p => p.srcDir ?? `packages/${p.name}`
+const getPath = p => p.srcDir ?? `packages/${p.name}`;
 const getImportPath = (p, isClient) =>
-  path.resolve(projectRootDir,
-  `${getPath(p)}/${isClient ? p.client : p.server}`)
+  path.resolve(
+    projectRootDir,
+    `${getPath(p)}/${isClient ? p.client : p.server}`
+  );
 
-const makeInjects = (isClient) =>
-  packages.map(p => {
-    const hasGlobals = Array.isArray(p.globals) && p.globals.length > 0;
-    const add = hasGlobals && ((p.client && isClient) || (p.server && !isClient));
-    if (add) {
-      return inject({
-        modules: Object.fromEntries(
-          p.globals.map(name => [name, [`meteor/${p.name}`, name]])
-        ),
-        exclude: `${getPath(p)}/**`
-      })
-    }
-    return null;
-  }).filter(i => i != null)
+const makeInjects = isClient =>
+  packages
+    .map(p => {
+      const hasGlobals = Array.isArray(p.globals) && p.globals.length > 0;
+      const add =
+        hasGlobals && ((p.client && isClient) || (p.server && !isClient));
+      if (add) {
+        return inject({
+          modules: Object.fromEntries(
+            p.globals.map(name => [name, [`meteor/${p.name}`, name]])
+          ),
+          exclude: `${getPath(p)}/**`,
+        });
+      }
+      return null;
+    })
+    .filter(i => i != null);
 
-const makeAliases = (isClient) => packages.flatMap(p => {
-    const add = !p.virtual && ((p.client && isClient) || (p.server && !isClient));
+const makeAliases = isClient =>
+  packages.flatMap(p => {
+    const add =
+      !p.virtual && ((p.client && isClient) || (p.server && !isClient));
     if (add) {
       return [
         {
           find: new RegExp(`^meteor/${p.name}$`),
-          replacement: getImportPath(p, isClient)
+          replacement: getImportPath(p, isClient),
         },
-      ]
+      ];
     }
     return [];
-  }
-)
+  });
 
 function makeConfig(input, output, isClient) {
   return {
@@ -615,100 +636,110 @@ function makeConfig(input, output, isClient) {
     treeshake: {
       preset: 'smallest',
       moduleSideEffects: [
-        path.resolve(projectRootDir, 'packages/non-core/mongo-decimal/decimal.js'),
+        path.resolve(
+          projectRootDir,
+          'packages/non-core/mongo-decimal/decimal.js'
+        ),
         path.resolve(projectRootDir, 'packages/promise/extensions.js'),
-        path.resolve(projectRootDir, 'packages/accounts-password/email_templates.js'),
+        path.resolve(
+          projectRootDir,
+          'packages/accounts-password/email_templates.js'
+        ),
         path.resolve(projectRootDir, 'packages/meteor/url_server.js'),
       ],
     },
-    external: isClient ? [
-      'decimal.js',
-    ] : [
-      '@vlasky/whomst',
-      'assert', // node:assert
-      'basic-auth-connnect',
-      'bcrypt',
-      'chalk',
-      'cluster',
-      'compression',
-      'connect',
-      'cookie-parser',
-      'crypto', //node:crypto
-      'decimal.js',
-      'denque',
-      'faye-websocket',
-      'fibers',
-      'fibers/future',
-      'fs', // node:fs
-      'http', // node:http
-      'meteor-promise',
-      'meteor/inter-process-messaging',
-      'meteor/reload', // elided
-      'mongodb',
-      'node-fetch',
-      'nodemailer',
-      'os', // node:os
-      'parseurl',
-      'path', // node:path
-      'permessage-deflate',
-      'qs',
-      'send',
-      'sockjs',
-      'underscore',
-      'url', // node:url
-      'useragent',
-    ],
+    external: isClient
+      ? ['decimal.js', 'sockjs-client']
+      : [
+          '@vlasky/whomst',
+          'assert', // node:assert
+          'basic-auth-connect',
+          'bcrypt',
+          'body-parser',
+          'chalk',
+          'cluster',
+          'compression',
+          'connect',
+          'cookie-parser',
+          'crypto', //node:crypto
+          'decimal.js',
+          'denque',
+          'faye-websocket',
+          'fibers',
+          'fibers/future',
+          'fs', // node:fs
+          'http', // node:http
+          'meteor-promise',
+          'meteor/inter-process-messaging',
+          'meteor/reload', // elided
+          'mongodb',
+          'mongodb-uri',
+          'node-fetch',
+          'nodemailer',
+          'os', // node:os
+          'parseurl',
+          'path', // node:path
+          'permessage-deflate',
+          'qs',
+          'send',
+          'sockjs',
+          'underscore',
+          'url', // node:url
+          'useragent',
+        ],
     plugins: [
       replace({
         preventAssignment: false,
         delimiters: ['', ''],
         values: {
-          'DDP._CurrentMethodInvocation': 'DDP$_CurrentMethodInvocation',
-          'DDP._CurrentPublicationInvocation': 'DDP$_CurrentPublicationInvocation',
-          'DDP._CurrentInvocation': 'DDP$_CurrentMethodInvocation',
           // 'Package[\'oauth-encryption\']': 'Package.oauthEncryption',
-          'Package[\'service-configuration\']': 'Package.serviceConfiguration',
-          'Package[\'mongo-decimal\']': 'Package.mongoDecimal',
-          'Package[\'ddp-rate-limiter\']': 'Package.ddpRateLimiter',
-          'Package[\'audit-argument-checks\']': 'true',
-          'Package[\'disable-oplog\']': 'true',
-        }
+          "Package['service-configuration']": 'Package.serviceConfiguration',
+          "Package['mongo-decimal']": 'Package.mongoDecimal',
+          "Package['ddp-rate-limiter']": 'Package.ddpRateLimiter',
+          "Package['facts-base']": 'Package.factsBase',
+          "Package['audit-argument-checks']": 'true',
+          "Package['disable-oplog']": 'true',
+          "Package['oauth-encryption']": 'Package.oauthEncryption',
+          'Package["oauth-encryption"]': 'Package.oauthEncryption',
+          ...Object.fromEntries(
+            Array.from(statics(isClient)).map(([global, member]) => [
+              `${global}.${member}`,
+              `${global}$${member}`,
+            ])
+          ),
+        },
       }),
       replace({
         preventAssignment: true,
-        values: isClient ? {
-          'Meteor.isServer': 'false',
-          'Meteor.isClient': 'true',
-          'Meteor.isCordova': 'false',
-          'Package.autopublish': 'undefined',
-          'Package.autoupdate': 'undefined',
-          'Package.blaze': 'undefined',
-          'Package.insecure': 'undefined',
-
-        } : {
-          'Meteor.isServer': 'true',
-          'Meteor.isClient': 'false',
-          'Meteor.isCordova': 'false',
-          'Npm.require': 'require',
-          'Meteor._printReceivedDDP': 'false',
-          'Meteor._printSentDDP': 'false',
-          'Package.autopublish': 'undefined',
-          'Package.autoupdate': 'undefined',
-          'Package.blaze': 'undefined',
-          'Package.insecure': 'undefined',
-        }
+        values: isClient
+          ? {
+              'Meteor.isServer': 'false',
+              'Meteor.isClient': 'true',
+              'Meteor.isCordova': 'false',
+              'Package.autopublish': 'undefined',
+              'Package.autoupdate': 'undefined',
+              'Package.blaze': 'undefined',
+              'Package.insecure': 'undefined',
+            }
+          : {
+              'Meteor.isServer': 'true',
+              'Meteor.isClient': 'false',
+              'Meteor.isCordova': 'false',
+              'Npm.require': 'require',
+              'Meteor._printReceivedDDP': 'false',
+              'Meteor._printSentDDP': 'false',
+              'Package.autopublish': 'undefined',
+              'Package.autoupdate': 'undefined',
+              'Package.factsBase': 'undefined',
+              'Package.blaze': 'undefined',
+              'Package.insecure': 'undefined',
+            },
       }),
       strip({
         functions: ['setMinimumBrowserVersions'],
       }),
       inject({
         _: 'underscore',
-        'DDP$_CurrentMethodInvocation': [
-          path.resolve(projectRootDir, 'packages/ddp-client/common/environment.js'), 'CurrentMethodInvocation'
-        ],
-        'DDP$_CurrentPublicationInvocation': [
-          path.resolve(projectRootDir, 'packages/ddp-client/common/environment.js'), 'CurrentPublicationInvocation'
-        ],
         'Package.tracker': ['meteor/tracker', '*'],
         'Package.reload': ['meteor/reload', '*'],
         'Package.mongo': ['meteor/mongo', '*'],
@@ -717,51 +748,103 @@ function makeConfig(input, output, isClient) {
         'Package.mongoDecimal': ['meteor/mongo-decimal', '*'],
         'Package.ddpRateLimiter': ['meteor/ddp-rate-limiter', '*'],
         Package: [path.resolve(projectRootDir, 'package-map.js'), '*'],
-        ...Object.fromEntries((isClient ? MeteorClientNamespace : MeteorServerNamespace).flatMap(nsp => {
-          const importFrom = nsp.package ?? path.resolve(projectRootDir, nsp.path);
-          return nsp.names.map(name => [`Meteor.${name}`, [importFrom, `Meteor$${name}`]])
-        })),
-        Meteor: [path.resolve(projectRootDir,
-          isClient ? 'meteor-map-client.js' : 'meteor-map-server.js'), '*'],
+        ...Object.fromEntries(
+          Array.from(
+            statics(isClient)
+          ).map(([global, member, importName, _path]) => [
+            `${global}$${member}`,
+            [path.resolve(projectRootDir, _path), importName],
+          ])
+        ),
+        ...Object.fromEntries(
+          (isClient ? MeteorClientNamespace : MeteorServerNamespace).flatMap(
+            nsp => {
+              const importFrom =
+                nsp.package ?? path.resolve(projectRootDir, nsp.path);
+              return nsp.names.map(name => [
+                `Meteor.${name}`,
+                [importFrom, `Meteor$${name}`],
+              ]);
+            }
+          )
+        ),
+        Meteor: [
+          path.resolve(
+            projectRootDir,
+            isClient ? 'meteor-map-client.js' : 'meteor-map-server.js'
+          ),
+          '*',
+        ],
       }),
       ...makeInjects(isClient),
       alias({
         entries: [
           {
             find: 'meteor/underscore',
-            replacement: 'underscore'
+            replacement: 'underscore',
           },
           {
             find: /^meteor\/meteor$/,
-            replacement: path.resolve(projectRootDir, isClient ? 'meteor-star-client.js' :
-              'meteor-star-server.js')
+            replacement: path.resolve(
+              projectRootDir,
+              isClient ? 'meteor-star-client.js' : 'meteor-star-server.js'
+            ),
           },
+          // TODO make replacement rule
           {
             find: 'meteor/ddp-common/utils.js',
-            replacement: path.resolve(projectRootDir, 'packages/ddp-common/utils.js'),
+            replacement: path.resolve(
+              projectRootDir,
+              'packages/ddp-common/utils.js'
+            ),
+          },
+          {
+            find: 'meteor/ddp-common/random_stream.js',
+            replacement: path.resolve(
+              projectRootDir,
+              'packages/ddp-common/random_stream.js'
+            ),
+          },
+          {
+            find: 'meteor/minimongo/constants',
+            replacement: path.resolve(
+              projectRootDir,
+              'packages/minimongo/constants.js'
+            ),
+          },
+          {
+            find: 'meteor/mongo/collection_util.js',
+            replacement: path.resolve(
+              projectRootDir,
+              'packages/mongo/collection_util.js'
+            ),
           },
           ...makeAliases(isClient),
-        ]
+        ],
       }),
       commonjs({
         transformMixedEsModules: true,
-      })
-    ]
+      }),
+    ],
   };
 }
 
 const clientInputFiles = Object.fromEntries(
-  packages.filter(p => p.client != null).map(p => {
-    const d = p.srcDir ?? `packages/${p.name}`
-    return [p.name, `${d}/${p.client}`]
-  })
+  packages
+    .filter(p => p.client != null)
+    .map(p => {
+      const d = p.srcDir ?? `packages/${p.name}`;
+      return [p.name, `${d}/${p.client}`];
+    })
 );
 
 const serverInputFiles = Object.fromEntries(
-  packages.filter(p => p.server != null).map(p => {
-    const d = p.srcDir ?? `packages/${p.name}`
-    return [p.name, `${d}/${p.server}`]
-  })
+  packages
+    .filter(p => p.server != null)
+    .map(p => {
+      const d = p.srcDir ?? `packages/${p.name}`;
+      return [p.name, `${d}/${p.server}`];
+    })
 );
 
 export default [
@@ -770,13 +853,13 @@ export default [
     {
       dir: 'modules-client',
     },
-    true,
+    true
   ),
   makeConfig(
     serverInputFiles,
     {
       dir: 'modules-server',
     },
-    false,
-  )
+    false
+  ),
 ];
