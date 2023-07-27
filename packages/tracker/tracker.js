@@ -59,7 +59,7 @@ function _throwOrLog(from, e) {
     _maybeSuppressMoreLogs(printArgs.length);
 
     for (var i = 0; i < printArgs.length; i++) {
-      Meteor._debug()(printArgs[i]);
+      Meteor._debug(printArgs[i]);
     }
   }
 }
