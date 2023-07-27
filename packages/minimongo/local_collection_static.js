@@ -156,7 +156,8 @@ export const wrapTransform =transform => {
 
     // XXX consider making tracker a weak dependency and checking
     // Package.tracker here
-    const transformed = Tracker.nonreactive(() => transform(doc));
+    const transformed =
+      Package.tracker ? Package.tracker.Tracker.nonreactive(() => transform(doc)) : transform(doc);
 
     if (!_isPlainObject(transformed)) {
       throw new Error('transform must return object');

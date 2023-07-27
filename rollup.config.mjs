@@ -566,7 +566,7 @@ const packages = [
   {
     name: 'tracker',
     client: 'tracker.js',
-    // server: 'tracker.js',
+    server: 'tracker.js',
     globals: ['Tracker'],
   },
   {
@@ -733,6 +733,7 @@ function makeConfig(input, output, isClient) {
               'Package.factsBase': 'undefined',
               'Package.blaze': 'undefined',
               'Package.insecure': 'undefined',
+              'Package.tracker': 'undefined',
             },
       }),
       strip({

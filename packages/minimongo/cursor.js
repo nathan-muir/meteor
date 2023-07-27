@@ -37,7 +37,7 @@ export default class Cursor {
     this._transform = LCS.wrapTransform(options.transform);
 
     // by default, queries register w/ Tracker when it is available.
-    if (typeof Tracker !== 'undefined') {
+    if (Package.tracker) {
       this.reactive = options.reactive === undefined ? true : options.reactive;
     }
   }
@@ -339,13 +339,13 @@ export default class Cursor {
       }
     });
 
-    if (this.reactive && Tracker.active) {
+    if (Package.tracker && Package.tracker.Tracker.active && this.reactive) {
       // XXX in many cases, the same observe will be recreated when
       // the current autorun is rerun.  we could save work by
       // letting it linger across rerun and potentially get
       // repurposed if the same observe is performed, using logic
       // similar to that of Meteor.subscribe.
-      Tracker.onInvalidate(() => {
+      Package.tracker.Tracker.onInvalidate(() => {
         handle.stop();
       });
     }
@@ -360,8 +360,8 @@ export default class Cursor {
   // XXX Maybe we need a version of observe that just calls a callback if
   // anything changed.
   _depend(changers, _allow_unordered) {
-    if (Tracker.active) {
-      const dependency = new Tracker.Dependency;
+    if (Package.tracker && Package.tracker.Tracker.active) {
+      const dependency = new Package.tracker.Tracker.Dependency;
       const notify = dependency.changed.bind(dependency);
 
       dependency.depend();
