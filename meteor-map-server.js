@@ -85,4 +85,4 @@ export {
   Meteor$isModern as isModern,
   Meteor$gitCommitHash as gitCommitHash,
   Meteor$settings as settings,
-} from './packages/meteor/client_environment.js';
+} from './packages/meteor/server_environment.js';

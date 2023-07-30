@@ -211,7 +211,7 @@ const MeteorServerNamespace = [
     names: ['loginWithPassword', 'loginWithPasswordAnd2faCode'],
   },
   {
-    path: 'packages/meteor/client_environment.js',
+    path: 'packages/meteor/server_environment.js',
     names: [
       'isProduction',
       'isDevelopment',
