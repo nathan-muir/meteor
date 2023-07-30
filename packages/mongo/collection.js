@@ -16,6 +16,7 @@ export function warnUsingOldApi (
     isCalledFromAsync
    ){
   if (
+    Meteor.isServer &&
     process.env.WARN_WHEN_USING_OLD_API && // also ensures it is on the server
     !isCalledFromAsync // must be true otherwise we should log
   ) {
