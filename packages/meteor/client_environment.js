@@ -1,6 +1,3 @@
-var config = __meteor_runtime_config__;
-export const meteorEnv = config.meteorEnv;
-
 /**
  * @summary The Meteor namespace
  * @namespace Meteor
@@ -12,7 +9,7 @@ export const meteorEnv = config.meteorEnv;
    * @static
    * @type {Boolean}
    */
-export const  Meteor$isProduction = meteorEnv.NODE_ENV === "production";
+export const  Meteor$isProduction = __meteor_runtime_config__.meteorEnv.NODE_ENV === "production";
 
   /**
    * @summary Boolean variable.  True if running in development environment.
@@ -20,7 +17,7 @@ export const  Meteor$isProduction = meteorEnv.NODE_ENV === "production";
    * @static
    * @type {Boolean}
    */
-export const Meteor$isDevelopment = meteorEnv.NODE_ENV !== "production";
+export const Meteor$isDevelopment = __meteor_runtime_config__.meteorEnv.NODE_ENV !== "production";
 
   /**
    * @summary Boolean variable.  True if running in client environment.
@@ -53,7 +50,7 @@ export const Meteor$isCordova = false;
    * @static
    * @type {Boolean}
    */
-export const Meteor$isModern = config.isModern;
+export const Meteor$isModern = __meteor_runtime_config__.isModern;
 
   /**
    * @summary Hexadecimal Git commit hash, if the application is using Git

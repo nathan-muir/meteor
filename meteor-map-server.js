@@ -42,7 +42,7 @@ export { default as _DoubleEndedQueue } from 'denque';
 export {
   Meteor$absoluteUrl as absoluteUrl,
   Meteor$_relativeToSiteRootUrl as _relativeToSiteRootUrl,
-} from './packages/meteor/url_server.js';
+} from './packages/meteor/url_common.js';
 export { Meteor$_escapeRegExp as _escapeRegExp } from './packages/meteor/string_utils.js';
 
 export {

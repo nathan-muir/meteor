@@ -898,9 +898,8 @@ function runWebAppServer() {
       }
     });
 
-    const { PUBLIC_SETTINGS } = __meteor_runtime_config__;
     const configOverrides = {
-      PUBLIC_SETTINGS,
+      PUBLIC_SETTINGS: __meteor_runtime_config__.PUBLIC_SETTINGS,
     };
 
     const oldProgram = WebApp.clientPrograms[arch];
@@ -935,7 +934,7 @@ function runWebAppServer() {
           configOverrides
         ),
       cordovaCompatibilityVersions: programJson.cordovaCompatibilityVersions,
-      PUBLIC_SETTINGS,
+      PUBLIC_SETTINGS: __meteor_runtime_config__.PUBLIC_SETTINGS,
       hmrVersion: programJson.hmrVersion,
     });
 
@@ -1029,7 +1028,15 @@ function runWebAppServer() {
     ));
     // We need the runtime config with overrides for meteor_runtime_config.js:
     program.meteorRuntimeConfig = JSON.stringify({
-      ...__meteor_runtime_config__,
+      ACCOUNTS_CONNECTION_URL: __meteor_runtime_config__.ACCOUNTS_CONNECTION_URL,
+      DDP_DEFAULT_CONNECTION_URL: __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL,
+      DISABLE_SOCKJS: __meteor_runtime_config__.DISABLE_SOCKJS,
+      PUBLIC_SETTINGS: __meteor_runtime_config__.PUBLIC_SETTINGS,
+      ROOT_URL: __meteor_runtime_config__.ROOT_URL,
+      ROOT_URL_PATH_PREFIX: __meteor_runtime_config__.ROOT_URL_PATH_PREFIX,
+      gitCommitHash: __meteor_runtime_config__.gitCommitHash,
+      meteorEnv: __meteor_runtime_config__.meteorEnv,
+      meteorRelease: __meteor_runtime_config__.meteorRelease,
       ...(additionalOptions.runtimeConfigOverrides || null),
     });
     program.refreshableAssets = baseData.css.map(file => ({
@@ -1365,7 +1372,7 @@ function runWebAppServer() {
    * @locus Server
    * @summary Starts the HTTP server.
    *  If `UNIX_SOCKET_PATH` is present Meteor's HTTP server will use that socket file for inter-process communication, instead of TCP.
-   * If you choose to not include webapp package in your application this method still must be defined for your Meteor application to work. 
+   * If you choose to not include webapp package in your application this method still must be defined for your Meteor application to work.
    */
   // Let the rest of the packages (and Meteor.startup hooks) insert connect
   // middlewares and update __meteor_runtime_config__, then keep going to set up

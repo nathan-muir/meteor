@@ -55,8 +55,7 @@ var defaultOptions = Meteor$absoluteUrl.defaultOptions = {};
 // available only in a browser environment
 var location = typeof window === "object" && window.location;
 
-if (typeof __meteor_runtime_config__ === "object" &&
-    __meteor_runtime_config__.ROOT_URL) {
+if (__meteor_runtime_config__.ROOT_URL) {
   defaultOptions.rootUrl = __meteor_runtime_config__.ROOT_URL;
 } else if (location &&
            location.protocol &&
@@ -73,8 +72,7 @@ if (location &&
 }
 
 export const Meteor$_relativeToSiteRootUrl = function (link) {
-  if (typeof __meteor_runtime_config__ === "object" &&
-      link.substr(0, 1) === "/")
+  if (link.substr(0, 1) === "/")
     link = (__meteor_runtime_config__.ROOT_URL_PATH_PREFIX || "") + link;
   return link;
 };

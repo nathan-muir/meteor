@@ -2,11 +2,6 @@ import { Server } from './livedata_server.js';
 import { InvalidationCrossbar } from './crossbar.js';
 export { DDPServer } from './livedata_server.js';
 
-if (process.env.DDP_DEFAULT_CONNECTION_URL) {
-  __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL =
-    process.env.DDP_DEFAULT_CONNECTION_URL;
-}
-
 export const Meteor$server = new Server;
 
 export const Meteor$refresh = function (notification) {

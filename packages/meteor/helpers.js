@@ -6,7 +6,7 @@ if (Meteor.isServer)
  * @locus Anywhere
  * @type {String}
  */
-export const Meteor$release = typeof __meteor_runtime_config__ === 'object' ? __meteor_runtime_config__.meteorRelease : undefined;
+export const Meteor$release = __meteor_runtime_config__.meteorRelease;
 
 // XXX find a better home for these? Ideally they would be _.get,
 // _.ensure, _.delete..

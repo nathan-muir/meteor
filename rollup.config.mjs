@@ -180,7 +180,7 @@ const MeteorServerNamespace = [
     names: ['_DoubleEndedQueue'],
   },
   {
-    path: 'packages/meteor/url_server.js',
+    path: 'packages/meteor/url_common.js',
     names: ['absoluteUrl', '_relativeToSiteRootUrl'],
   },
   {
@@ -645,7 +645,6 @@ function makeConfig(input, output, isClient) {
           projectRootDir,
           'packages/accounts-password/email_templates.js'
         ),
-        path.resolve(projectRootDir, 'packages/meteor/url_server.js'),
       ],
     },
     external: isClient
@@ -740,6 +739,14 @@ function makeConfig(input, output, isClient) {
         functions: ['setMinimumBrowserVersions'],
       }),
       inject({
+        ...(isClient ? {
+          __meteor_runtime_config__:
+            path.resolve(projectRootDir, 'packages/meteor/meteor_runtime_config_client.js')
+          } : {
+          __meteor_runtime_config__: [
+            path.resolve(projectRootDir, 'packages/meteor/meteor_runtime_config_server.js'), '*'
+            ]
+        }),
         _: 'underscore',
         'Package.tracker': ['meteor/tracker', '*'],
         'Package.reload': ['meteor/reload', '*'],
