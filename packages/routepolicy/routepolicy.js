@@ -55,48 +55,10 @@ export default class RoutePolicy {
     return null;
   }
 
-  checkForConflictWithStatic(urlPrefix, type, _testManifest) {
-    if (type === 'static-online') {
-      return null;
-    }
-
-    const policy = this;
-
-    function check(manifest) {
-      const conflict = manifest.find(resource => (
-        resource.type === 'static' &&
-        resource.where === 'client' &&
-        policy.urlPrefixMatches(urlPrefix, resource.url)
-      ));
-
-      if (conflict) {
-        return `static resource ${conflict.url} conflicts with ${type} ` +
-          `route ${urlPrefix}`;
-      }
-
-      return null;
-    };
-
-    if (_testManifest) {
-      return check(_testManifest);
-    }
-
-    const { WebApp } = require("meteor/webapp");
-    let errorMessage = null;
-
-    Object.keys(WebApp.clientPrograms).some(arch => {
-      const { manifest } = WebApp.clientPrograms[arch];
-      return errorMessage = check(manifest);
-    });
-
-    return errorMessage;
-  }
-
   declare(urlPrefix, type) {
     const problem =
       this.checkType(type) ||
-      this.checkUrlPrefix(urlPrefix, type) ||
-      this.checkForConflictWithStatic(urlPrefix, type);
+      this.checkUrlPrefix(urlPrefix, type);
     if (problem) {
       throw new Error(problem);
     }
