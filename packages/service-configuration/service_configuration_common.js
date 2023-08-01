@@ -6,7 +6,7 @@ ServiceConfiguration.configurations = new Mongo.Collection(
   'meteor_accounts_loginServiceConfiguration',
   {
     _preventAutopublish: true,
-    connection: Meteor.isClient ? Accounts.connection : null,
+    connection: Meteor.connection,
   }
 );
 // Leave this collection open in insecure mode. In theory, someone could
