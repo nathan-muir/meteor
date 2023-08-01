@@ -302,6 +302,8 @@ const packages = [
   },
   {
     name: 'accounts-oauth',
+    client: 'oauth_client.js',
+    server: 'oauth_server.js'
   },
   {
     name: 'accounts-password',
@@ -474,7 +476,7 @@ const packages = [
   },
   {
     name: 'npm-mongo',
-    server: 'wrapper.js',
+    // server: 'wrapper.js',
     globals: ['NpmModuleMongodb', 'NpmModuleMongodbVersion'],
   },
   {
@@ -579,7 +581,7 @@ const packages = [
     name: 'webapp',
     client: 'webapp_client.js',
     server: 'webapp_server.js',
-    globals: ['WebApp', 'WebAppInternals'],
+    // globals: ['WebApp', 'WebAppInternals'],
   },
 ];
 
@@ -645,6 +647,14 @@ function makeConfig(input, output, isClient) {
           projectRootDir,
           'packages/accounts-password/email_templates.js'
         ),
+        path.resolve(
+          projectRootDir,
+          'packages/accounts-oauth/oauth_common.js',
+        ),
+        path.resolve(
+          projectRootDir,
+          'packages/accounts-oauth/oauth_server.js',
+        )
       ],
     },
     external: isClient
@@ -755,6 +765,8 @@ function makeConfig(input, output, isClient) {
         'Package.serviceConfiguration': ['meteor/service-configuration', '*'],
         'Package.mongoDecimal': ['meteor/mongo-decimal', '*'],
         'Package.ddpRateLimiter': ['meteor/ddp-rate-limiter', '*'],
+        'WebApp': ['meteor/webapp', '*'],
+        'WebAppInternals': ['meteor/webapp', '*'],
         Package: [path.resolve(projectRootDir, 'package-map.js'), '*'],
         ...Object.fromEntries(
           Array.from(
