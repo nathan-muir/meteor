@@ -736,6 +736,43 @@ export class AccountsClient extends AccountsCommon {
 
 };
 
+// Note that both arguments are optional and are currently only passed by
+// accounts_url_tests.js.
+const attemptToMatchHash = (accounts, hash, success) => {
+  // All of the special hash URLs we support for accounts interactions
+  ["reset-password", "verify-email", "enroll-account"].forEach(urlPart => {
+    let token;
+
+    const tokenRegex = new RegExp(`^\\#\\/${urlPart}\\/(.*)$`);
+    const match = hash.match(tokenRegex);
+
+    if (match) {
+      token = match[1];
+
+      // XXX COMPAT WITH 0.9.3
+      if (urlPart === "reset-password") {
+        accounts._resetPasswordToken = token;
+      } else if (urlPart === "verify-email") {
+        accounts._verifyEmailToken = token;
+      } else if (urlPart === "enroll-account") {
+        accounts._enrollAccountToken = token;
+      }
+    } else {
+      return;
+    }
+
+    // If no handlers match the hash, then maybe it's meant to be consumed
+    // by some entirely different code, so we only clear it the first time
+    // a handler successfully matches. Note that later handlers reuse the
+    // savedHash, so clearing window.location.hash here will not interfere
+    // with their needs.
+    window.location.hash = "";
+
+    // Do some stuff with the token we matched
+    success.call(accounts, token, urlPart);
+  });
+}
+
 const defaultSuccessHandler = function(token, urlPart) {
   // put login in a suspended state to wait for the interaction to finish
   this._autoLoginEnabled = false;
