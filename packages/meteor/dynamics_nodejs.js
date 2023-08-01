@@ -32,10 +32,9 @@ var EVp = Meteor$EnvironmentVariable.prototype;
  * @memberof Meteor.EnvironmentVariable
  */
 EVp.get = function () {
-  Meteor$_nodeCodeMustBeInFiber();
+  // Meteor$_nodeCodeMustBeInFiber();
 
-  return Fiber.current._meteor_dynamics &&
-    Fiber.current._meteor_dynamics[this.slot];
+  return Fiber.current?._meteor_dynamics?.[this.slot]
 };
 
 // Most Meteor code ought to run inside a fiber, and the
@@ -147,9 +146,9 @@ EVp._setCallAsyncMethodRunning = function (value) {
  * @return {Function} The wrapped function
  */
 export const Meteor$bindEnvironment = function (func, onException, _this) {
-  Meteor$_nodeCodeMustBeInFiber();
+  // Meteor$_nodeCodeMustBeInFiber();
 
-  var dynamics = Fiber.current._meteor_dynamics;
+  var dynamics = Fiber.current?._meteor_dynamics;
   var boundValues = dynamics ? dynamics.slice() : [];
 
   if (!onException || typeof(onException) === 'string') {
