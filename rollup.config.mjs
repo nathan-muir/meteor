@@ -871,14 +871,14 @@ export default [
   makeConfig(
     clientInputFiles,
     {
-      dir: 'modules-client',
+      dir: '_prototype/meteor-runtime/src/browser',
     },
     true
   ),
   makeConfig(
     serverInputFiles,
     {
-      dir: 'modules-server',
+      dir: '_prototype/meteor-runtime/src/node',
     },
     false
   ),

@@ -1,21 +1,15 @@
-import alias from '@rollup/plugin-alias';
-import replace from '@rollup/plugin-replace';
-import inject from '@rollup/plugin-inject';
-import path from 'node:path';
-
 export default [
   {
-    input: './meteor-runtime-browser.mjs',
+    input: './meteor-runtime-browser.js',
     output: {
-      file: './meteor-runtime-browser.esm.js',
+      file: './dist/meteor-runtime-browser.js',
       format: 'es',
     },
     external: ['decimal.js', 'sockjs-client'],
-  },
-  {
-    input: './meteor-runtime-server.mjs',
+  }, {
+    input: './meteor-runtime-node.js',
     output: {
-      file: './meteor-runtime-server.esm.js',
+      file: './dist/meteor-runtime-node.js',
       format: 'es',
     },
     external: [
@@ -38,8 +32,6 @@ export default [
       'fs', // node:fs
       'http', // node:http
       'meteor-promise',
-      'meteor/inter-process-messaging',
-      'meteor/reload', // elided
       'mongodb',
       'mongodb-uri',
       'node-fetch',
@@ -55,5 +47,7 @@ export default [
       'url', // node:url
       'useragent',
     ],
-  },
-];
+  }
+]
+
+

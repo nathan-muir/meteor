@@ -289,11 +289,9 @@ OAuth._renderOauthResults = (res, query, credentialSecret) => {
 // This "template" (not a real Spacebars template, just an HTML file
 // with some ##PLACEHOLDER##s) communicates the credential secret back
 // to the main window and then closes the popup.
-OAuth._endOfPopupResponseTemplate = Assets.getText(
-  "end_of_popup_response.html");
+OAuth._endOfPopupResponseTemplate = '';
 
-OAuth._endOfRedirectResponseTemplate = Assets.getText(
-  "end_of_redirect_response.html");
+OAuth._endOfRedirectResponseTemplate = '';
 
 // Renders the end of login response template into some HTML and JavaScript
 // that closes the popup or redirects at the end of the OAuth flow.
