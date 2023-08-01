@@ -1,3 +1,4 @@
+import './oauth_common.js';
 // Documentation for Meteor.loginWithExternalService
 
 /**

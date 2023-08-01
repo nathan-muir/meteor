@@ -29,7 +29,7 @@ Accounts.oauth.registerService = name => {
     throw new Error(`Duplicate service: ${name}`);
   services[name] = true;
 
-  if (Meteor.server) {
+  if (Meteor.isServer) {
     // Accounts.updateOrCreateUserFromExternalService does a lookup by this id,
     // so this should be a unique index. You might want to add indexes for other
     // fields returned by your service (eg services.github.login) but you can do
@@ -52,7 +52,7 @@ Accounts.oauth.unregisterService = name => {
 Accounts.oauth.serviceNames = () => Object.keys(services);
 
 // loginServiceConfiguration and ConfigError are maintained for backwards compatibility
-Meteor.startup(() => {
+/*Meteor.startup(() => {
   const { ServiceConfiguration } = Package['service-configuration'];
   Accounts.loginServiceConfiguration = ServiceConfiguration.configurations;
   Accounts.ConfigError = ServiceConfiguration.ConfigError;
@@ -83,4 +83,4 @@ Meteor.startup(() => {
       }
     });
   }
-});
+});*/
