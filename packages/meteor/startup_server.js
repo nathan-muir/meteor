@@ -1,3 +1,13 @@
+let startupHooks = [];
+
+export function Meteor$runStartup () {
+  while (startupHooks != null && startupHooks.length) {
+    const hook = startupHooks.shift();
+    hook.call()
+  }
+  startupHooks = null;
+}
+
 export function Meteor$startup(callback) {
   callback = Meteor.wrapFn(callback);
   if (process.env.METEOR_PROFILE) {
@@ -15,10 +25,8 @@ export function Meteor$startup(callback) {
       .replace(/^Error: /, ""); // Not really an Error per se.
   }
 
-  var bootstrap = global.__meteor_bootstrap__;
-  if (bootstrap &&
-      bootstrap.startupHooks) {
-    bootstrap.startupHooks.push(callback);
+  if (startupHooks) {
+    startupHooks.push(callback);
   } else {
     // We already started up. Just call it now.
     callback();
