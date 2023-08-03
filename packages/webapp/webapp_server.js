@@ -124,25 +124,7 @@ export async function staticFilesMiddleware(
     );
     return;
   }
-
-  if (
-    req.method === 'GET' ||
-    req.method === 'HEAD'
-  ) {
-    res.writeHead(200, {
-      'Content-type': 'text/html; charset=UTF-8',
-      'Content-Length': Buffer.byteLength(boilerplateHtml),
-    });
-    res.write(boilerplateHtml);
-    res.end();
-  } else {
-    const status = req.method === 'OPTIONS' ? 200 : 405;
-    res.writeHead(status, {
-      Allow: 'OPTIONS, GET, HEAD',
-      'Content-Length': '0',
-    });
-    res.end();
-  }
+  next();
 }
 
 // Parse the passed in port value. Return the port as-is if it's a String
@@ -375,9 +357,12 @@ app.use(async function (req, res, next) {
       return;
     }
 
-    // TODO!!
-
-    next();
+    res.writeHead(200, {
+      'Content-type': 'text/html; charset=UTF-8',
+      'Content-Length': Buffer.byteLength(boilerplateHtml),
+    });
+    res.write(boilerplateHtml);
+    res.end();
   }
 });
 
