@@ -1,3 +1,4 @@
+import * as GeoJSON from 'meteor/geojson-utils';
 import * as fieldHelpers from "./field-helpers.js";
 import { _isPlainObject, _selectorIsId } from "./local_collection_util.js";
 import { MinimongoError } from "./error.js";
