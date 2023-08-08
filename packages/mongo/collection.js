@@ -29,7 +29,7 @@ export function warnUsingOldApi (
    console.trace()
  };
 }
-
+const __lookup_by_name = new Map();
 /**
  * @summary Constructor for a Collection
  * @locus Anywhere
@@ -61,6 +61,9 @@ export function Collection(name, options) {
     throw new Error(
       'First argument to new Mongo.Collection must be a string or null'
     );
+  }
+  if (typeof name === 'string') {
+    __lookup_by_name.set(name, this);
   }
 
   if (options && options.methods) {
@@ -166,6 +169,12 @@ export function Collection(name, options) {
   }
 };
 
+Collection.__getCollectionByName = function(name) {
+  if (typeof name !== 'string') {
+    return
+  }
+  return __lookup_by_name.get(name);
+}
 Object.assign(Collection.prototype, {
   _maybeSetUpReplication(name, { _suppressSameNameError = false }) {
     const self = this;
