@@ -630,7 +630,7 @@ function makeConfig(input, output, isClient) {
     input: Object.values(input),
     output: {
       format: 'es',
-      // hoistTransitiveImports: false,
+      hoistTransitiveImports: false,
       ...output,
       preserveModules: true,
       preserveModulesRoot: 'packages',
@@ -706,7 +706,7 @@ function makeConfig(input, output, isClient) {
           "Package['mongo-decimal']": 'Package.mongoDecimal',
           "Package['ddp-rate-limiter']": 'Package.ddpRateLimiter',
           "Package['facts-base']": 'Package.factsBase',
-          "Package['audit-argument-checks']": 'true',
+          "Package['audit-argument-checks']": 'undefined',
           "Package['disable-oplog']": 'true',
           "Package['oauth-encryption']": 'Package.oauthEncryption',
           'Package["oauth-encryption"]': 'Package.oauthEncryption',

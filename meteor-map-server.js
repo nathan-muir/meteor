@@ -32,7 +32,7 @@ export {
 } from './packages/meteor/timers.js';
 export { Meteor$_setImmediate as _setImmediate } from './packages/meteor/setimmediate.js';
 export const _localStorage = undefined;
-export { Meteor$startup as startup } from './packages/meteor/startup_server.js';
+export { Meteor$startup as startup, Meteor$runStartup as runStartup } from './packages/meteor/startup_server.js';
 export {
   Meteor$_noYieldsAllowed as _noYieldsAllowed,
   Meteor$_SynchronousQueue as _SynchronousQueue,

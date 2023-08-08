@@ -2,6 +2,7 @@ export { Accounts } from './src/node/accounts-base/server_main.js';
 import './src/node/accounts-password/password_server.js';
 import './src/node/accounts-oauth/oauth_server.js';
 export { check, Match } from './src/node/check/match.js';
+export { DDP } from './src/node/ddp-client/server/server.js';
 export { DDPRateLimiter } from './src/node/ddp-rate-limiter/ddp-rate-limiter.js';
 export { DDPServer } from './src/node/ddp-server/server_convenience.js';
 export { DiffSequence } from './src/node/diff-sequence/diff.js';
@@ -25,3 +26,4 @@ export { RoutePolicy } from './src/node/routepolicy/main.js';
 export { ServiceConfiguration } from './src/node/service-configuration/service_configuration_server.js';
 export * as WebApp from './src/node/webapp/webapp_server.js';
 export { default as _ } from 'underscore';
+export { fetch, Headers, Request, Response } from './src/node/fetch/server.js'
