@@ -6,8 +6,9 @@ Package.describe({
 Package.onUse(function (api) {
   api.export('ReactiveVar');
 
-  api.use('tracker');
+  api.use(['ecmascript', 'tracker']);
 
-  api.addFiles('reactive-var.js');
+  api.addFiles('reactive-var-client.js', 'client');
+  api.addFiles('reactive-var.js', 'server');
   api.addAssets('reactive-var.d.ts', 'server');
 });

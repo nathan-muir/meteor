@@ -514,14 +514,14 @@ const packages = [
   },
   {
     name: 'reactive-dict',
-    client: 'migration.js',
+    client: 'migration-client.js',
     // server: 'migration.js',
     globals: ['ReactiveDict'],
   },
 
   {
     name: 'reactive-var',
-    client: 'reactive-var.js',
+    client: 'reactive-var-client.js',
     // server: 'reactive-var.js',
     globals: ['ReactiveVar'],
   },
@@ -567,7 +567,7 @@ const packages = [
   },
   {
     name: 'tracker',
-    client: 'tracker.js',
+    client: 'tracker_client.js',
     server: 'tracker.js',
     globals: ['Tracker'],
   },
