@@ -1,7 +1,6 @@
 import alias from '@rollup/plugin-alias';
 import replace from '@rollup/plugin-replace';
 import inject from '@rollup/plugin-inject';
-import legacy from '@rollup/plugin-legacy';
 import commonjs from '@rollup/plugin-commonjs';
 import strip from '@rollup/plugin-strip';
 import path from 'node:path';
