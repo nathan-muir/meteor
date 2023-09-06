@@ -759,15 +759,16 @@ export class AccountsServer extends AccountsCommon {
     // Bring into lexical scope for publish callbacks that need `this`
     const { users, _autopublishFields, _defaultPublishFields } = this;
 
-    // Publish all login service configuration fields other than secret.
-    this._server.publish("meteor.loginServiceConfiguration", function() {
-      if (Package['service-configuration']) {
-        const { ServiceConfiguration } = Package['service-configuration'];
-        return ServiceConfiguration.configurations.find({}, {fields: {secret: 0}});
-      }
-      this.ready();
-    }, {is_auto: true}); // not technically autopublish, but stops the warning.
-
+    Meteor.startup(() => {
+      // Publish all login service configuration fields other than secret.
+      this._server.publish("meteor.loginServiceConfiguration", function() {
+        if (Package['service-configuration']) {
+          const { ServiceConfiguration } = Package['service-configuration'];
+          return ServiceConfiguration.configurations.find({}, {fields: {secret: 0}});
+        }
+        this.ready();
+      }, {is_auto: true}); // not technically autopublish, but stops the warning.
+    });
     // Use Meteor.startup to give other packages a chance to call
     // setDefaultPublishFields.
     Meteor.startup(() => {
