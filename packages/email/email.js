@@ -3,25 +3,11 @@ import { Hook } from 'meteor/callback-hook';
 
 import url from 'url';
 import nodemailer from 'nodemailer';
+import MailComposer from 'nodemailer/lib/mail-composer';
 import wellKnow from 'nodemailer/lib/well-known';
 
 export const Email = {};
 export const EmailTest = {};
-
-export const EmailInternals = {
-  NpmModules: {
-    mailcomposer: {
-      version: Npm.require('nodemailer/package.json').version,
-      module: Npm.require('nodemailer/lib/mail-composer'),
-    },
-    nodemailer: {
-      version: Npm.require('nodemailer/package.json').version,
-      module: Npm.require('nodemailer'),
-    },
-  },
-};
-
-const MailComposer = EmailInternals.NpmModules.mailcomposer.module;
 
 const makeTransport = function (mailUrlString) {
   const mailUrl = new URL(mailUrlString);
