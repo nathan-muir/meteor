@@ -9,7 +9,6 @@ export { DiffSequence } from './src/node/diff-sequence/diff.js';
 export { EJSON } from './src/node/ejson/ejson.js';
 export { Email } from './src/node/email/email.js';
 export { Google } from './src/node/google-oauth/google_server.js';
-export { HTTP } from './src/node/deprecated/http/httpcall_server.js';
 export { Meteor } from './src/node/meteor-star-server.js';
 export {
   LocalCollection,

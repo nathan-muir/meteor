@@ -6,7 +6,6 @@ export { DDP } from './src/browser/ddp-client/client/client.js';
 export { DiffSequence } from './src/browser/diff-sequence/diff.js';
 export { EJSON } from './src/browser/ejson/ejson.js';
 export { Google } from './src/browser/google-oauth/google_client.js';
-export { HTTP } from './src/browser/deprecated/http/httpcall_client.js';
 export { Meteor } from './src/browser/meteor-star-client.js';
 export {
   LocalCollection,
