@@ -302,7 +302,7 @@ const packages = [
   {
     name: 'accounts-oauth',
     client: 'oauth_client.js',
-    server: 'oauth_server.js'
+    server: 'oauth_server.js',
   },
   {
     name: 'accounts-password',
@@ -588,7 +588,7 @@ const getPath = p => p.srcDir ?? `packages/${p.name}`;
 const getImportPath = (p, isClient) =>
   path.resolve(
     projectRootDir,
-    `${getPath(p)}/${isClient ? p.client : p.server}`
+    `${getPath(p)}/${isClient ? p.client : p.server}`,
   );
 
 const makeInjects = isClient =>
@@ -600,7 +600,7 @@ const makeInjects = isClient =>
       if (add) {
         return inject({
           modules: Object.fromEntries(
-            p.globals.map(name => [name, [`meteor/${p.name}`, name]])
+            p.globals.map(name => [name, [`meteor/${p.name}`, name]]),
           ),
           exclude: `${getPath(p)}/**`,
         });
@@ -639,21 +639,15 @@ function makeConfig(input, output, isClient) {
       moduleSideEffects: [
         path.resolve(
           projectRootDir,
-          'packages/non-core/mongo-decimal/decimal.js'
+          'packages/non-core/mongo-decimal/decimal.js',
         ),
         path.resolve(projectRootDir, 'packages/promise/extensions.js'),
         path.resolve(
           projectRootDir,
-          'packages/accounts-password/email_templates.js'
+          'packages/accounts-password/email_templates.js',
         ),
-        path.resolve(
-          projectRootDir,
-          'packages/accounts-oauth/oauth_common.js',
-        ),
-        path.resolve(
-          projectRootDir,
-          'packages/accounts-oauth/oauth_server.js',
-        )
+        path.resolve(projectRootDir, 'packages/accounts-oauth/oauth_common.js'),
+        path.resolve(projectRootDir, 'packages/accounts-oauth/oauth_server.js'),
       ],
     },
     external: isClient
@@ -713,7 +707,7 @@ function makeConfig(input, output, isClient) {
             Array.from(statics(isClient)).map(([global, member]) => [
               `${global}.${member}`,
               `${global}$${member}`,
-            ])
+            ]),
           ),
         },
       }),
@@ -748,14 +742,22 @@ function makeConfig(input, output, isClient) {
         functions: ['setMinimumBrowserVersions'],
       }),
       inject({
-        ...(isClient ? {
-          __meteor_runtime_config__:
-            path.resolve(projectRootDir, 'packages/meteor/meteor_runtime_config_client.js')
-          } : {
-          __meteor_runtime_config__: [
-            path.resolve(projectRootDir, 'packages/meteor/meteor_runtime_config_server.js'), '*'
-            ]
-        }),
+        ...(isClient
+          ? {
+              __meteor_runtime_config__: path.resolve(
+                projectRootDir,
+                'packages/meteor/meteor_runtime_config_client.js',
+              ),
+            }
+          : {
+              __meteor_runtime_config__: [
+                path.resolve(
+                  projectRootDir,
+                  'packages/meteor/meteor_runtime_config_server.js',
+                ),
+                '*',
+              ],
+            }),
         _: 'underscore',
         'Package.tracker': ['meteor/tracker', '*'],
         'Package.reload': ['meteor/reload', '*'],
@@ -764,16 +766,16 @@ function makeConfig(input, output, isClient) {
         'Package.serviceConfiguration': ['meteor/service-configuration', '*'],
         'Package.mongoDecimal': ['meteor/mongo-decimal', '*'],
         'Package.ddpRateLimiter': ['meteor/ddp-rate-limiter', '*'],
-        'WebApp': ['meteor/webapp', '*'],
-        'WebAppInternals': ['meteor/webapp', '*'],
+        WebApp: ['meteor/webapp', '*'],
+        WebAppInternals: ['meteor/webapp', '*'],
         Package: [path.resolve(projectRootDir, 'package-map.js'), '*'],
         ...Object.fromEntries(
-          Array.from(
-            statics(isClient)
-          ).map(([global, member, importName, _path]) => [
-            `${global}$${member}`,
-            [path.resolve(projectRootDir, _path), importName],
-          ])
+          Array.from(statics(isClient)).map(
+            ([global, member, importName, _path]) => [
+              `${global}$${member}`,
+              [path.resolve(projectRootDir, _path), importName],
+            ],
+          ),
         ),
         ...Object.fromEntries(
           (isClient ? MeteorClientNamespace : MeteorServerNamespace).flatMap(
@@ -784,13 +786,13 @@ function makeConfig(input, output, isClient) {
                 `Meteor.${name}`,
                 [importFrom, `Meteor$${name}`],
               ]);
-            }
-          )
+            },
+          ),
         ),
         Meteor: [
           path.resolve(
             projectRootDir,
-            isClient ? 'meteor-map-client.js' : 'meteor-map-server.js'
+            isClient ? 'meteor-map-client.js' : 'meteor-map-server.js',
           ),
           '*',
         ],
@@ -806,7 +808,7 @@ function makeConfig(input, output, isClient) {
             find: /^meteor\/meteor$/,
             replacement: path.resolve(
               projectRootDir,
-              isClient ? 'meteor-star-client.js' : 'meteor-star-server.js'
+              isClient ? 'meteor-star-client.js' : 'meteor-star-server.js',
             ),
           },
           // TODO make replacement rule
@@ -814,28 +816,28 @@ function makeConfig(input, output, isClient) {
             find: 'meteor/ddp-common/utils.js',
             replacement: path.resolve(
               projectRootDir,
-              'packages/ddp-common/utils.js'
+              'packages/ddp-common/utils.js',
             ),
           },
           {
             find: 'meteor/ddp-common/random_stream.js',
             replacement: path.resolve(
               projectRootDir,
-              'packages/ddp-common/random_stream.js'
+              'packages/ddp-common/random_stream.js',
             ),
           },
           {
             find: 'meteor/minimongo/constants',
             replacement: path.resolve(
               projectRootDir,
-              'packages/minimongo/constants.js'
+              'packages/minimongo/constants.js',
             ),
           },
           {
             find: 'meteor/mongo/collection_util.js',
             replacement: path.resolve(
               projectRootDir,
-              'packages/mongo/collection_util.js'
+              'packages/mongo/collection_util.js',
             ),
           },
           ...makeAliases(isClient),
@@ -854,7 +856,7 @@ const clientInputFiles = Object.fromEntries(
     .map(p => {
       const d = p.srcDir ?? `packages/${p.name}`;
       return [p.name, `${d}/${p.client}`];
-    })
+    }),
 );
 
 const serverInputFiles = Object.fromEntries(
@@ -863,7 +865,7 @@ const serverInputFiles = Object.fromEntries(
     .map(p => {
       const d = p.srcDir ?? `packages/${p.name}`;
       return [p.name, `${d}/${p.server}`];
-    })
+    }),
 );
 
 export default [
@@ -872,13 +874,13 @@ export default [
     {
       dir: '_prototype/meteor-runtime/src/browser',
     },
-    true
+    true,
   ),
   makeConfig(
     serverInputFiles,
     {
       dir: '_prototype/meteor-runtime/src/node',
     },
-    false
+    false,
   ),
 ];
