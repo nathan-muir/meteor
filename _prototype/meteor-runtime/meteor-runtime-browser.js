@@ -13,7 +13,6 @@ export {
 } from './src/browser/minimongo/minimongo_client.js';
 export { Mongo } from './src/browser/mongo/client_main.js';
 export { MongoID } from './src/browser/mongo-id/id.js';
-export { OAuth } from './src/browser/oauth/oauth_client.js';
 // export { Promise } from './src/browser/promise/client.js';
 export { Random } from './src/browser/random/main_client.js';
 export { ReactiveDict } from './src/browser/reactive-dict/reactive-dict-client.js';

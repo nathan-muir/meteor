@@ -1,6 +1,7 @@
 export { Accounts } from './src/node/accounts-base/server_main.js';
 import './src/node/accounts-password/password_server.js';
 import './src/node/accounts-oauth/oauth_server.js';
+import './src/node/accounts-google/google_server.js';
 export { check, Match } from './src/node/check/match.js';
 export { DDP } from './src/node/ddp-client/server/server.js';
 export { DDPRateLimiter } from './src/node/ddp-rate-limiter/ddp-rate-limiter.js';
@@ -16,7 +17,6 @@ export {
 } from './src/node/minimongo/minimongo_server.js';
 export { Mongo } from './src/node/mongo/server_main.js';
 export { MongoID } from './src/node/mongo-id/id.js';
-export { OAuth } from './src/node/oauth/oauth_server.js';
 import './src/node/oauth2/oauth2_server.js';
 export { Promise } from './src/node/promise/server.js';
 export { Random } from './src/node/random/main_server.js';

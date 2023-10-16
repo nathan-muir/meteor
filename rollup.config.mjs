@@ -303,6 +303,7 @@ const packages = [
     name: 'accounts-oauth',
     client: 'oauth_client.js',
     server: 'oauth_server.js',
+    globals: [{ name: 'AccountsOAuth', namespace: true }],
   },
   {
     name: 'accounts-password',
@@ -482,7 +483,7 @@ const packages = [
     name: 'oauth',
     client: 'oauth_client.js',
     server: 'oauth_server.js',
-    globals: ['OAuth'],
+    globals: [{ name: 'OAuth', namespace: true }],
   },
   {
     name: 'oauth2',
@@ -600,7 +601,14 @@ const makeInjects = isClient =>
       if (add) {
         return inject({
           modules: Object.fromEntries(
-            p.globals.map(name => [name, [`meteor/${p.name}`, name]]),
+            p.globals.map(opt =>
+              typeof opt === 'string'
+                ? [opt, [`meteor/${p.name}`, opt]]
+                : [
+                    opt.name,
+                    [`meteor/${p.name}`, opt.namespace ? '*' : opt.name],
+                  ],
+            ),
           ),
           exclude: `${getPath(p)}/**`,
         });
@@ -703,6 +711,7 @@ function makeConfig(input, output, isClient) {
           "Package['disable-oplog']": 'true',
           "Package['oauth-encryption']": 'Package.oauthEncryption',
           'Package["oauth-encryption"]': 'Package.oauthEncryption',
+          'Accounts.oauth': 'AccountsOAuth',
           ...Object.fromEntries(
             Array.from(statics(isClient)).map(([global, member]) => [
               `${global}.${member}`,

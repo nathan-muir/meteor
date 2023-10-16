@@ -1,4 +1,6 @@
-import './oauth_common.js';
+import { serviceNames } from './oauth_common.js';
+
+export * from './oauth_common.js';
 // Listen to calls to `login` with an oauth option set. This is where
 // users actually get logged in to meteor via oauth.
 Accounts.registerLoginHandler(options => {
@@ -43,7 +45,7 @@ Accounts.registerLoginHandler(options => {
     // to the user.
     throw result;
   else {
-    if (! Accounts.oauth.serviceNames().includes(result.serviceName)) {
+    if (! serviceNames().includes(result.serviceName)) {
       // serviceName was not found in the registered services list.
       // This could happen because the service never registered itself or
       // unregisterService was called on it.
