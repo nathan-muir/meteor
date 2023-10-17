@@ -1,3 +1,4 @@
+import { Meteor$bindEnvironment } from "./dynamics_browser.js";
 // This file is a partial analogue to fiber_helpers.js, which allows the client
 // to use a queue too, and also to call noYieldsAllowed.
 
@@ -55,9 +56,21 @@ SQp.runTask = function (task) {
   }
 };
 
+// on the server, `queueTask` is run in an unbound fiber
+//  this means it runs without environment variables set
+// on the client, it's incorrectly implemented to run under the current
+//  environment.
+// this causes an issue when LocalCollection._observeQueue.drain() is called
+//  during a method call, causing all handlers, and promises launched in those
+//  handlers to be executed in the environment of the simulation.
+const withoutEnvironment = Meteor$bindEnvironment(function (task) {
+  return task();
+})
 SQp.queueTask = function (task) {
   var self = this;
-  self._tasks.push(task);
+  self._tasks.push(function() {
+    withoutEnvironment(task)
+  });
   // Intentionally not using Meteor.setTimeout, because it doesn't like runing
   // in stubs for now.
   if (!self._runTimeout) {
