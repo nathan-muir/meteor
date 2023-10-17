@@ -130,12 +130,7 @@ export class ClientStream extends StreamClientCommon {
   _sockjsProtocolsWhitelist() {
     // only allow polling protocols. no streaming.  streaming
     // makes safari spin.
-    var protocolsWhitelist = [
-      'xdr-polling',
-      'xhr-polling',
-      'iframe-xhr-polling',
-      'jsonp-polling'
-    ];
+    var protocolsWhitelist = ['xhr-polling'];
 
     // iOS 4 and 5 and below crash when using websockets over certain
     // proxies. this seems to be resolved with iOS 6. eg
