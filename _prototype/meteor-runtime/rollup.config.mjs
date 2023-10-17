@@ -1,3 +1,5 @@
+import prettier from 'rollup-plugin-prettier';
+
 export default [
   {
     input: './meteor-runtime-browser.js',
@@ -6,6 +8,15 @@ export default [
       format: 'es',
     },
     external: ['decimal.js', 'sockjs-client'],
+    plugins: [
+      prettier({
+        singleQuote: true,
+        trailingComma: 'all',
+        arrowParens: 'avoid',
+        htmlWhitespaceSensitivity: 'ignore',
+        parser: 'espree',
+      })
+    ]
   }, {
     input: './meteor-runtime-node.js',
     output: {

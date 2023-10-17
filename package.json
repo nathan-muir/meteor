@@ -1,48 +1,12 @@
 {
-  "name": "meteor",
-  "version": "0.0.1",
-  "description": "Used to apply Prettier and ESLint manually",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/meteor/meteor.git"
-  },
-  "author": "Filipe Névola",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/meteor/meteor/issues"
-  },
-  "homepage": "https://github.com/meteor/meteor#readme",
   "devDependencies": {
-    "@quave/eslint-config-quave": "^1.0.3",
-    "@rollup/plugin-alias": "^4.0.2",
-    "@rollup/plugin-commonjs": "^25.0.1",
-    "@rollup/plugin-inject": "^5.0.2",
-    "@rollup/plugin-legacy": "^3.0.1",
-    "@rollup/plugin-replace": "^5.0.1",
+    "@rollup/plugin-alias": "^5.0.0",
+    "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-inject": "^5.0.3",
+    "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-strip": "^3.0.2",
-    "@types/node": "^14.17.6",
-    "rollup": "^3.25.1"
-  },
-  "eslintConfig": {
-    "extends": [
-      "@quave/quave"
-    ],
-    "rules": {
-      "global-require": "off",
-      "no-console": "off",
-      "camelcase": "warn",
-      "consistent-return": "off",
-      "quotes": "warn",
-      "no-shadow": [
-        "error",
-        {
-          "allow": [
-            "resolve"
-          ]
-        }
-      ],
-      "no-use-before-define": "warn",
-      "import/no-unresolved": "warn"
-    }
+    "prettier": "^3.0.3",
+    "rollup": "^3.27.2",
+    "rollup-plugin-prettier": "^4.1.1"
   }
 }

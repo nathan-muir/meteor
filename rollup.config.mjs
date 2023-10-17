@@ -5,6 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import strip from '@rollup/plugin-strip';
 import path from 'node:path';
 import * as url from 'node:url';
+import prettier from 'rollup-plugin-prettier';
 
 const projectRootDir = url.fileURLToPath(new URL('.', import.meta.url));
 
@@ -853,7 +854,16 @@ function makeConfig(input, output, isClient) {
         ],
       }),
       commonjs({
+        strictRequires: false,
         transformMixedEsModules: true,
+      }),
+
+      prettier({
+        singleQuote: true,
+        trailingComma: 'all',
+        arrowParens: 'avoid',
+        htmlWhitespaceSensitivity: 'ignore',
+        parser: 'espree',
       }),
     ],
   };
