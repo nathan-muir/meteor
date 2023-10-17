@@ -1,4 +1,4 @@
-import { shallowRef, triggerRef } from 'vue';
+import { shallowRef, triggerRef } from '@vue/runtime-dom';
 /*
  * ## [new] ReactiveVar(initialValue, [equalsFunc])
  *

@@ -1,4 +1,4 @@
-import { shallowReactive, toRaw } from 'vue';
+import { shallowReactive, toRaw } from '@vue/runtime-dom';
 
 const hasOwn = Object.prototype.hasOwnProperty;
 
