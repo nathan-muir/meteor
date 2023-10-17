@@ -162,8 +162,12 @@ export class ClientStream extends StreamClientCommon {
       ...this.options._sockjsOptions
     };
 
-
-    this.socket = new WebSocket(toWebsocketUrl(this.rawUrl));
+    this.socket = __meteor_runtime_config__.DISABLE_SOCKJS
+      // Convert raw URL to SockJS URL each time we open a connection, so
+      // that we can connect to random hostnames and get around browser
+      // per-host connection limits.
+      ? new WebSocket(toWebsocketUrl(this.rawUrl))
+      : new SockJS(toSockjsUrl(this.rawUrl), undefined, options);
 
     this.socket.onopen = data => {
       this.lastError = null;
