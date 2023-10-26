@@ -52,10 +52,6 @@ export function _timeoutAdjustmentRequestCallback(req, res) {
     res.on('finish', l);
   });
 }
-let boilerplateHtml = '<html><body>Not setup</body></html>';
-export function setBoilerplateHtml(newHtml) {
-  boilerplateHtml = newHtml;
-}
 
 const meteorRuntimeConfig = JSON.stringify({
   ACCOUNTS_CONNECTION_URL: __meteor_runtime_config__.ACCOUNTS_CONNECTION_URL,
@@ -311,58 +307,8 @@ app.use(async function (req, res, next) {
     });
     res.end();
   } else {
-    var headers = {
-      'Content-Type': 'text/html; charset=utf-8',
-    };
-
-    if (shuttingDown) {
-      headers['Connection'] = 'Close';
-    }
-
-    if (req.url.query && req.url.query['meteor_css_resource']) {
-      // In this case, we're requesting a CSS resource in the meteor-specific
-      // way, but we don't have it.  Serve a static css file that indicates that
-      // we didn't have it, so we can detect that and refresh.  Make sure
-      // that any proxies or CDNs don't cache this error!  (Normally proxies
-      // or CDNs are smart enough not to cache error pages, but in order to
-      // make this hack work, we need to return the CSS file as a 200, which
-      // would otherwise be cached.)
-      headers['Content-Type'] = 'text/css; charset=utf-8';
-      headers['Cache-Control'] = 'no-cache';
-      res.writeHead(200, headers);
-      res.write('.meteor-css-not-found-error { width: 0px;}');
-      res.end();
-      return;
-    }
-
-    if (req.url.query && req.url.query['meteor_js_resource']) {
-      // Similarly, we're requesting a JS resource that we don't have.
-      // Serve an uncached 404. (We can't use the same hack we use for CSS,
-      // because actually acting on that hack requires us to have the JS
-      // already!)
-      headers['Cache-Control'] = 'no-cache';
-      res.writeHead(404, headers);
-      res.end('404 Not Found');
-      return;
-    }
-
-    if (req.url.query && req.url.query['meteor_dont_serve_index']) {
-      // When downloading files during a Cordova hot code push, we need
-      // to detect if a file is not available instead of inadvertently
-      // downloading the default index page.
-      // So similar to the situation above, we serve an uncached 404.
-      headers['Cache-Control'] = 'no-cache';
-      res.writeHead(404, headers);
-      res.end('404 Not Found');
-      return;
-    }
-
-    res.writeHead(200, {
-      'Content-type': 'text/html; charset=UTF-8',
-      'Content-Length': Buffer.byteLength(boilerplateHtml),
-    });
-    res.write(boilerplateHtml);
-    res.end();
+    // just go to 404
+    next();
   }
 });
 
