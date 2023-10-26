@@ -58,6 +58,15 @@ export default [
       'url', // node:url
       'useragent',
     ],
+    plugins: [
+      prettier({
+        singleQuote: true,
+        trailingComma: 'all',
+        arrowParens: 'avoid',
+        htmlWhitespaceSensitivity: 'ignore',
+        parser: 'espree',
+      })
+    ]
   }
 ]
 
