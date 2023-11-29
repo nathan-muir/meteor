@@ -24,5 +24,4 @@ export { RateLimiter } from './src/node/rate-limit/rate-limit.js';
 export { RoutePolicy } from './src/node/routepolicy/main.js';
 export { ServiceConfiguration } from './src/node/service-configuration/service_configuration_server.js';
 export * as WebApp from './src/node/webapp/webapp_server.js';
-export { default as _ } from 'underscore';
 export { fetch, Headers, Request, Response } from './src/node/fetch/server.js'

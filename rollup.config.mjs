@@ -768,7 +768,7 @@ function makeConfig(input, output, isClient) {
                 '*',
               ],
             }),
-        _: 'underscore',
+        _: ['underscore', '*'],
         'Package.tracker': ['meteor/tracker', '*'],
         'Package.reload': ['meteor/reload', '*'],
         'Package.mongo': ['meteor/mongo', '*'],
