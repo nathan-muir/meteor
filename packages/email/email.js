@@ -94,32 +94,39 @@ const knownHostsTransport = function (settings = undefined, url = undefined) {
 };
 EmailTest.knowHostsTransport = knownHostsTransport;
 
-const getTransport = function () {
-  const packageSettings = Meteor.settings.packages?.email || {};
-  // We delay this check until the first call to Email.send, in case someone
-  // set process.env.MAIL_URL in startup code. Then we store in a cache until
-  // process.env.MAIL_URL changes.
-  const url = process.env.MAIL_URL;
-  if (
-    this.cacheKey === undefined ||
-    this.cacheKey !== url ||
-    this.cacheKey !== packageSettings.service ||
-    this.cacheKey !== 'settings'
-  ) {
-    if (
-      (packageSettings.service && wellKnow(packageSettings.service)) ||
-      (url && wellKnow(new URL(url).hostname)) ||
-      wellKnow(url?.split(':')[0] || '')
-    ) {
-      this.cacheKey = packageSettings.service || 'settings';
-      this.cache = knownHostsTransport(packageSettings, url);
-    } else {
-      this.cacheKey = url;
-      this.cache = url ? makeTransport(url, packageSettings) : null;
-    }
+class TransportFactory {
+  constructor() {
+    this.cacheKey = undefined;
+    this.cache = undefined;
   }
-  return this.cache;
-};
+   getTransport() {
+    const packageSettings = Meteor.settings.packages?.email || {};
+    // We delay this check until the first call to Email.send, in case someone
+    // set process.env.MAIL_URL in startup code. Then we store in a cache until
+    // process.env.MAIL_URL changes.
+    const url = process.env.MAIL_URL;
+    if (
+      this.cacheKey === undefined ||
+      this.cacheKey !== url ||
+      this.cacheKey !== packageSettings.service ||
+      this.cacheKey !== 'settings'
+    ) {
+      if (
+        (packageSettings.service && wellKnow(packageSettings.service)) ||
+        (url && wellKnow(new URL(url).hostname)) ||
+        wellKnow(url?.split(':')[0] || '')
+      ) {
+        this.cacheKey = packageSettings.service || 'settings';
+        this.cache = knownHostsTransport(packageSettings, url);
+      } else {
+        this.cacheKey = url;
+        this.cache = url ? makeTransport(url, packageSettings) : null;
+      }
+    }
+    return this.cache;
+  }
+}
+const transportFactory = new TransportFactory();
 
 let nextDevModeMailId = 0;
 
@@ -298,7 +305,7 @@ Email.sendAsync = async function (options) {
   }
 
   if (mailUrlEnv || mailUrlSettings) {
-    const transport = getTransport();
+    const transport = transportFactory.getTransport();
     smtpSend(transport, email);
     return;
   }
