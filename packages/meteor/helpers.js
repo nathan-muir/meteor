@@ -1,15 +1,12 @@
 if (Meteor.isServer)
   var Future = Npm.require('fibers/future');
 
-if (typeof __meteor_runtime_config__ === 'object' &&
-    __meteor_runtime_config__.meteorRelease) {
-  /**
-   * @summary `Meteor.release` is a string containing the name of the [release](#meteorupdate) with which the project was built (for example, `"1.2.3"`). It is `undefined` if the project was built using a git checkout of Meteor.
-   * @locus Anywhere
-   * @type {String}
-   */
-  Meteor.release = __meteor_runtime_config__.meteorRelease;
-}
+/**
+ * @summary `Meteor.release` is a string containing the name of the [release](#meteorupdate) with which the project was built (for example, `"1.2.3"`). It is `undefined` if the project was built using a git checkout of Meteor.
+ * @locus Anywhere
+ * @type {String}
+ */
+export const Meteor$release = __meteor_runtime_config__.meteorRelease;
 
 // XXX find a better home for these? Ideally they would be _.get,
 // _.ensure, _.delete..
@@ -17,7 +14,7 @@ if (typeof __meteor_runtime_config__ === 'object' &&
 // _get(a,b,c,d) returns a[b][c][d], or else undefined if a[b] or
 // a[b][c] doesn't exist.
 //
-Meteor._get = function (obj /*, arguments */) {
+export const Meteor$_get = function (obj /*, arguments */) {
   for (var i = 1; i < arguments.length; i++) {
     if (!(arguments[i] in obj))
       return undefined;
@@ -29,7 +26,7 @@ Meteor._get = function (obj /*, arguments */) {
 // _ensure(a,b,c,d) ensures that a[b][c][d] exists. If it does not,
 // it is created and set to {}. Either way, it is returned.
 //
-Meteor._ensure = function (obj /*, arguments */) {
+export const Meteor$_ensure = function (obj /*, arguments */) {
   for (var i = 1; i < arguments.length; i++) {
     var key = arguments[i];
     if (!(key in obj))
@@ -43,7 +40,7 @@ Meteor._ensure = function (obj /*, arguments */) {
 // _delete(a, b, c, d) deletes a[b][c][d], then a[b][c] unless it
 // isn't empty, then a[b] unless it isn't empty.
 //
-Meteor._delete = function (obj /*, arguments */) {
+export const Meteor$_delete = function (obj /*, arguments */) {
   var stack = [obj];
   var leaf = true;
   for (var i = 1; i < arguments.length - 1; i++) {
@@ -80,7 +77,7 @@ Meteor._delete = function (obj /*, arguments */) {
  * @param errorFirst - If the callback follows the errorFirst style
  * @returns {function(...[*]): Promise<unknown>}
  */
-Meteor.promisify = function (fn, context, errorFirst) {
+export const Meteor$promisify = function (fn, context, errorFirst) {
   if (errorFirst === undefined) {
     errorFirst = true;
   }
@@ -130,7 +127,7 @@ Meteor.promisify = function (fn, context, errorFirst) {
  * @param {Function} func A function that takes a callback as its final parameter
  * @param {Object} [context] Optional `this` object against which the original function will be invoked
  */
-Meteor.wrapAsync = function (fn, context) {
+export const Meteor$wrapAsync = function (fn, context) {
   return function (/* arguments */) {
     var self = context || this;
     var newArgs = Array.prototype.slice.call(arguments);
@@ -163,24 +160,7 @@ Meteor.wrapAsync = function (fn, context) {
   };
 };
 
-Meteor.wrapFn = function (fn) {
-  if (!fn || typeof fn !== 'function') {
-    throw new Meteor.Error("Expected to receive function to wrap");
-  }
 
-  if (Meteor.isClient) {
-    return fn;
-  }
-
-  return function() {
-    var ret = fn.apply(this, arguments);
-    if (ret && typeof ret.then === 'function') {
-      return Promise.await(ret);
-    }
-
-    return ret;
-  }
-};
 
 // Sets child's prototype to a new object whose prototype is parent's
 // prototype. Used as:
@@ -188,7 +168,7 @@ Meteor.wrapFn = function (fn) {
 //   _.extend(ClassB.prototype, { ... })
 // Inspired by CoffeeScript's `extend` and Google Closure's `goog.inherits`.
 var hasOwn = Object.prototype.hasOwnProperty;
-Meteor._inherits = function (Child, Parent) {
+export const Meteor$_inherits = function (Child, Parent) {
   // copy Parent static properties
   for (var key in Parent) {
     // make sure we only copy hasOwnProperty properties vs. prototype
@@ -213,12 +193,12 @@ var warnedAboutWrapAsync = false;
 /**
  * @deprecated in 0.9.3
  */
-Meteor._wrapAsync = function(fn, context) {
+export const Meteor$_wrapAsync = function(fn, context) {
   if (! warnedAboutWrapAsync) {
     Meteor._debug("Meteor._wrapAsync has been renamed to Meteor.wrapAsync");
     warnedAboutWrapAsync = true;
   }
-  return Meteor.wrapAsync.apply(Meteor, arguments);
+  return Meteor$wrapAsync(fn, context);
 };
 
 function logErr(err) {

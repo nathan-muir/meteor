@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { DDPCommon } from 'meteor/ddp-common';
 import { Tracker } from 'meteor/tracker';
 import { EJSON } from 'meteor/ejson';
@@ -14,6 +13,7 @@ import {
   isEmpty,
   last,
 } from "meteor/ddp-common/utils.js";
+import { ClientStream } from 'meteor/socket-stream-client';
 
 let Fiber;
 let Future;
@@ -21,6 +21,8 @@ if (Meteor.isServer) {
   Fiber = Npm.require('fibers');
   Future = Npm.require('fibers/future');
 }
+
+export const _reconnectHook = new Hook({ bindEnvironment: false });
 
 class MongoIDMap extends IdMap {
   constructor() {
@@ -84,7 +86,6 @@ export class Connection {
     if (typeof url === 'object') {
       self._stream = url;
     } else {
-      const { ClientStream } = require("meteor/socket-stream-client");
       self._stream = new ClientStream(url, {
         retry: options.retry,
         ConnectionError: DDP.ConnectionError,
@@ -1708,7 +1709,7 @@ export class Connection {
     self._outstandingMethodBlocks = [];
 
     self.onReconnect && self.onReconnect();
-    DDP._reconnectHook.each(callback => {
+    _reconnectHook.each(callback => {
       callback(self);
       return true;
     });

@@ -1,5 +1,6 @@
 import { hash as bcryptHash, compare as bcryptCompare } from 'bcrypt';
 import { Accounts } from "meteor/accounts-base";
+import './email_templates.js';
 
 // Utility for grabbing user
 const getUserById = (id, options) => Meteor.users.findOne(id, Accounts._addDefaultFieldSelector(options));

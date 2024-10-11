@@ -1,5 +1,5 @@
 import { EJSON } from 'meteor/ejson';
-import { Decimal } from 'decimal.js';
+import Decimal from 'decimal.js';
 
 Decimal.prototype.typeName = function() {
   return 'Decimal';

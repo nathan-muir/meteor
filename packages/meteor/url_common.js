@@ -7,14 +7,14 @@
  * @param {Boolean} options.replaceLocalhost Replace localhost with 127.0.0.1. Useful for services that don't recognize localhost as a domain name.
  * @param {String} options.rootUrl Override the default ROOT_URL from the server environment. For example: "`http://foo.example.com`"
  */
-Meteor.absoluteUrl = function (path, options) {
+export const Meteor$absoluteUrl = function (path, options) {
   // path is optional
   if (!options && typeof path === 'object') {
     options = path;
     path = undefined;
   }
   // merge options with defaults
-  options = Object.assign({}, Meteor.absoluteUrl.defaultOptions, options || {});
+  options = Object.assign({}, Meteor$absoluteUrl.defaultOptions, options || {});
 
   var url = options.rootUrl;
   if (!url)
@@ -50,13 +50,12 @@ Meteor.absoluteUrl = function (path, options) {
 };
 
 // allow later packages to override default options
-var defaultOptions = Meteor.absoluteUrl.defaultOptions = {};
+var defaultOptions = Meteor$absoluteUrl.defaultOptions = {};
 
 // available only in a browser environment
 var location = typeof window === "object" && window.location;
 
-if (typeof __meteor_runtime_config__ === "object" &&
-    __meteor_runtime_config__.ROOT_URL) {
+if (__meteor_runtime_config__.ROOT_URL) {
   defaultOptions.rootUrl = __meteor_runtime_config__.ROOT_URL;
 } else if (location &&
            location.protocol &&
@@ -72,9 +71,8 @@ if (location &&
   defaultOptions.secure = true;
 }
 
-Meteor._relativeToSiteRootUrl = function (link) {
-  if (typeof __meteor_runtime_config__ === "object" &&
-      link.substr(0, 1) === "/")
+export const Meteor$_relativeToSiteRootUrl = function (link) {
+  if (link.substr(0, 1) === "/")
     link = (__meteor_runtime_config__.ROOT_URL_PATH_PREFIX || "") + link;
   return link;
 };

@@ -1,8 +1,10 @@
+import { Meteor$_inherits } from './helpers.js';
+
 // Makes an error subclass which properly contains a stack trace in most
 // environments. constructor can set fields on `this` (and should probably set
 // `message`, which is what gets displayed at the top of a stack trace).
 //
-Meteor.makeErrorType = function (name, constructor) {
+export const Meteor$makeErrorType = function (name, constructor) {
   var errorClass = function (/*arguments*/) {
     // Ensure we get a proper stack trace in most Javascript environments
     if (Error.captureStackTrace) {
@@ -19,7 +21,7 @@ Meteor.makeErrorType = function (name, constructor) {
     this.errorType = name;
   };
 
-  Meteor._inherits(errorClass, Error);
+  Meteor$_inherits(errorClass, Error);
 
   return errorClass;
 };
@@ -68,7 +70,7 @@ Meteor.makeErrorType = function (name, constructor) {
  * @param {String} [details] Optional.  Additional information about the error,
  * like a textual stack trace.
  */
-Meteor.Error = Meteor.makeErrorType(
+export const Meteor$Error = Meteor$makeErrorType(
   "Meteor.Error",
   function (error, reason, details) {
     var self = this;
@@ -106,7 +108,7 @@ Meteor.Error = Meteor.makeErrorType(
 // Meteor.Error is thrown through a Future, the error, reason, and details
 // properties become non-enumerable so a standard Object clone won't preserve
 // them and they will be lost from DDP.
-Meteor.Error.prototype.clone = function () {
+Meteor$Error.prototype.clone = function () {
   var self = this;
-  return new Meteor.Error(self.error, self.reason, self.details);
+  return new Meteor$Error(self.error, self.reason, self.details);
 };

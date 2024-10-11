@@ -1,5 +1,3 @@
-import { normalizeProjection } from "./mongo_utils";
-
 /**
  * Provide a synchronous Collection API using fibers, backed by
  * MongoDB.  This is only for use on the server, and mostly identical
@@ -8,37 +6,27 @@ import { normalizeProjection } from "./mongo_utils";
  * NOTE: the public API methods must be run within a fiber. If you call
  * these outside of a fiber they will explode!
  */
-
-const path = require("path");
-const util = require("util");
-
-/** @type {import('mongodb')} */
-var MongoDB = NpmModuleMongodb;
-var Future = Npm.require('fibers/future');
-import { DocFetcher } from "./doc_fetcher.js";
+import MongoDB from 'mongodb'
+import path from 'path';
+import Future from 'fibers/future';
 import {
   ASYNC_CURSOR_METHODS,
   getAsyncMethodName
 } from "meteor/minimongo/constants";
-
-MongoInternals = {};
-
-MongoInternals.NpmModules = {
-  mongodb: {
-    version: NpmModuleMongodbVersion,
-    module: MongoDB
-  }
-};
-
-// Older version of what is now available via
-// MongoInternals.NpmModules.mongodb.module.  It was never documented, but
-// people do use it.
-// XXX COMPAT WITH 1.0.3.2
-MongoInternals.NpmModule = MongoDB;
+import { DocFetcher } from './doc_fetcher.js';
+import { OplogHandle } from './oplog_tailing.js';
+import { ObserveHandle, ObserveMultiplexer } from './observe_multiplex.js';
+import { PollingObserveDriver } from './polling_observe_driver.js';
+import { OplogObserveDriver } from './oplog_observe_driver.js';
+import { getConnectionOptions } from "./connection_options.js";
+import { publishCursor, rewriteSelector } from './collection_util.js';
 
 const FILE_ASSET_SUFFIX = 'Asset';
 const ASSETS_FOLDER = 'assets';
 const APP_FOLDER = 'app';
+
+
+export const OPLOG_COLLECTION = 'oplog.rs';
 
 // This is used to add or remove EJSON from the beginning of everything nested
 // inside an EJSON custom type. It should only be called on pure JSON!
@@ -77,7 +65,7 @@ var replaceMongoAtomWithMeteor = function (document) {
     return new Uint8Array(buffer);
   }
   if (document instanceof MongoDB.ObjectID) {
-    return new Mongo.ObjectID(document.toHexString());
+    return new MongoID.ObjectID(document.toHexString());
   }
   if (document instanceof MongoDB.Decimal128) {
     return Decimal(document.toString());
@@ -105,7 +93,7 @@ var replaceMeteorAtomWithMongo = function (document) {
   if (document instanceof MongoDB.Binary) {
      return document;
   }
-  if (document instanceof Mongo.ObjectID) {
+  if (document instanceof MongoID.ObjectID) {
     return new MongoDB.ObjectID(document.toHexString());
   }
   if (document instanceof MongoDB.Timestamp) {
@@ -148,14 +136,14 @@ var replaceTypes = function (document, atomTransformer) {
 };
 
 
-MongoConnection = function (url, options) {
+export const MongoConnection = function (url, options) {
   var self = this;
   options = options || {};
   self._observeMultiplexers = {};
   self._onFailoverHook = new Hook;
 
   const userOptions = {
-    ...(Mongo._connectionOptions || {}),
+    ...getConnectionOptions(),
     ...(Meteor.settings?.packages?.mongo?.options || {})
   };
 
@@ -206,7 +194,7 @@ MongoConnection = function (url, options) {
     }
   }));
 
-  if (options.oplogUrl && ! Package['disable-oplog']) {
+  if (!Package['disable-oplog'] && options.oplogUrl) {
     self._oplogHandle = new OplogHandle(options.oplogUrl, self.db.databaseName);
     self._docFetcher = new DocFetcher(self);
   }
@@ -561,7 +549,7 @@ MongoConnection.prototype._update = function (collection_name, selector, mod,
         ! isModify &&
         ! knownId &&
         options.insertedId &&
-        ! (options.insertedId instanceof Mongo.ObjectID &&
+        ! (options.insertedId instanceof MongoID.ObjectID &&
            options.generatedId)) {
       // In case of an upsert with a replacement, where there is no _id defined
       // in either the query or the replacement doc, mongo will generate an id itself.
@@ -619,7 +607,7 @@ MongoConnection.prototype._update = function (collection_name, selector, mod,
                 if (knownId) {
                   meteorResult.insertedId = knownId;
                 } else if (meteorResult.insertedId instanceof MongoDB.ObjectID) {
-                  meteorResult.insertedId = new Mongo.ObjectID(meteorResult.insertedId.toHexString());
+                  meteorResult.insertedId = new MongoID.ObjectID(meteorResult.insertedId.toHexString());
                 }
               }
 
@@ -787,7 +775,7 @@ MongoConnection.prototype.upsert = function (collectionName, selector, mod,
   var self = this;
 
 
-  
+
   if (typeof options === "function" && ! callback) {
     callback = options;
     options = {};
@@ -843,7 +831,7 @@ MongoConnection.prototype.createIndexAsync = function (collectionName, index,
 MongoConnection.prototype.createIndex = function (collectionName, index,
                                                    options) {
   var self = this;
-  
+
 
   return Future.fromPromise(self.createIndexAsync(collectionName, index, options));
 };
@@ -865,7 +853,7 @@ MongoConnection.prototype._ensureIndex = MongoConnection.prototype.createIndex;
 MongoConnection.prototype._dropIndex = function (collectionName, index) {
   var self = this;
 
-  
+
   // This function is only used by test code, not within a method, so we don't
   // interact with the write fence.
   var collection = self.rawCollection(collectionName);
@@ -907,14 +895,14 @@ MongoConnection.prototype._dropIndex = function (collectionName, index) {
 // they start sending observeChanges callbacks (and a ready() invocation) to
 // their ObserveMultiplexer, and you stop them by calling their stop() method.
 
-CursorDescription = function (collectionName, selector, options) {
+export const CursorDescription = function (collectionName, selector, options) {
   var self = this;
   self.collectionName = collectionName;
-  self.selector = Mongo.Collection._rewriteSelector(selector);
+  self.selector = rewriteSelector(selector);
   self.options = options || {};
 };
 
-Cursor = function (mongo, cursorDescription) {
+export const Cursor = function (mongo, cursorDescription) {
   var self = this;
 
   self._mongo = mongo;
@@ -989,7 +977,7 @@ Cursor.prototype.getTransform = function () {
 Cursor.prototype._publishCursor = function (sub) {
   var self = this;
   var collection = self._cursorDescription.collectionName;
-  return Mongo.Collection._publishCursor(self, sub, collection);
+  return publishCursor(self, sub, collection);
 };
 
 // Used to guarantee that publish functions return at most one cursor per
@@ -1397,44 +1385,48 @@ MongoConnection.prototype._observeChanges = function (
   );
 
   if (firstHandle) {
-    var matcher, sorter;
-    var canUseOplog = _.all([
-      function () {
-        // At a bare minimum, using the oplog requires us to have an oplog, to
-        // want unordered callbacks, and to not want a callback on the polls
-        // that won't happen.
-        return self._oplogHandle && !ordered &&
-          !callbacks._testOnlyPollCallback;
-      }, function () {
-        // We need to be able to compile the selector. Fall back to polling for
-        // some newfangled $selector that minimongo doesn't support yet.
-        try {
-          matcher = new Minimongo.Matcher(cursorDescription.selector);
-          return true;
-        } catch (e) {
-          // XXX make all compilation errors MinimongoError or something
-          //     so that this doesn't ignore unrelated exceptions
-          return false;
-        }
-      }, function () {
-        // ... and the selector itself needs to support oplog.
-        return OplogObserveDriver.cursorSupported(cursorDescription, matcher);
-      }, function () {
-        // And we need to be able to compile the sort, if any.  eg, can't be
-        // {$natural: 1}.
-        if (!cursorDescription.options.sort)
-          return true;
-        try {
-          sorter = new Minimongo.Sorter(cursorDescription.options.sort);
-          return true;
-        } catch (e) {
-          // XXX make all compilation errors MinimongoError or something
-          //     so that this doesn't ignore unrelated exceptions
-          return false;
-        }
-      }], function (f) { return f(); });  // invoke each function
-
-    var driverClass = canUseOplog ? OplogObserveDriver : PollingObserveDriver;
+    var driverClass;
+    if (!Package['disable-oplog']) {
+      var matcher, sorter;
+      var canUseOplog = _.all([
+        function () {
+          // At a bare minimum, using the oplog requires us to have an oplog, to
+          // want unordered callbacks, and to not want a callback on the polls
+          // that won't happen.
+          return self._oplogHandle && !ordered &&
+            !callbacks._testOnlyPollCallback;
+        }, function () {
+          // We need to be able to compile the selector. Fall back to polling for
+          // some newfangled $selector that minimongo doesn't support yet.
+          try {
+            matcher = new Minimongo.Matcher(cursorDescription.selector);
+            return true;
+          } catch (e) {
+            // XXX make all compilation errors MinimongoError or something
+            //     so that this doesn't ignore unrelated exceptions
+            return false;
+          }
+        }, function () {
+          // ... and the selector itself needs to support oplog.
+          return OplogObserveDriver.cursorSupported(cursorDescription, matcher);
+        }, function () {
+          // And we need to be able to compile the sort, if any.  eg, can't be
+          // {$natural: 1}.
+          if (!cursorDescription.options.sort)
+            return true;
+          try {
+            sorter = new Minimongo.Sorter(cursorDescription.options.sort);
+            return true;
+          } catch (e) {
+            // XXX make all compilation errors MinimongoError or something
+            //     so that this doesn't ignore unrelated exceptions
+            return false;
+          }
+        }], function (f) { return f(); });  // invoke each function
+      driverClass = canUseOplog ? OplogObserveDriver : PollingObserveDriver;
+    } else {
+      driverClass = PollingObserveDriver;
+    }
     observeDriver = new driverClass({
       cursorDescription: cursorDescription,
       mongoHandle: self,
@@ -1461,7 +1453,7 @@ MongoConnection.prototype._observeChanges = function (
 // listenCallback is the same kind of (notification, complete) callback passed
 // to InvalidationCrossbar.listen.
 
-listenAll = function (cursorDescription, listenCallback) {
+export function listenAll(cursorDescription, listenCallback) {
   var listeners = [];
   forEachTrigger(cursorDescription, function (trigger) {
     listeners.push(DDPServer._InvalidationCrossbar.listen(
@@ -1475,9 +1467,9 @@ listenAll = function (cursorDescription, listenCallback) {
       });
     }
   };
-};
+}
 
-forEachTrigger = function (cursorDescription, triggerCallback) {
+export function forEachTrigger(cursorDescription, triggerCallback) {
   var key = {collection: cursorDescription.collectionName};
   var specificIds = LocalCollection._idsMatchedBySelector(
     cursorDescription.selector);
@@ -1491,7 +1483,7 @@ forEachTrigger = function (cursorDescription, triggerCallback) {
   }
   // Everyone cares about the database being dropped.
   triggerCallback({ dropDatabase: true });
-};
+}
 
 // observeChanges for tailable cursors on capped collections.
 //
@@ -1546,10 +1538,3 @@ MongoConnection.prototype._observeChangesTailable = function (
     }
   });
 };
-
-// XXX We probably need to find a better way to expose this. Right now
-// it's only used by tests, but in fact you need it in normal
-// operation to interact with capped collections.
-MongoInternals.MongoTimestamp = MongoDB.Timestamp;
-
-MongoInternals.Connection = MongoConnection;

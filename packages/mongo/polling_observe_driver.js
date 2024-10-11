@@ -1,7 +1,9 @@
+import { listenAll } from "./mongo_driver.js";
+
 var POLLING_THROTTLE_MS = +process.env.METEOR_POLLING_THROTTLE_MS || 50;
 var POLLING_INTERVAL_MS = +process.env.METEOR_POLLING_INTERVAL_MS || 10 * 1000;
 
-PollingObserveDriver = function (options) {
+export const PollingObserveDriver = function (options) {
   var self = this;
 
   self._cursorDescription = options.cursorDescription;

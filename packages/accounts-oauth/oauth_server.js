@@ -1,5 +1,6 @@
-import { Meteor } from 'meteor/meteor';
+import { serviceNames } from './oauth_common.js';
 
+export * from './oauth_common.js';
 // Listen to calls to `login` with an oauth option set. This is where
 // users actually get logged in to meteor via oauth.
 Accounts.registerLoginHandler(options => {
@@ -44,7 +45,7 @@ Accounts.registerLoginHandler(options => {
     // to the user.
     throw result;
   else {
-    if (! Accounts.oauth.serviceNames().includes(result.serviceName)) {
+    if (! serviceNames().includes(result.serviceName)) {
       // serviceName was not found in the registered services list.
       // This could happen because the service never registered itself or
       // unregisterService was called on it.
@@ -62,11 +63,12 @@ Accounts.registerLoginHandler(options => {
 /// OAuth Encryption Support
 ///
 
-const OAuthEncryption = Package["oauth-encryption"]?.OAuthEncryption;
+if (Package["oauth-encryption"]) {
+  const OAuthEncryption = Package["oauth-encryption"].OAuthEncryption;
 
-const usingOAuthEncryption = () => {
-  return OAuthEncryption?.keyIsLoaded();
-};
+  const usingOAuthEncryption = () => {
+    return OAuthEncryption?.keyIsLoaded();
+  };
 
 // Encrypt unencrypted login service secrets when oauth-encryption is
 // added.
@@ -77,24 +79,25 @@ const usingOAuthEncryption = () => {
 // block in the app code will run after this accounts-base startup
 // block.  Perhaps we need a post-startup callback?
 
-Meteor.startup(() => {
-  if (! usingOAuthEncryption()) {
-    return;
-  }
+  Meteor.startup(() => {
+    if (!usingOAuthEncryption()) {
+      return;
+    }
 
-  const { ServiceConfiguration } = Package['service-configuration'];
+    const { ServiceConfiguration } = Package['service-configuration'];
 
-  ServiceConfiguration.configurations.find({
-    $and: [{
-      secret: { $exists: true }
-    }, {
-      "secret.algorithm": { $exists: false }
-    }]
-  }).forEach(config => {
-    ServiceConfiguration.configurations.update(config._id, {
-      $set: {
-        secret: OAuthEncryption.seal(config.secret)
-      }
+    ServiceConfiguration.configurations.find({
+      $and: [{
+        secret: { $exists: true }
+      }, {
+        "secret.algorithm": { $exists: false }
+      }]
+    }).forEach(config => {
+      ServiceConfiguration.configurations.update(config._id, {
+        $set: {
+          secret: OAuthEncryption.seal(config.secret)
+        }
+      });
     });
   });
-});
+}

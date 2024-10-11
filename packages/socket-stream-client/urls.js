@@ -1,5 +1,3 @@
-import { Meteor } from "meteor/meteor";
-
 // @param url {String} URL to Meteor app, eg:
 //   "/" or "madewith.meteor.com" or "https://foo.meteor.com"
 //   or "ddp+sockjs://ddp--****-foo.meteor.com/sockjs"

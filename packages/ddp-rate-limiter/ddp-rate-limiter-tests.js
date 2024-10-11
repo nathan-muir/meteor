@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import { Accounts } from 'meteor/accounts-base';
 import { RATE_LIMIT_NUM_CALLS, RATE_LIMIT_INTERVAL_TIME_MS } from './ddp-rate-limiter-tests-common';

@@ -19,8 +19,6 @@ Package.onUse(function (api) {
   // `ecmascript-runtime-client@0.6.2` or newer.
   api.use(['ejson', 'ecmascript', 'ecmascript-runtime-client']);
   api.mainModule('logging.js');
-  api.addFiles('logging_server.js', 'server')
-  api.addFiles('logging_browser.js', 'client')
   api.mainModule('logging_cordova.js', 'web.cordova');
 });
 

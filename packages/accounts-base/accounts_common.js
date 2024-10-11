@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-
 // config option keys
 const VALID_CONFIG_KEYS = [
   'sendVerificationEmail',
@@ -228,22 +226,6 @@ export class AccountsCommon {
    * @param {Number} options.tokenSequenceLength When using the package `accounts-2fa`, use this to the size of the token sequence generated. The default is 6.
    */
   config(options) {
-    // We don't want users to accidentally only call Accounts.config on the
-    // client, where some of the options will have partial effects (eg removing
-    // the "create account" button from accounts-ui if forbidClientAccountCreation
-    // is set, or redirecting Google login to a specific-domain page) without
-    // having their full effects.
-    if (Meteor.isServer) {
-      __meteor_runtime_config__.accountsConfigCalled = true;
-    } else if (!__meteor_runtime_config__.accountsConfigCalled) {
-      // XXX would be nice to "crash" the client and replace the UI with an error
-      // message, but there's no trivial way to do this.
-      Meteor._debug(
-        'Accounts.config was called on the client but not on the ' +
-          'server; some configuration options may not take effect.'
-      );
-    }
-
     // We need to validate the oauthSecretKey option at the time
     // Accounts.config is called. We also deliberately don't store the
     // oauthSecretKey in Accounts._options.
@@ -342,10 +324,7 @@ export class AccountsCommon {
       this.connection = options.connection;
     } else if (options.ddpUrl) {
       this.connection = DDP.connect(options.ddpUrl);
-    } else if (
-      typeof __meteor_runtime_config__ !== 'undefined' &&
-      __meteor_runtime_config__.ACCOUNTS_CONNECTION_URL
-    ) {
+    } else if (__meteor_runtime_config__.ACCOUNTS_CONNECTION_URL) {
       // Temporary, internal hook to allow the server to point the client
       // to a different authentication server. This is for a very
       // particular use case that comes up when implementing a oauth
@@ -409,34 +388,6 @@ export class AccountsCommon {
   // No-op on the server, overridden on the client.
   _startupCallback(callback) {}
 }
-
-// Note that Accounts is defined separately in accounts_client.js and
-// accounts_server.js.
-
-/**
- * @summary Get the current user id, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- */
-Meteor.userId = () => Accounts.userId();
-
-/**
- * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- * @param {Object} [options]
- * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
- */
-Meteor.user = options => Accounts.user(options);
-
-/**
- * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.
- * @locus Anywhere but publish functions
- * @importFromPackage meteor
- * @param {Object} [options]
- * @param {MongoFieldSpecifier} options.fields Dictionary of fields to return or exclude.
- */
-Meteor.userAsync = options => Accounts.userAsync(options);
 
 // how long (in days) until a login token expires
 const DEFAULT_LOGIN_EXPIRATION_DAYS = 90;

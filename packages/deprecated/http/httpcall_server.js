@@ -1,6 +1,5 @@
-import { Meteor } from 'meteor/meteor';
 import { fetch, Request } from 'meteor/fetch';
-import { URL, URLSearchParams } from 'meteor/url';
+import { URL, URLSearchParams, constructUrl } from 'meteor/url';
 import { HTTP, makeErrorByStatus, populateData } from './httpcall_common.js';
 
 export { HTTP };
@@ -52,7 +51,7 @@ function _call (method, url, options, callback) {
     paramsForBody = options.params;
   }
 
-  const newUrl = URL._constructUrl(url, options.query, paramsForUrl);
+  const newUrl = constructUrl(url, options.query, paramsForUrl);
 
   if (options.auth) {
     if (options.auth.indexOf(':') < 0) {

@@ -25,7 +25,7 @@ var websocketExtensions = _.once(function () {
 
 var pathPrefix = __meteor_runtime_config__.ROOT_URL_PATH_PREFIX ||  "";
 
-StreamServer = function () {
+export const StreamServer = function () {
   var self = this;
   self.registration_callbacks = [];
   self.open_sockets = [];
@@ -40,6 +40,7 @@ StreamServer = function () {
   var serverOptions = {
     prefix: self.prefix,
     log: function() {},
+    disable_cors: true,
     // this is the default, but we code it explicitly because we depend
     // on it in stream_client:HEARTBEAT_TIMEOUT
     heartbeat_delay: 45000,

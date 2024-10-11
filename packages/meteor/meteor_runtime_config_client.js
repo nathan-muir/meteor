@@ -1,0 +1,1 @@
+export default globalThis.__meteor_runtime_config__;

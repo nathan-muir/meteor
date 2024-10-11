@@ -11,7 +11,7 @@ var suppress = 0;
 // be very visible. if you change _debug to go someplace else, etc,
 // please fix the autopublish code to do something reasonable.
 //
-Meteor._debug = function (/* arguments */) {
+export const Meteor$_debug = function (/* arguments */) {
   if (suppress) {
     suppress--;
     return;
@@ -54,11 +54,11 @@ Meteor._debug = function (/* arguments */) {
 // Suppress the next 'count' Meteor._debug messsages. Use this to
 // stop tests from spamming the console.
 //
-Meteor._suppress_log = function (count) {
+export const Meteor$_suppress_log = function (count) {
   suppress += count;
 };
 
-Meteor._suppressed_log_expected = function () {
+export const Meteor$_suppressed_log_expected = function () {
   return suppress !== 0;
 };
 

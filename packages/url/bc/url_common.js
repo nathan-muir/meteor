@@ -4,7 +4,7 @@ function encodeString(str) {
 
 // Encode URL parameters into a query string, handling nested objects and
 // arrays properly.
-var _encodeParams = function (params, prefix) {
+export function encodeParams(params, prefix) {
   var str = [];
   var isParamsArray = Array.isArray(params);
   for (var p in params) {
@@ -12,7 +12,7 @@ var _encodeParams = function (params, prefix) {
       var k = prefix ? prefix + '[' + (isParamsArray ? '' : p) + ']' : p;
       var v = params[p];
       if (typeof v === 'object') {
-        str.push(_encodeParams(v, k));
+        str.push(encodeParams(v, k));
       } else {
         var encodedKey =
           encodeString(k).replace('%5B', '[').replace('%5D', ']');
@@ -21,11 +21,10 @@ var _encodeParams = function (params, prefix) {
     }
   }
   return str.join('&').replace(/%20/g, '+');
-};
+}
 
-exports._encodeParams = _encodeParams;
 
-exports.buildUrl = function(before_qmark, from_qmark, opt_query, opt_params) {
+export function buildUrl(before_qmark, from_qmark, opt_query, opt_params) {
   var url_without_query = before_qmark;
   var query = from_qmark ? from_qmark.slice(1) : null;
 
@@ -34,7 +33,7 @@ exports.buildUrl = function(before_qmark, from_qmark, opt_query, opt_params) {
 
   if (opt_params) {
     query = query || "";
-    var prms = _encodeParams(opt_params);
+    var prms = encodeParams(opt_params);
     if (query && prms)
       query += '&';
     query += prms;
@@ -45,4 +44,4 @@ exports.buildUrl = function(before_qmark, from_qmark, opt_query, opt_params) {
     url += ("?"+query);
 
   return url;
-};
+}

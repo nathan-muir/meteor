@@ -1,6 +1,4 @@
-if (typeof ServiceConfiguration === 'undefined') {
-  ServiceConfiguration = {};
-}
+export const ServiceConfiguration = {};
 
 // Table containing documents with configuration options for each
 // login service
@@ -8,7 +6,7 @@ ServiceConfiguration.configurations = new Mongo.Collection(
   'meteor_accounts_loginServiceConfiguration',
   {
     _preventAutopublish: true,
-    connection: Meteor.isClient ? Accounts.connection : Meteor.connection,
+    connection: Meteor.connection,
   }
 );
 // Leave this collection open in insecure mode. In theory, someone could

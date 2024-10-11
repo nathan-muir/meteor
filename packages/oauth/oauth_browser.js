@@ -8,7 +8,7 @@
 //   arguments.
 // @param dimensions {optional Object(width, height)} The dimensions of
 //   the popup. If not passed defaults to something sane.
-OAuth.showPopup = (url, callback, dimensions) => {
+export const OAuth$showPopup = (url, callback, dimensions) => {
   // default dimensions that worked well for facebook and google
   const popup = openCenteredPopup(
     url,
@@ -68,6 +68,6 @@ const openCenteredPopup = function(url, width, height) {
 
   if (newwindow.focus)
     newwindow.focus();
-  
+
   return newwindow;
 };

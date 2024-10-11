@@ -1,28 +1,20 @@
-if (process.env.DDP_DEFAULT_CONNECTION_URL) {
-  __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL =
-    process.env.DDP_DEFAULT_CONNECTION_URL;
-}
+import { Server } from './livedata_server.js';
+import { InvalidationCrossbar } from './crossbar.js';
+export { DDPServer } from './livedata_server.js';
 
-Meteor.server = new Server;
+export const Meteor$server = new Server;
 
-Meteor.refresh = function (notification) {
-  DDPServer._InvalidationCrossbar.fire(notification);
+export const Meteor$refresh = function (notification) {
+  InvalidationCrossbar.fire(notification);
 };
 
 // Proxy the public methods of Meteor.server so they can
 // be called directly on Meteor.
-_.each(
-  [
-    'publish',
-    'methods',
-    'call',
-    'callAsync',
-    'apply',
-    'applyAsync',
-    'onConnection',
-    'onMessage',
-  ],
-  function(name) {
-    Meteor[name] = _.bind(Meteor.server[name], Meteor.server);
-  }
-);
+export const Meteor$publish = (...args) => Meteor$server.publish(...args);
+export const Meteor$methods = (...args) => Meteor$server.methods(...args);
+export const Meteor$call = (...args) => Meteor$server.call(...args);
+export const Meteor$callAsync = (...args) => Meteor$server.callAsync(...args);
+export const Meteor$apply = (...args) => Meteor$server.apply(...args);
+export const Meteor$applyAsync = (...args) => Meteor$server.applyAsync(...args);
+export const Meteor$onConnection = (...args) => Meteor$server.onConnection(...args);
+export const Meteor$onMessage = (...args) => Meteor$server.onMessage(...args);

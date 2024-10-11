@@ -1,9 +1,7 @@
+import { Long } from 'mongodb';
+import { CursorDescription, MongoConnection, OPLOG_COLLECTION } from './mongo_driver.js';
+
 var Future = Npm.require('fibers/future');
-
-import { NpmModuleMongodb } from "meteor/npm-mongo";
-const { Long } = NpmModuleMongodb;
-
-OPLOG_COLLECTION = 'oplog.rs';
 
 var TOO_FAR_BEHIND = process.env.METEOR_OPLOG_TOO_FAR_BEHIND || 2000;
 var TAIL_TIMEOUT = +process.env.METEOR_OPLOG_TAIL_TIMEOUT || 30000;
@@ -12,7 +10,7 @@ var showTS = function (ts) {
   return "Timestamp(" + ts.getHighBits() + ", " + ts.getLowBits() + ")";
 };
 
-idForOp = function (op) {
+export function idForOp(op) {
   if (op.op === 'd')
     return op.o._id;
   else if (op.op === 'i')
@@ -24,9 +22,9 @@ idForOp = function (op) {
                 EJSON.stringify(op));
   else
     throw Error("Unknown op: " + EJSON.stringify(op));
-};
+}
 
-OplogHandle = function (oplogUrl, dbName) {
+export const OplogHandle = function (oplogUrl, dbName) {
   var self = this;
   self._oplogUrl = oplogUrl;
   self._dbName = dbName;

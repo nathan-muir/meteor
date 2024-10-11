@@ -19,7 +19,6 @@
 // XXX These tests should be refactored to use Tinytest.add instead of
 // testAsyncMulti as they're all on the server. Any future tests should be
 // written that way.
-import { Meteor } from 'meteor/meteor';
 import { RateLimiter } from 'meteor/rate-limit';
 import { DDPCommon } from 'meteor/ddp-common';
 

@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-
 if (window.applicationCache) {
 
   const appCacheStatuses = [

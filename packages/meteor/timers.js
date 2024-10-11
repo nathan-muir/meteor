@@ -1,23 +1,12 @@
 function withoutInvocation(f) {
-  if (Package.ddp) {
-    var DDP = Package.ddp.DDP;
-    var CurrentInvocation =
-      DDP._CurrentMethodInvocation ||
-      // For backwards compatibility, as explained in this issue:
-      // https://github.com/meteor/meteor/issues/8947
-      DDP._CurrentInvocation;
-
-    var invocation = CurrentInvocation.get();
-    if (invocation && invocation.isSimulation) {
-      throw new Error("Can't set timers inside simulations");
-    }
-
-    return function () {
-      CurrentInvocation.withValue(null, f);
-    };
-  } else {
-    return f;
+  var invocation = DDP._CurrentMethodInvocation.get();
+  if (invocation && invocation.isSimulation) {
+    throw new Error("Can't set timers inside simulations");
   }
+
+  return function () {
+    DDP._CurrentInvocation.withValue(null, f);
+  };
 }
 
 function bindAndCatch(context, f) {
@@ -35,7 +24,7 @@ function bindAndCatch(context, f) {
  * @param {Function} func The function to run
  * @param {Number} delay Number of milliseconds to wait before calling function
  */
-Meteor.setTimeout = function (f, duration) {
+export const Meteor$setTimeout = function (f, duration) {
   return setTimeout(bindAndCatch("setTimeout callback", f), duration);
 };
 
@@ -46,7 +35,7 @@ Meteor.setTimeout = function (f, duration) {
  * @param {Function} func The function to run
  * @param {Number} delay Number of milliseconds to wait between each function call.
  */
-Meteor.setInterval = function (f, duration) {
+export const Meteor$setInterval = function (f, duration) {
   return setInterval(bindAndCatch("setInterval callback", f), duration);
 };
 
@@ -56,7 +45,7 @@ Meteor.setInterval = function (f, duration) {
  * @locus Anywhere
  * @param {Object} id The handle returned by `Meteor.setInterval`
  */
-Meteor.clearInterval = function(x) {
+export const Meteor$clearInterval = function(x) {
   return clearInterval(x);
 };
 
@@ -66,7 +55,7 @@ Meteor.clearInterval = function(x) {
  * @locus Anywhere
  * @param {Object} id The handle returned by `Meteor.setTimeout`
  */
-Meteor.clearTimeout = function(x) {
+export const Meteor$clearTimeout = function(x) {
   return clearTimeout(x);
 };
 
@@ -81,6 +70,6 @@ Meteor.clearTimeout = function(x) {
  * @locus Anywhere
  * @param {Function} func The function to run
  */
-Meteor.defer = function (f) {
+export const Meteor$defer = function (f) {
   Meteor._setImmediate(bindAndCatch("defer callback", f));
 };

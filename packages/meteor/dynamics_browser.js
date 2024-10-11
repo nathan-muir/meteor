@@ -4,11 +4,11 @@ var nextSlot = 0;
 var currentValues = [];
 var callAsyncMethodRunning = false;
 
-Meteor.EnvironmentVariable = function () {
+export const Meteor$EnvironmentVariable = function () {
   this.slot = nextSlot++;
 };
 
-var EVp = Meteor.EnvironmentVariable.prototype;
+var EVp = Meteor$EnvironmentVariable.prototype;
 
 EVp.getCurrentValues = function () {
   return currentValues;
@@ -51,7 +51,7 @@ EVp._setCallAsyncMethodRunning = function (value) {
 };
 
 
-Meteor.bindEnvironment = function (func, onException, _this) {
+export const Meteor$bindEnvironment = function (func, onException, _this) {
   // needed in order to be able to create closures inside func and
   // have the closed variables not change back to their original
   // values
@@ -83,6 +83,6 @@ Meteor.bindEnvironment = function (func, onException, _this) {
   };
 };
 
-Meteor._nodeCodeMustBeInFiber = function () {
+export const Meteor$_nodeCodeMustBeInFiber = function () {
   // no-op on browser
 };

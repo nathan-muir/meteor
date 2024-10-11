@@ -1,7 +1,5 @@
-var URL = require("meteor/url").URL;
-var common = require("./httpcall_common.js");
-var HTTP = exports.HTTP = common.HTTP;
-var hasOwn = Object.prototype.hasOwnProperty;
+import {URL, constructUrl, encodeParams } from 'meteor/url';
+import { HTTP, populateData, makeErrorByStatus } from './httpcall_common.js';
 
 /**
  * @summary Perform an outbound HTTP request.
@@ -53,7 +51,7 @@ HTTP.call = function(method, url, options, callback) {
   else
     params_for_body = options.params;
 
-  url = URL._constructUrl(url, options.query, params_for_url);
+  url = constructUrl(url, options.query, params_for_url);
 
   if (options.followRedirects === false)
     throw new Error("Option followRedirects:false not supported on client.");
@@ -69,7 +67,7 @@ HTTP.call = function(method, url, options, callback) {
   }
 
   if (params_for_body) {
-    content = URL._encodeParams(params_for_body);
+    content = encodeParams(params_for_body);
   }
 
   if (options.headers) {
@@ -171,11 +169,11 @@ HTTP.call = function(method, url, options, callback) {
             }
           });
 
-          common.populateData(response);
+          populateData(response);
 
           var error = null;
           if (response.statusCode >= 400) {
-            error = common.makeErrorByStatus(
+            error = makeErrorByStatus(
               response.statusCode,
               response.content
             );
@@ -201,3 +199,5 @@ HTTP.call = function(method, url, options, callback) {
     callback(err);
   }
 };
+
+export { HTTP };

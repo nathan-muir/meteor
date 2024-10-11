@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { Meteor } from 'meteor/meteor'
 import {
   AccountsCommon,
   EXPIRE_TOKENS_INTERVAL_MS,
@@ -299,7 +298,7 @@ export class AccountsServer extends AccountsCommon {
 
     if (query.id) {
       // default field selector is added within getUserById()
-      user = Meteor.users.findOne(query.id, this._addDefaultFieldSelector(options));
+      user = this.users.findOne(query.id, this._addDefaultFieldSelector(options));
     } else {
       options = this._addDefaultFieldSelector(options);
       let fieldName;
@@ -315,11 +314,11 @@ export class AccountsServer extends AccountsCommon {
       }
       let selector = {};
       selector[fieldName] = fieldValue;
-      user = Meteor.users.findOne(selector, options);
+      user = this.users.findOne(selector, options);
       // If user is not found, try a case insensitive lookup
       if (!user) {
         selector = this._selectorForFastCaseInsensitiveLookup(fieldName, fieldValue);
-        const candidateUsers = Meteor.users.find(selector, { ...options, limit: 2 }).fetch();
+        const candidateUsers = this.users.find(selector, { ...options, limit: 2 }).fetch();
         // No match if multiple candidates are found
         if (candidateUsers.length === 1) {
           user = candidateUsers[0];
@@ -760,15 +759,16 @@ export class AccountsServer extends AccountsCommon {
     // Bring into lexical scope for publish callbacks that need `this`
     const { users, _autopublishFields, _defaultPublishFields } = this;
 
-    // Publish all login service configuration fields other than secret.
-    this._server.publish("meteor.loginServiceConfiguration", function() {
-      if (Package['service-configuration']) {
-        const { ServiceConfiguration } = Package['service-configuration'];
-        return ServiceConfiguration.configurations.find({}, {fields: {secret: 0}});
-      }
-      this.ready();
-    }, {is_auto: true}); // not technically autopublish, but stops the warning.
-
+    Meteor.startup(() => {
+      // Publish all login service configuration fields other than secret.
+      this._server.publish("meteor.loginServiceConfiguration", function() {
+        if (Package['service-configuration']) {
+          const { ServiceConfiguration } = Package['service-configuration'];
+          return ServiceConfiguration.configurations.find({}, {fields: {secret: 0}});
+        }
+        this.ready();
+      }, {is_auto: true}); // not technically autopublish, but stops the warning.
+    });
     // Use Meteor.startup to give other packages a chance to call
     // setDefaultPublishFields.
     Meteor.startup(() => {
@@ -1127,7 +1127,7 @@ export class AccountsServer extends AccountsCommon {
         }
       }
     }, { multi: true });
-    // The observe on Meteor.users will take care of closing connections for
+    // The observe on this.users will take care of closing connections for
     // expired tokens.
   };
 
@@ -1435,7 +1435,7 @@ export class AccountsServer extends AccountsCommon {
     );
 
     if (fieldValue && !skipCheck) {
-      const matchedUsers = Meteor.users
+      const matchedUsers = this.users
         .find(
           this._selectorForFastCaseInsensitiveLookup(fieldName, fieldValue),
           {
@@ -1478,7 +1478,7 @@ export class AccountsServer extends AccountsCommon {
       this._checkForCaseInsensitiveDuplicates('emails.address', 'Email', email, userId);
     } catch (ex) {
       // Remove inserted user if the check fails
-      Meteor.users.remove(userId);
+      this.users.remove(userId);
       throw ex;
     }
     return userId;

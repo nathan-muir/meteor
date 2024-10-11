@@ -5,7 +5,7 @@ var Fiber = Npm.require('fibers');
 var nextSlot = 0;
 var callAsyncMethodRunning = false;
 
-Meteor._nodeCodeMustBeInFiber = function () {
+export const Meteor$_nodeCodeMustBeInFiber = function () {
   if (!Fiber.current) {
     throw new Error("Meteor code must always run within a Fiber. " +
                     "Try wrapping callbacks that you pass to non-Meteor " +
@@ -19,11 +19,11 @@ Meteor._nodeCodeMustBeInFiber = function () {
  * @locus Anywhere
  * @class
  */
-Meteor.EnvironmentVariable = function () {
+export const Meteor$EnvironmentVariable = function () {
   this.slot = nextSlot++;
 };
 
-var EVp = Meteor.EnvironmentVariable.prototype;
+var EVp = Meteor$EnvironmentVariable.prototype;
 
 /**
  * @summary Return value of environment variable if available
@@ -32,10 +32,9 @@ var EVp = Meteor.EnvironmentVariable.prototype;
  * @memberof Meteor.EnvironmentVariable
  */
 EVp.get = function () {
-  Meteor._nodeCodeMustBeInFiber();
+  // Meteor$_nodeCodeMustBeInFiber();
 
-  return Fiber.current._meteor_dynamics &&
-    Fiber.current._meteor_dynamics[this.slot];
+  return Fiber.current?._meteor_dynamics?.[this.slot]
 };
 
 // Most Meteor code ought to run inside a fiber, and the
@@ -67,7 +66,7 @@ EVp.getOrNullIfOutsideFiber = function () {
  * @return {Any} Return value of function
  */
 EVp.withValue = function (value, func) {
-  Meteor._nodeCodeMustBeInFiber();
+  Meteor$_nodeCodeMustBeInFiber();
 
   if (!Fiber.current._meteor_dynamics)
     Fiber.current._meteor_dynamics = [];
@@ -93,12 +92,12 @@ EVp.withValue = function (value, func) {
  */
 
 EVp._set = function (context) {
-  Meteor._nodeCodeMustBeInFiber();
+  Meteor$_nodeCodeMustBeInFiber();
   Fiber.current._meteor_dynamics[this.slot] = context;
 };
 
 EVp._setNewContextAndGetCurrent = function (value) {
-  Meteor._nodeCodeMustBeInFiber();
+  Meteor$_nodeCodeMustBeInFiber();
   if (!Fiber.current._meteor_dynamics) {
     Fiber.current._meteor_dynamics = [];
   }
@@ -146,10 +145,10 @@ EVp._setCallAsyncMethodRunning = function (value) {
  * @param {Object} _this Optional `this` object against which the original function will be invoked
  * @return {Function} The wrapped function
  */
-Meteor.bindEnvironment = function (func, onException, _this) {
-  Meteor._nodeCodeMustBeInFiber();
+export const Meteor$bindEnvironment = function (func, onException, _this) {
+  // Meteor$_nodeCodeMustBeInFiber();
 
-  var dynamics = Fiber.current._meteor_dynamics;
+  var dynamics = Fiber.current?._meteor_dynamics;
   var boundValues = dynamics ? dynamics.slice() : [];
 
   if (!onException || typeof(onException) === 'string') {

@@ -1,4 +1,3 @@
-import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 
 // Default time interval (in milliseconds) to reset rate limit counters

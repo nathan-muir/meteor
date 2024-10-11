@@ -34,7 +34,7 @@ const hasOwn = Object.prototype.hasOwnProperty;
 // call all of them if it is able to make a decision without calling them all
 // (so don't include side effects).
 
-AllowDeny = {
+export const AllowDeny = {
   CollectionPrototype: {}
 };
 
@@ -107,7 +107,7 @@ CollectionPrototype._defineMutationMethods = function(options) {
   // it wait()s until its result is ready, yielding.
   // This matches the behavior of macromongo on the server better.
   // XXX see #MeteorServerNull
-  if (self._connection && (self._connection === Meteor.server || Meteor.isClient)) {
+  if ((Meteor.isClient && self._connection) || (Meteor.isServer && self._connection === Meteor.server)) {
     const m = {};
 
     ['insert', 'update', 'remove'].forEach((method) => {

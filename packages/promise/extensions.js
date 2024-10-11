@@ -1,4 +1,4 @@
-var proto = Promise.prototype;
+var proto = globalThis.Promise.prototype;
 var hasOwn = Object.prototype.hasOwnProperty;
 
 proto.done = function (onFulfilled, onRejected) {

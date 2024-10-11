@@ -1,5 +1,3 @@
-import { Meteor } from 'meteor/meteor';
-
 // TODO get from account-base
 // config option keys
 const VALID_CONFIG_KEYS = [
@@ -19,19 +17,17 @@ const VALID_CONFIG_KEYS = [
   'tokenSequenceLength',
 ];
 
-Accounts.oauth = {};
-
 const services = {};
 const hasOwn = Object.prototype.hasOwnProperty;
 
 // Helper for registering OAuth based accounts packages.
 // On the server, adds an index to the user collection.
-Accounts.oauth.registerService = name => {
+export const registerService = name => {
   if (hasOwn.call(services, name))
     throw new Error(`Duplicate service: ${name}`);
   services[name] = true;
 
-  if (Meteor.server) {
+  if (Meteor.isServer) {
     // Accounts.updateOrCreateUserFromExternalService does a lookup by this id,
     // so this should be a unique index. You might want to add indexes for other
     // fields returned by your service (eg services.github.login) but you can do
@@ -45,16 +41,16 @@ Accounts.oauth.registerService = name => {
 // contain it.
 // It's worth noting that already logged in users will remain logged in unless
 // you manually expire their sessions.
-Accounts.oauth.unregisterService = name => {
+export const unregisterService = name => {
   if (!hasOwn.call(services, name))
     throw new Error(`Service not found: ${name}`);
   delete services[name];
 };
 
-Accounts.oauth.serviceNames = () => Object.keys(services);
+export const serviceNames = () => Object.keys(services);
 
 // loginServiceConfiguration and ConfigError are maintained for backwards compatibility
-Meteor.startup(() => {
+/*Meteor.startup(() => {
   const { ServiceConfiguration } = Package['service-configuration'];
   Accounts.loginServiceConfiguration = ServiceConfiguration.configurations;
   Accounts.ConfigError = ServiceConfiguration.ConfigError;
@@ -85,4 +81,4 @@ Meteor.startup(() => {
       }
     });
   }
-});
+});*/

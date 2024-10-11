@@ -1,3 +1,4 @@
+import { openSecret, sealSecret } from "./oauth_server.js";
 //
 // When an oauth request is made, Meteor receives oauth credentials
 // in one browser tab, and temporarily persists them while that
@@ -11,14 +12,14 @@
 
 // Collection containing pending credentials of oauth credential requests
 // Has key, credential, and createdAt fields.
-OAuth._pendingCredentials = new Mongo.Collection(
+const OAuth$_pendingCredentials = new Mongo.Collection(
   "meteor_oauth_pendingCredentials", {
     _preventAutopublish: true
   });
 
-OAuth._pendingCredentials.createIndex('key', { unique: true });
-OAuth._pendingCredentials.createIndex('credentialSecret');
-OAuth._pendingCredentials.createIndex('createdAt');
+OAuth$_pendingCredentials.createIndex('key', { unique: true });
+OAuth$_pendingCredentials.createIndex('credentialSecret');
+OAuth$_pendingCredentials.createIndex('createdAt');
 
 
 
@@ -27,7 +28,7 @@ const _cleanStaleResults = () => {
   // Remove credentials older than 1 minute
   const timeCutoff = new Date();
   timeCutoff.setMinutes(timeCutoff.getMinutes() - 1);
-  OAuth._pendingCredentials.remove({ createdAt: { $lt: timeCutoff } });
+  OAuth$_pendingCredentials.remove({ createdAt: { $lt: timeCutoff } });
 };
 const _cleanupHandle = Meteor.setInterval(_cleanStaleResults, 60 * 1000);
 
@@ -40,20 +41,20 @@ const _cleanupHandle = Meteor.setInterval(_cleanStaleResults, 60 * 1000);
 // @param credentialSecret {string} A secret that must be presented in
 //   addition to the `key` to retrieve the credential
 //
-OAuth._storePendingCredential = (key, credential, credentialSecret = null) => {
+const OAuth$_storePendingCredential = (key, credential, credentialSecret = null) => {
   check(key, String);
   check(credentialSecret, Match.Maybe(String));
 
   if (credential instanceof Error) {
     credential = storableError(credential);
   } else {
-    credential = OAuth.sealSecret(credential);
+    credential = sealSecret(credential);
   }
 
   // We do an upsert here instead of an insert in case the user happens
   // to somehow send the same `state` parameter twice during an OAuth
   // login; we don't want a duplicate key error.
-  OAuth._pendingCredentials.upsert({
+  OAuth$_pendingCredentials.upsert({
     key,
   }, {
     key,
@@ -69,20 +70,20 @@ OAuth._storePendingCredential = (key, credential, credentialSecret = null) => {
 // @param key {string}
 // @param credentialSecret {string}
 //
-OAuth._retrievePendingCredential = (key, credentialSecret = null) => {
+const OAuth$_retrievePendingCredential = (key, credentialSecret = null) => {
   check(key, String);
 
-  const pendingCredential = OAuth._pendingCredentials.findOne({
+  const pendingCredential = OAuth$_pendingCredentials.findOne({
     key,
     credentialSecret,
   });
 
   if (pendingCredential) {
-    OAuth._pendingCredentials.remove({ _id: pendingCredential._id });
+    OAuth$_pendingCredentials.remove({ _id: pendingCredential._id });
     if (pendingCredential.credential.error)
       return recreateError(pendingCredential.credential.error);
     else
-      return OAuth.openSecret(pendingCredential.credential);
+      return openSecret(pendingCredential.credential);
   } else {
     return undefined;
   }
@@ -123,4 +124,10 @@ const recreateError = errorDoc => {
   );
 
   return error;
+};
+
+export {
+  OAuth$_pendingCredentials as _pendingCredentials,
+  OAuth$_storePendingCredential as _storePendingCredential,
+  OAuth$_retrievePendingCredential as _retrievePendingCredential
 };

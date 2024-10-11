@@ -1,9 +1,8 @@
 import { DDP } from '../common/namespace.js';
-import { Meteor } from 'meteor/meteor';
 
 // Meteor.refresh can be called on the client (if you're in common code) but it
 // only has an effect on the server.
-Meteor.refresh = () => {};
+export const Meteor$refresh = () => {};
 
 // By default, try to connect back to the same endpoint as the page
 // was served from.
@@ -20,8 +19,7 @@ Meteor.refresh = () => {};
 // _translateUrl in stream_client_common.js not force absolute paths
 // to be treated like relative paths. See also
 // stream_client_common.js #RationalizingRelativeDDPURLs
-const runtimeConfig = typeof __meteor_runtime_config__ !== 'undefined' ? __meteor_runtime_config__ : Object.create(null);
-const ddpUrl = runtimeConfig.DDP_DEFAULT_CONNECTION_URL || '/';
+const ddpUrl = __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL || '/';
 
 const retry = new Retry();
 
@@ -38,22 +36,18 @@ function onDDPVersionNegotiationFailure(description) {
   }
 }
 
-Meteor.connection = DDP.connect(ddpUrl, {
+export const Meteor$connection = DDP.connect(ddpUrl, {
   onDDPVersionNegotiationFailure: onDDPVersionNegotiationFailure
 });
 
-// Proxy the public methods of Meteor.connection so they can
+// Proxy the public methods of Meteor$connection so they can
 // be called directly on Meteor.
-[
-  'subscribe',
-  'methods',
-  'call',
-  'callAsync',
-  'apply',
-  'applyAsync',
-  'status',
-  'reconnect',
-  'disconnect'
-].forEach(name => {
-  Meteor[name] = Meteor.connection[name].bind(Meteor.connection);
-});
+export const Meteor$subscribe = Meteor$connection.subscribe.bind(Meteor$connection)
+export const Meteor$methods = Meteor$connection.methods.bind(Meteor$connection)
+export const Meteor$call = Meteor$connection.call.bind(Meteor$connection)
+export const Meteor$callAsync = Meteor$connection.callAsync.bind(Meteor$connection)
+export const Meteor$apply = Meteor$connection.apply.bind(Meteor$connection)
+export const Meteor$applyAsync = Meteor$connection.applyAsync.bind(Meteor$connection)
+export const Meteor$status = Meteor$connection.status.bind(Meteor$connection)
+export const Meteor$reconnect = Meteor$connection.reconnect.bind(Meteor$connection)
+export const Meteor$disconnect = Meteor$connection.disconnect.bind(Meteor$connection)

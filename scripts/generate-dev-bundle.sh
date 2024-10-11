@@ -57,7 +57,7 @@ downloadReleaseCandidateNode() {
 
 # Try each strategy in the following order:
 extractNodeFromTarGz || downloadNodeFromS3 || \
-  downloadOfficialNode14 || downloadReleaseCandidateNode
+  downloadOfficialNode || downloadReleaseCandidateNode
 
 # On macOS, download MongoDB from mongodb.com. On Linux, download a custom build
 # that is compatible with current distributions. If a 32-bit Linux is used,
@@ -71,7 +71,7 @@ fi
 case $OS in
     macos) MONGO_BASE_URL="https://fastdl.mongodb.org/osx" ;;
     linux)
-        [ $ARCH = "i686" ] &&
+        [ $ARCH = "i686" -o $ARCH = "aarch64" ] &&
             MONGO_BASE_URL="https://fastdl.mongodb.org/linux" ||
             MONGO_BASE_URL="https://github.com/meteor/mongodb-builder/releases/download/v${MONGO_VERSION}"
         ;;
@@ -80,6 +80,8 @@ esac
 
 if [ $OS = "macos" ] && [ "$(uname -m)" = "arm64" ] ; then
   MONGO_NAME="mongodb-${OS}-x86_64-${MONGO_VERSION}"
+elif [ $OS = "linux" ] && [ "$ARCH" = "aarch64" ] ; then
+  MONGO_NAME="mongodb-linux-aarch64-ubuntu2004-${MONGO_VERSION}"
 else
   MONGO_NAME="mongodb-${OS}-${ARCH}-${MONGO_VERSION}"
 fi

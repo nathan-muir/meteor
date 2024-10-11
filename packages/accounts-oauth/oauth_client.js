@@ -1,3 +1,4 @@
+export * from './oauth_common.js'
 // Documentation for Meteor.loginWithExternalService
 
 /**
@@ -71,7 +72,7 @@ Meteor.startup(() => {
 // Send an OAuth login method to the server. If the user authorized
 // access in the popup this should log the user in, otherwise
 // nothing should happen.
-Accounts.oauth.tryLoginAfterPopupClosed = (
+export const tryLoginAfterPopupClosed = (
   credentialToken,
   callback,
   shouldRetry = true
@@ -88,7 +89,7 @@ Accounts.oauth.tryLoginAfterPopupClosed = (
     }
     Meteor.setTimeout(
       () =>
-        Accounts.oauth.tryLoginAfterPopupClosed(
+        tryLoginAfterPopupClosed(
           credentialToken,
           callback,
           false
@@ -104,12 +105,12 @@ Accounts.oauth.tryLoginAfterPopupClosed = (
   });
 };
 
-Accounts.oauth.credentialRequestCompleteHandler = callback =>
+export const credentialRequestCompleteHandler = callback =>
   credentialTokenOrError => {
     if(credentialTokenOrError && credentialTokenOrError instanceof Error) {
       callback && callback(credentialTokenOrError);
     } else {
-      Accounts.oauth.tryLoginAfterPopupClosed(credentialTokenOrError, callback);
+      tryLoginAfterPopupClosed(credentialTokenOrError, callback);
     }
   }
 

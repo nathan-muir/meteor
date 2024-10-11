@@ -27,7 +27,13 @@ export class StreamClientCommon {
       return;
     }
 
-    this.eventCallbacks[name].forEach(cb);
+    this.eventCallbacks[name].forEach(function(eventCallback) {
+      try {
+        cb(eventCallback)
+      } catch (err) {
+        Meteor._debug('SocketStreamClient error in "' + name + '" callback', err);
+      }
+    });
   }
 
   _initCommon(options) {

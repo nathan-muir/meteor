@@ -1,18 +1,15 @@
+import { OAuth$showPopup } from "./oauth_browser.js";
+import { OAuth$_storageTokenPrefix, OAuth$_redirectUri } from "./oauth_common.js";
+
 // credentialToken -> credentialSecret. You must provide both the
 // credentialToken and the credentialSecret to retrieve an access token from
 // the _pendingCredentials collection.
 const credentialSecrets = {};
 
-OAuth = {};
-
-OAuth.showPopup = (url, callback, dimensions) => {
-  throw new Error("OAuth.showPopup must be implemented on this arch.");
-};
-
 // Determine the login style (popup or redirect) for this login flow.
 //
 //
-OAuth._loginStyle = (service, config, options) => {
+const OAuth$_loginStyle = (service, config, options) => {
 
   if (Meteor.isCordova) {
     return "popup";
@@ -38,7 +35,7 @@ OAuth._loginStyle = (service, config, options) => {
   return loginStyle;
 };
 
-OAuth._stateParam = (loginStyle, credentialToken, redirectUrl) => {
+const OAuth$_stateParam = (loginStyle, credentialToken, redirectUrl) => {
   const state = {
     loginStyle,
     credentialToken,
@@ -62,7 +59,7 @@ OAuth._stateParam = (loginStyle, credentialToken, redirectUrl) => {
 // the login service, save the credential token for this login attempt
 // in the reload migration data.
 //
-OAuth.saveDataForRedirect = (loginService, credentialToken) => {
+const OAuth$saveDataForRedirect = (loginService, credentialToken) => {
   Reload._onMigrate('oauth', () => [true, { loginService, credentialToken }]);
   Reload._migrate(null, {immediateMigration: true});
 };
@@ -75,14 +72,14 @@ OAuth.saveDataForRedirect = (loginService, credentialToken) => {
 // application startup and we weren't just redirected at the end of
 // the login flow.
 //
-OAuth.getDataAfterRedirect = () => {
+const OAuth$getDataAfterRedirect = () => {
   const migrationData = Reload._migrationData('oauth');
 
   if (! (migrationData && migrationData.credentialToken))
     return null;
 
   const { credentialToken } = migrationData;
-  const key = OAuth._storageTokenPrefix + credentialToken;
+  const key = OAuth$_storageTokenPrefix + credentialToken;
   let credentialSecret;
   try {
     credentialSecret = sessionStorage.getItem(key);
@@ -110,16 +107,16 @@ OAuth.getDataAfterRedirect = () => {
 //    is closed and we have the credential from the login service.
 //  credentialToken: our identifier for this login flow.
 //
-OAuth.launchLogin = options => {
+const OAuth$launchLogin = options => {
   if (! options.loginService)
     throw new Error('loginService required');
   if (options.loginStyle === 'popup') {
-    OAuth.showPopup(
+    OAuth$showPopup(
       options.loginUrl,
       options.credentialRequestCompleteCallback.bind(null, options.credentialToken),
       options.popupOptions);
   } else if (options.loginStyle === 'redirect') {
-    OAuth.saveDataForRedirect(options.loginService, options.credentialToken);
+    OAuth$saveDataForRedirect(options.loginService, options.credentialToken);
     window.location = options.loginUrl;
   } else {
     throw new Error('invalid login style');
@@ -128,7 +125,7 @@ OAuth.launchLogin = options => {
 
 // Called by the popup when the OAuth flow is completed, right before
 // the popup closes.
-OAuth._handleCredentialSecret = (credentialToken, secret) => {
+const OAuth$_handleCredentialSecret = (credentialToken, secret) => {
   check(credentialToken, String);
   check(secret, String);
   if (! Object.prototype.hasOwnProperty.call(credentialSecrets, credentialToken)) {
@@ -140,13 +137,13 @@ OAuth._handleCredentialSecret = (credentialToken, secret) => {
 
 // Used by accounts-oauth, which needs both a credentialToken and the
 // corresponding to credential secret to call the `login` method over DDP.
-OAuth._retrieveCredentialSecret = credentialToken => {
+const OAuth$_retrieveCredentialSecret = credentialToken => {
   // First check the secrets collected by OAuth._handleCredentialSecret,
   // then check localStorage. This matches what we do in
   // end_of_login_response.html.
   let secret = credentialSecrets[credentialToken];
   if (! secret) {
-    const localStorageKey = OAuth._storageTokenPrefix + credentialToken;
+    const localStorageKey = OAuth$_storageTokenPrefix + credentialToken;
     secret = Meteor._localStorage.getItem(localStorageKey);
     Meteor._localStorage.removeItem(localStorageKey);
   } else {
@@ -154,3 +151,16 @@ OAuth._retrieveCredentialSecret = credentialToken => {
   }
   return secret;
 };
+
+export {
+  OAuth$showPopup as showPopup,
+  OAuth$_loginStyle as _loginStyle,
+  OAuth$_stateParam as _stateParam,
+  OAuth$saveDataForRedirect as saveDataForRedirect,
+  OAuth$getDataAfterRedirect as getDataAfterRedirect,
+  OAuth$launchLogin as launchLogin,
+  OAuth$_handleCredentialSecret as _handleCredentialSecret,
+  OAuth$_retrieveCredentialSecret as _retrieveCredentialSecret,
+  OAuth$_storageTokenPrefix as _storageTokenPrefix,
+  OAuth$_redirectUri as _redirectUri,
+}

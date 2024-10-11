@@ -38,9 +38,9 @@ export function last(array, n, guard) {
   return slice.call(array, Math.max(array.length - n, 0));
 }
 
-DDPCommon.SUPPORTED_DDP_VERSIONS = [ '1', 'pre2', 'pre1' ];
+export const SUPPORTED_DDP_VERSIONS = [ '1', 'pre2', 'pre1' ];
 
-DDPCommon.parseDDP = function (stringMessage) {
+export function parseDDP (stringMessage) {
   try {
     var msg = JSON.parse(stringMessage);
   } catch (e) {
@@ -74,9 +74,9 @@ DDPCommon.parseDDP = function (stringMessage) {
   });
 
   return msg;
-};
+}
 
-DDPCommon.stringifyDDP = function (msg) {
+export function stringifyDDP(msg) {
   const copy = EJSON.clone(msg);
 
   // swizzle 'changed' messages from 'fields undefined' rep to 'fields
@@ -114,4 +114,4 @@ DDPCommon.stringifyDDP = function (msg) {
   }
 
   return JSON.stringify(copy);
-};
+}

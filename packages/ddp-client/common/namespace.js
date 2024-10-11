@@ -1,7 +1,7 @@
-import { DDPCommon } from 'meteor/ddp-common';
-import { Meteor } from 'meteor/meteor';
-
-import { Connection } from './livedata_connection.js';
+import { _reconnectHook, Connection } from './livedata_connection.js';
+import { CurrentMethodInvocation, CurrentPublicationInvocation } from './environment.js';
+import { ConnectionError, ForcedReconnectError } from './errors.js';
+import { randomStream } from './random_stream.js';
 
 // This array allows the `_allSubscriptionsReady` method below, which
 // is used by the `spiderable` package, to keep track of whether all
@@ -12,40 +12,20 @@ const allConnections = [];
  * @namespace DDP
  * @summary Namespace for DDP-related methods/classes.
  */
-export const DDP = {};
-
-// This is private but it's used in a few places. accounts-base uses
-// it to get the current user. Meteor.setTimeout and friends clear
-// it. We can probably find a better way to factor this.
-DDP._CurrentMethodInvocation = new Meteor.EnvironmentVariable();
-DDP._CurrentPublicationInvocation = new Meteor.EnvironmentVariable();
-
-// XXX: Keep DDP._CurrentInvocation for backwards-compatibility.
-DDP._CurrentInvocation = DDP._CurrentMethodInvocation;
-
-// This is passed into a weird `makeErrorType` function that expects its thing
-// to be a constructor
-function connectionErrorConstructor(message) {
-  this.message = message;
-}
-
-DDP.ConnectionError = Meteor.makeErrorType(
-  'DDP.ConnectionError',
-  connectionErrorConstructor
-);
-
-DDP.ForcedReconnectError = Meteor.makeErrorType(
-  'DDP.ForcedReconnectError',
-  () => {}
-);
-
-// Returns the named sequence of pseudo-random values.
-// The scope will be DDP._CurrentMethodInvocation.get(), so the stream will produce
-// consistent values for method calls on the client and server.
-DDP.randomStream = name => {
-  const scope = DDP._CurrentMethodInvocation.get();
-  return DDPCommon.RandomStream.get(scope, name);
+export const DDP = {
+  // This is private but it's used in a few places. accounts-base uses
+  // it to get the current user. Meteor.setTimeout and friends clear
+  // it. We can probably find a better way to factor this.
+  _CurrentMethodInvocation: CurrentMethodInvocation,
+  _CurrentPublicationInvocation: CurrentPublicationInvocation,
+  // XXX: Keep DDP._CurrentInvocation for backwards-compatibility.
+  _CurrentInvocation: CurrentMethodInvocation,
+  ConnectionError,
+  ForcedReconnectError,
+  randomStream,
+  _reconnectHook,
 };
+
 
 // @param url {String} URL to Meteor app,
 //     e.g.:
@@ -70,7 +50,6 @@ DDP.connect = (url, options) => {
   return ret;
 };
 
-DDP._reconnectHook = new Hook({ bindEnvironment: false });
 
 /**
  * @summary Register a function to call as the first step of
